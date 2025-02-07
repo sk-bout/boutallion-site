@@ -16,112 +16,50 @@ interface RowProps {
 export default function Row({ items, direction, speed, isHovered, cardHeight = 400 }: RowProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
-  const animationFrameRef = useRef<number>()
-  const positionRef = useRef(0)
+  const [trackWidth, setTrackWidth] = useState(0)
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null)
   const [isPaused, setIsPaused] = useState(false)
   const prefersReducedMotion = useRef(false)
   
-  // Expose hoveredCardId to Card components
   const cardHoveredCardId = hoveredCardId
+  const duplicatedItems = [...items, ...items, ...items, ...items, ...items]
 
-  // Check for reduced motion preference
+  const cardWidth = Math.round(cardHeight * 0.75)
+  const gap = 24
+  const estimatedOneSet = items.length * (cardWidth + gap)
+  const effectiveTrackWidth = trackWidth > 0 ? trackWidth : estimatedOneSet
+
+  const duration = effectiveTrackWidth > 0 ? Math.round((effectiveTrackWidth / 80) * 1000) : 60000
+  const animName = `corridor-scroll-${direction}-${items.length}`
+  const animRunning = effectiveTrackWidth > 0 && !isPaused
+
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     prefersReducedMotion.current = mediaQuery.matches
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      prefersReducedMotion.current = e.matches
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
+    mediaQuery.addEventListener('change', (e) => { prefersReducedMotion.current = e.matches })
+    return () => mediaQuery.removeEventListener('change', () => {})
   }, [])
 
-  // Multiple duplicates for seamless infinite loop (no gaps) - enough to cover viewport
-  const duplicatedItems = [...items, ...items, ...items, ...items, ...items]
-
   useEffect(() => {
-    if (prefersReducedMotion.current) {
-      return
-    }
-
-    const container = containerRef.current
     const track = trackRef.current
-    if (!container || !track) return
-
-    // Calculate dynamic item width: card width (cardHeight * 0.8) + gap
-    const cardWidth = Math.round(cardHeight * 0.8)
-    const gap = window.innerWidth < 768 ? 16 : window.innerWidth < 1024 ? 24 : 32
-    const itemWidth = cardWidth + gap
-    const totalWidth = items.length * itemWidth // Width of one set of items
-    
-    // Initialize position for seamless loop - start from left edge
-    // For right direction (left-to-right scroll): start at 0 so content appears from left
-    // For left direction (right-to-left scroll): start at 0 so content appears from left
-    if (positionRef.current === 0) {
-      positionRef.current = 0 // Always start from left edge
+    if (!track) return
+    const measure = () => {
+      const w = track.scrollWidth
+      const cycles = Math.max(1, duplicatedItems.length / items.length)
+      const oneSet = cycles > 0 ? w / cycles : estimatedOneSet
+      setTrackWidth(oneSet)
     }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(track)
+    const t1 = setTimeout(measure, 300)
+    const t2 = setTimeout(measure, 1000)
+    const t3 = setTimeout(measure, 2500)
+    return () => { ro.disconnect(); clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
+  }, [items.length, duplicatedItems.length, estimatedOneSet])
 
-    const animate = () => {
-      if (prefersReducedMotion.current) {
-        return
-      }
-
-      // Pause if hovering over an image card
-      if (isPaused) {
-        animationFrameRef.current = requestAnimationFrame(animate)
-        return
-      }
-
-      const currentSpeed = isHovered ? speed * 0.35 : speed
-      const delta = direction === 'right' ? currentSpeed : -currentSpeed
-
-      positionRef.current += delta
-
-      // Reset position seamlessly when we've moved one full set
-      // This creates the infinite loop effect without gaps
-      // We reset before the gap appears to ensure continuous visibility
-      if (direction === 'right') {
-        // Moving right: reset when we've moved one set width (before gap appears)
-        // Start at 0, when we reach totalWidth, reset back to 0
-        if (positionRef.current >= totalWidth) {
-          positionRef.current -= totalWidth
-        }
-        // Also handle if we somehow go too far negative
-        if (positionRef.current < -totalWidth) {
-          positionRef.current += totalWidth
-        }
-      } else {
-        // Moving left: reset when we've moved one set width
-        // Start at 0, when we reach -totalWidth, reset back to 0
-        if (positionRef.current <= -totalWidth) {
-          positionRef.current += totalWidth
-        }
-        // Also handle if we somehow go too far positive
-        if (positionRef.current > totalWidth) {
-          positionRef.current -= totalWidth
-        }
-      }
-
-      if (track) {
-        track.style.transform = `translateX(${positionRef.current}px)`
-      }
-
-      animationFrameRef.current = requestAnimationFrame(animate)
-    }
-
-    animationFrameRef.current = requestAnimationFrame(animate)
-
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current)
-      }
-    }
-  }, [items.length, direction, speed, isHovered, cardHeight, isPaused])
-
-  // Handle reduced motion - make it horizontally scrollable
-  if (prefersReducedMotion.current) {
+  // Handle reduced motion - make it horizontally scrollable (disabled for lab corridor)
+  if (false /* prefersReducedMotion.current */) {
     return (
       <div
         ref={containerRef}
@@ -162,29 +100,28 @@ export default function Row({ items, direction, speed, isHovered, cardHeight = 4
       ref={containerRef}
       className="overflow-hidden"
       style={{ 
-        willChange: 'transform',
         height: '100%',
         maxHeight: '100%',
         display: 'flex',
         alignItems: 'center',
-        // Hardware acceleration to prevent flickering
-        transform: 'translate3d(0, 0, 0)',
-        backfaceVisibility: 'hidden',
       }}
     >
+      <style>{`
+        @keyframes ${animName} {
+          0% { transform: translateX(${direction === 'right' ? 0 : -effectiveTrackWidth}px); }
+          100% { transform: translateX(${direction === 'right' ? -effectiveTrackWidth : 0}px); }
+        }
+      `}</style>
       <div
         ref={trackRef}
-        className="flex gap-4 sm:gap-6 md:gap-8 items-center"
+        className="flex gap-4 sm:gap-6 md:gap-8 items-center shrink-0"
         style={{
           width: 'max-content',
-          willChange: 'transform',
           height: '100%',
-          paddingLeft: '0', // Start from left edge - no empty space
-          paddingRight: '100vw', // Ensure items can scroll to the right
-          // Hardware acceleration to prevent flickering
-          transform: 'translate3d(0, 0, 0)',
-          backfaceVisibility: 'hidden',
-          perspective: '1000px',
+          paddingLeft: '0',
+          paddingRight: '0',
+          animation: effectiveTrackWidth > 0 ? `${animName} ${duration}ms linear infinite` : 'none',
+          animationPlayState: animRunning ? 'running' : 'paused',
         }}
       >
         {duplicatedItems.map((item, index) => (
@@ -292,8 +229,9 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
     }
   }, [isInView, isHovered, item.type])
 
-  // Calculate responsive width based on height (wider aspect ratio for even bigger frames)
-  const cardWidth = Math.round(cardHeight * 0.85)
+  // Calculate responsive width based on height
+  // Use width < height so frames read more vertical than horizontal
+  const cardWidth = Math.round(cardHeight * 0.75)
 
   const cardContent = (
     <div
@@ -302,23 +240,24 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
       style={{
         width: `${cardWidth}px`,
         height: `${cardHeight}px`,
-        // 3D Green background with depth
+        // Solid 3D frame - no transparency
         background: `
           linear-gradient(135deg, #052a2f 0%, #031a1d 25%, #041f23 50%, #031a1d 75%, #052a2f 100%),
-          repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px),
-          radial-gradient(circle at 30% 40%, rgba(212, 197, 160, 0.08) 0%, transparent 40%),
-          radial-gradient(circle at 70% 60%, rgba(212, 197, 160, 0.05) 0%, transparent 40%)
+          repeating-linear-gradient(45deg, #041f23 0px, #041f23 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px),
+          radial-gradient(circle at 30% 40%, rgba(212, 197, 160, 0.06) 0%, #041f23 40%),
+          radial-gradient(circle at 70% 60%, rgba(212, 197, 160, 0.04) 0%, #041f23 40%)
         `,
-        // 3D recessed panel effect with strong depth - perfectly symmetrical
+        backgroundColor: '#031a1d',
+        // 3D frame - solid border + inset shadows for depth
         boxShadow: `
-          inset 0 0 0 3px rgba(212, 197, 160, 0.2),
-          inset 0 4px 8px rgba(0, 0, 0, 0.5),
-          inset 0 -4px 8px rgba(0, 0, 0, 0.4),
-          inset 6px 0 12px rgba(0, 0, 0, 0.3),
-          inset -6px 0 12px rgba(0, 0, 0, 0.3),
-          0 6px 16px rgba(0, 0, 0, 0.4),
-          0 0 0 1px rgba(0, 0, 0, 0.3),
-          0 0 20px rgba(0, 0, 0, 0.2)
+          inset 0 0 0 3px rgba(212, 197, 160, 0.25),
+          inset 0 6px 12px rgba(0, 0, 0, 0.6),
+          inset 0 -6px 12px rgba(0, 0, 0, 0.5),
+          inset 8px 0 16px rgba(0, 0, 0, 0.4),
+          inset -8px 0 16px rgba(0, 0, 0, 0.4),
+          0 12px 32px rgba(0, 0, 0, 0.5),
+          0 0 0 1px rgba(0, 0, 0, 0.4),
+          0 0 40px rgba(0, 0, 0, 0.3)
         `,
         // 3D transform for depth
         transform: `translate3d(0, 0, 0) perspective(1000px) rotateX(0deg) ${isHovered ? 'scale(1.03) translateZ(10px)' : 'scale(1) translateZ(0px)'}`,
@@ -331,90 +270,109 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
     >
-      {/* Fluted column effect on left side - 3D green */}
+      {/* Fluted column effect on left side - solid 3D frame edge */}
       <div
         className="absolute left-0 top-0 bottom-0 z-10"
         style={{
-          width: '16px', // Equal width for both sides (w-4 in Tailwind = 16px)
+          width: '16px',
           background: `
             repeating-linear-gradient(
               90deg,
               #041f23 0px,
               #041f23 8px,
-              rgba(0, 0, 0, 0.3) 8px,
-              rgba(0, 0, 0, 0.3) 12px
+              #021214 8px,
+              #021214 12px
             )
           `,
-          boxShadow: 'inset -3px 0 6px rgba(0, 0, 0, 0.4), 2px 0 4px rgba(0, 0, 0, 0.2)',
+          boxShadow: 'inset -4px 0 8px rgba(0, 0, 0, 0.6), 2px 0 6px rgba(0, 0, 0, 0.3)',
         }}
       />
       
-      {/* Fluted column effect on right side - 3D green (perfectly mirrored) */}
+      {/* Fluted column effect on right side - solid 3D frame edge */}
       <div
         className="absolute right-0 top-0 bottom-0 z-10"
         style={{
-          width: '16px', // Equal width for both sides - perfectly symmetrical
+          width: '16px',
           background: `
             repeating-linear-gradient(
               90deg,
               #041f23 0px,
               #041f23 8px,
-              rgba(0, 0, 0, 0.3) 8px,
-              rgba(0, 0, 0, 0.3) 12px
+              #021214 8px,
+              #021214 12px
             )
           `,
-          boxShadow: 'inset 3px 0 6px rgba(0, 0, 0, 0.4), -2px 0 4px rgba(0, 0, 0, 0.2)',
+          boxShadow: 'inset 4px 0 8px rgba(0, 0, 0, 0.6), -2px 0 6px rgba(0, 0, 0, 0.3)',
         }}
       />
       
-      {/* Horizontal molding bands at top - symmetrical with bottom */}
+      {/* Top molding - solid 3D bevel */}
       <div
-        className="absolute top-0 left-0 right-0 h-1.5 z-10"
+        className="absolute top-0 left-0 right-0 h-2 z-10"
         style={{
-          background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1), transparent)',
-          boxShadow: 'inset 0 2px 3px rgba(0, 0, 0, 0.4)',
+          background: 'linear-gradient(to bottom, #021214 0%, #041f23 40%, #052a2f 100%)',
+          boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.3)',
         }}
       />
       <div
-        className="absolute top-1.5 left-0 right-0 h-0.5 z-10"
+        className="absolute top-2 left-0 right-0 h-0.5 z-10"
         style={{
-          background: 'rgba(212, 197, 160, 0.15)',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1)',
-        }}
-      />
-      
-      {/* Horizontal molding bands at bottom - symmetrical with top */}
-      <div
-        className="absolute bottom-1.5 left-0 right-0 h-0.5 z-10"
-        style={{
-          background: 'rgba(212, 197, 160, 0.15)',
-          boxShadow: '0 -1px 3px rgba(0, 0, 0, 0.3), inset 0 -1px 1px rgba(255, 255, 255, 0.1)',
-        }}
-      />
-      <div
-        className="absolute bottom-0 left-0 right-0 h-1.5 z-10"
-        style={{
-          background: 'linear-gradient(to top, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1), transparent)',
-          boxShadow: 'inset 0 -2px 3px rgba(0, 0, 0, 0.4)',
+          background: 'linear-gradient(to bottom, rgba(212, 197, 160, 0.25) 0%, rgba(212, 197, 160, 0.1) 100%)',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.08)',
         }}
       />
       
-      {/* Content container with recessed panel effect - 3D green */}
+      {/* Bottom molding - solid 3D bevel */}
+      <div
+        className="absolute bottom-2 left-0 right-0 h-0.5 z-10"
+        style={{
+          background: 'linear-gradient(to top, rgba(212, 197, 160, 0.25) 0%, rgba(212, 197, 160, 0.1) 100%)',
+          boxShadow: '0 -1px 3px rgba(0, 0, 0, 0.4), inset 0 -1px 1px rgba(255, 255, 255, 0.08)',
+        }}
+      />
+      <div
+        className="absolute bottom-0 left-0 right-0 h-2 z-10"
+        style={{
+          background: 'linear-gradient(to top, #021214 0%, #041f23 40%, #052a2f 100%)',
+          boxShadow: 'inset 0 -2px 4px rgba(0, 0, 0, 0.6), 0 -2px 4px rgba(0, 0, 0, 0.3)',
+        }}
+      />
+
+      {/* Label in exact visual center of entire frame */}
+      {item.label && (
+        <div
+          className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
+          style={{ top: 0, left: 0, right: 0, bottom: 0 }}
+        >
+          <span
+            className="font-portrait text-gold text-2xl md:text-3xl tracking-[0.15em] uppercase"
+            style={{
+              textShadow: '0 1px 2px rgba(0, 0, 0, 0.5), 0 -1px 1px rgba(255, 255, 255, 0.1)',
+            }}
+          >
+            {item.label}
+          </span>
+        </div>
+      )}
+      
+      {/* Content container - solid recessed panel, no transparency */}
       <div
         className="relative w-full h-full"
         style={{
-          margin: '10px 16px 10px 16px', // Equal left and right margins
+          margin: '10px 16px 6px 16px',
           boxShadow: `
-            inset 0 3px 8px rgba(0, 0, 0, 0.5),
-            inset 0 -3px 8px rgba(0, 0, 0, 0.4),
-            inset 4px 0 8px rgba(0, 0, 0, 0.3),
-            inset -4px 0 8px rgba(0, 0, 0, 0.3)
+            inset 0 0 0 3px rgba(212, 197, 160, 0.2),
+            inset 0 6px 12px rgba(0, 0, 0, 0.55),
+            inset 0 -6px 12px rgba(0, 0, 0, 0.45),
+            inset 8px 0 16px rgba(0, 0, 0, 0.4),
+            inset -8px 0 16px rgba(0, 0, 0, 0.4),
+            0 12px 32px rgba(0, 0, 0, 0.45),
+            0 0 0 1px rgba(0, 0, 0, 0.35)
           `,
-          // Ensure equal left and right padding
           paddingLeft: '0',
           paddingRight: '0',
-          background: 'rgba(0, 0, 0, 0.2)',
-          border: '1px solid rgba(212, 197, 160, 0.1)',
+          background: '#031a1d',
+          border: '1px solid rgba(212, 197, 160, 0.15)',
         }}
       >
         {item.type === 'topic' ? (
@@ -469,7 +427,7 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
               position: 'absolute',
               top: 0,
               left: 0,
-              right: 0, // Equal left and right - symmetrical
+              right: 0,
               bottom: 0,
             }}
           >
@@ -479,17 +437,25 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
               fill
               className="object-cover"
               style={{
-                opacity: isHovered ? 1 : 0.85,
+                opacity: isHovered ? 1 : 0.9,
                 transition: 'opacity 0.3s ease-out',
                 willChange: 'opacity',
-                objectPosition: 'left center', // Anchor to left, center vertically
+                objectPosition: 'center center',
               }}
               sizes="280px"
             />
-            {/* Frame number overlay - bronze plaque style */}
+            {/* Clickable overlay for frames with href - label is rendered at card level for exact center */}
+            {item.href && (
+              <Link
+                href={item.href}
+                className="absolute inset-0 z-30"
+                aria-label={item.label || 'View'}
+              />
+            )}
+            {/* Frame number overlay */}
             {item.frameNumber && (
               <div 
-                className="absolute top-3 left-3 px-2 py-1"
+                className="absolute top-3 left-3 px-2 py-1 z-20"
                 style={{
                   background: 'linear-gradient(135deg, #8b6914 0%, #6b4e0a 50%, #8b6914 100%)',
                   boxShadow: `
@@ -532,15 +498,23 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
                 opacity: isHovered ? 1 : 0.85,
                 transition: 'opacity 0.3s ease-out',
                 willChange: 'opacity',
-                objectPosition: 'left center', // Anchor to left, center vertically
+                objectPosition: 'left center',
+              }}
+              onLoadedMetadata={(e) => {
+                const video = e.currentTarget
+                const offset = item.videoStartOffset ?? 0
+                if (offset > 0 && video.duration && !isNaN(video.duration)) {
+                  video.currentTime = Math.min(offset, video.duration - 0.1)
+                }
               }}
               onLoadedData={(e) => {
-                // Try to play when video data is loaded
                 const video = e.currentTarget
+                const offset = item.videoStartOffset ?? 0
+                if (offset > 0 && video.duration && !isNaN(video.duration)) {
+                  video.currentTime = Math.min(offset, video.duration - 0.1)
+                }
                 if (isInView || isHovered) {
-                  video.play().catch(() => {
-                    // Ignore autoplay errors
-                  })
+                  video.play().catch(() => {})
                 }
               }}
             />

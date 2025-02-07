@@ -1,11 +1,10 @@
-'use client'
+`use client`
 
 import { useState, useRef, useEffect } from 'react'
 import Row from './Row'
 import { row1Items, row2Items } from './items'
-import PermanentLanguageSwitcher from '@/components/PermanentLanguageSwitcher'
 import SocialIcons from '@/components/SocialIcons'
-import CorridorNavigation from '@/components/CorridorNavigation'
+import Footer from '@/components/Footer'
 import BaroqueBackground from '@/components/BaroqueBackground'
 
 export default function Corridor() {
@@ -16,8 +15,7 @@ export default function Corridor() {
   const [bottomPadding, setBottomPadding] = useState(30)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Base speed - very slow, museum-like
-  const baseSpeed = 0.3
+  const baseSpeed = 2.5
 
   // Calculate responsive card height based on viewport - ensure everything fits exactly
   useEffect(() => {
@@ -27,38 +25,34 @@ export default function Corridor() {
       const isMobile = vw < 768
       const isTablet = vw >= 768 && vw < 1024
       
-      // Calculate exact reserved space
-      const labelHeight = isMobile ? 40 : 60 // Label at top
-      const calculatedGap = isMobile ? 16 : isTablet ? 24 : 32 // Gap between rows (2 gaps total)
-      const calculatedTopPadding = isMobile ? 60 : 90 // Label + padding
-      const calculatedBottomPadding = isMobile ? 20 : 30
-      
-      // Update gap and padding state
+      // Vertical gap BETWEEN the two rows (keep subtle but give more space to frames)
+      const calculatedGap = isMobile ? 14 : isTablet ? 20 : 26
       setGapSize(calculatedGap)
+
+      // Padding above first row (space for header + gap before frames)
+      const headerHeight = isMobile ? 72 : 88
+      const calculatedTopPadding = headerHeight + (isMobile ? 20 : 24)
+      // Padding below second row (space above copyright)
+      const calculatedBottomPadding = isMobile ? 30 : 50
       setTopPadding(calculatedTopPadding)
       setBottomPadding(calculatedBottomPadding)
       
-      // Total reserved: top padding (includes label) + 1 gap + bottom padding + text areas
-      const textAreaHeight = isMobile ? 120 : 160 // BOUTALLION text + copyright
-      const totalReserved = calculatedTopPadding + calculatedGap + calculatedBottomPadding + textAreaHeight
+      // Extra vertical space reserved for logo + copyright text themselves
+      const textAreaHeight = isMobile ? 60 : 70
+      const nonRowSpace = calculatedTopPadding + calculatedBottomPadding + textAreaHeight
       
-      // Calculate available height for 2 rows
-      const availableHeight = vh - totalReserved
+      // Height available for the two frame rows plus the gap between them
+      const availableHeight = vh - nonRowSpace
       
-      // Each row gets exactly 1/2 of available space
-      const rowHeight = Math.floor(availableHeight / 2)
+      // Target card height so that 2 rows + gap fit exactly in available height
+      const idealCardHeight = Math.floor((availableHeight - calculatedGap) / 2)
       
-      // Card height should use most of the row height for bigger frames
-      const calculatedHeight = Math.max(250, rowHeight - 1) // Minimal safety margin
+      // Apply responsive constraints while keeping frames as large as possible
+      const maxCardHeight = isMobile ? 560 : isTablet ? 680 : 800
+      const minCardHeight = 260
+      const calculatedHeight = Math.max(minCardHeight, Math.min(maxCardHeight, idealCardHeight))
       
-      // Apply responsive constraints - significantly increased max sizes for much bigger frames
-      if (isMobile) {
-        setCardHeight(Math.min(450, calculatedHeight))
-      } else if (isTablet) {
-        setCardHeight(Math.min(600, calculatedHeight))
-      } else {
-        setCardHeight(Math.min(700, calculatedHeight))
-      }
+      setCardHeight(calculatedHeight)
     }
 
     calculateCardHeight()
@@ -69,24 +63,12 @@ export default function Corridor() {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 bg-boutallion-green overflow-hidden"
+      className="fixed inset-0 overflow-hidden z-10"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Baroque decorative background elements */}
+      {/* Background */}
       <BaroqueBackground />
-      {/* BOUTALLION text - centered above first row */}
-      <div className="absolute top-0 left-0 right-0 flex justify-center items-center z-20" style={{ paddingTop: 'clamp(40px, 5vh, 60px)' }}>
-        <h1 className="font-portrait text-gold text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-[0.1em] uppercase">
-          BOUTALLION
-        </h1>
-      </div>
-
-      {/* Navigation menu - top left */}
-      <CorridorNavigation />
-
-      {/* Language switcher - top right */}
-      <PermanentLanguageSwitcher />
 
       {/* Social icons - bottom right */}
       <SocialIcons />
@@ -96,8 +78,9 @@ export default function Corridor() {
         className="absolute inset-0 flex flex-col justify-center items-center"
         style={{
           gap: `${gapSize}px`,
-          paddingTop: 'clamp(100px, 12vh, 140px)',
-          paddingBottom: 'clamp(80px, 10vh, 120px)',
+          // Use calculated paddings so two rows always fit viewport
+          paddingTop: `${topPadding}px`,
+          paddingBottom: `${bottomPadding}px`,
           height: '100vh',
           overflow: 'hidden',
         }}
@@ -125,12 +108,7 @@ export default function Corridor() {
         </div>
       </div>
 
-      {/* Copyright - below first row */}
-      <div className="absolute bottom-4 left-4 sm:bottom-8 sm:left-8 z-20">
-        <p className="font-refined text-white/40 text-xs sm:text-sm">
-          © Boutallion 2026
-        </p>
-      </div>
+      <Footer />
     </div>
   )
 }

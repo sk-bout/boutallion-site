@@ -8,9 +8,8 @@ import Image from 'next/image'
 import LuxuryWebGLEffects from '@/components/LuxuryWebGLEffects'
 import { getTranslations, Locale } from '@/lib/i18n'
 import PermanentLanguageSwitcher from '@/components/PermanentLanguageSwitcher'
-import Copyright from '@/components/Copyright'
+import Footer from '@/components/Footer'
 import SocialIcons from '@/components/SocialIcons'
-import GoldDustCursor from '@/components/GoldDustCursor'
 import { hiddenBrandMentions } from '@/lib/backlinks-seo'
 import { getAnalyticsTracker } from '@/lib/analytics'
 
@@ -381,10 +380,9 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
 
   return (
     <div className="min-h-screen min-h-[100dvh] flex items-center justify-center relative overflow-hidden bg-boutallion-green safe-area-inset">
-      <GoldDustCursor />
       <PermanentLanguageSwitcher />
       <SocialIcons />
-      <Copyright />
+      <Footer />
       
       {/* Background with darker teal color */}
       <div className="absolute inset-0 bg-boutallion-green">

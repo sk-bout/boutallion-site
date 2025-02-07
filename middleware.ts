@@ -48,7 +48,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 301)
   }
   
-  // Skip API routes, static files, Next.js internals, verification files, robots.txt/sitemap, and lab routes
+  // Skip API routes, static files, Next.js internals, verification files, robots.txt/sitemap, lab routes, and policy pages
   if (
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
@@ -57,6 +57,9 @@ export function middleware(request: NextRequest) {
     pathname === '/robots.txt' ||
     pathname === '/sitemap.xml' ||
     pathname.startsWith('/lab') ||
+    pathname === '/cookie-policy' ||
+    pathname === '/terms' ||
+    pathname === '/privacy-policy' ||
     pathname.includes('.')
   ) {
     return NextResponse.next()

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import LabCorridorHeader from '@/components/LabCorridorHeader'
 
 export const metadata: Metadata = {
   robots: {
@@ -15,6 +16,11 @@ export default function CorridorLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <>{children}</>
+  return (
+    <>
+      <LabCorridorHeader />
+      {children}
+    </>
+  )
 }
 

@@ -14,7 +14,12 @@ const LANGUAGES: { code: Locale; label: string; nativeLabel: string }[] = [
   { code: 'ru', label: 'Russian', nativeLabel: 'Русский' },
 ]
 
-export default function PermanentLanguageSwitcher() {
+interface PermanentLanguageSwitcherProps {
+  /** When true, renders inline (no fixed positioning) for use inside a header bar */
+  inline?: boolean
+}
+
+export default function PermanentLanguageSwitcher({ inline }: PermanentLanguageSwitcherProps) {
   const pathname = usePathname()
   const router = useRouter()
   const params = useParams()
@@ -31,12 +36,15 @@ export default function PermanentLanguageSwitcher() {
   const currentLanguage = LANGUAGES.find(lang => lang.code === currentLocale) || LANGUAGES[0]
 
   const switchLanguage = (newLocale: Locale) => {
-    // Close dropdown immediately
     setIsOpen(false)
-    // Remove current locale from path
-    const pathWithoutLocale = pathname.replace(/^\/(en|ar|it|fr|nl|zh|ru)/, '') || '/'
-    // Add new locale
-    router.push(`/${newLocale}${pathWithoutLocale}`)
+    // Paths with locale prefix (e.g. /en, /ar/about) - replace locale
+    if (pathname.match(/^\/(en|ar|it|fr|nl|zh|ru)(\/|$)/)) {
+      const pathWithoutLocale = pathname.replace(/^\/(en|ar|it|fr|nl|zh|ru)/, '') || '/'
+      router.push(`/${newLocale}${pathWithoutLocale}`)
+    } else {
+      // Paths without locale (e.g. /lab/corridor, /cookie-policy) - go to locale homepage
+      router.push(`/${newLocale}`)
+    }
   }
 
   // Close dropdown when clicking outside or scrolling
@@ -70,8 +78,8 @@ export default function PermanentLanguageSwitcher() {
   return (
     <div 
       ref={dropdownRef}
-      className="fixed top-0 right-0 z-[100] p-3 sm:p-4 md:p-6 pointer-events-none"
-      style={{
+      className={inline ? 'relative pointer-events-auto' : 'fixed top-0 right-0 z-[100] p-3 sm:p-4 md:p-6 pointer-events-none'}
+      style={inline ? undefined : {
         paddingTop: `max(0.75rem, env(safe-area-inset-top))`,
         paddingRight: `max(0.75rem, env(safe-area-inset-right))`,
         boxSizing: 'border-box',
@@ -79,11 +87,11 @@ export default function PermanentLanguageSwitcher() {
         opacity: 1,
       }}
     >
-      <div className="relative pointer-events-auto" dir="ltr">
+      <div className={inline ? 'relative' : 'relative pointer-events-auto'} dir="ltr">
         {/* Dropdown Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="px-3 py-2 text-xs sm:text-sm bg-transparent border border-white/40 text-white/90 font-sans hover:text-gold-DEFAULT hover:border-gold-DEFAULT/60 transition-colors duration-200 font-light whitespace-nowrap flex items-center justify-center gap-1.5"
+          className="px-3 py-2 text-xs sm:text-sm bg-transparent border border-boutallion-green text-boutallion-green font-sans hover:bg-boutallion-green hover:text-white transition-colors duration-200 font-light whitespace-nowrap flex items-center justify-center gap-1.5"
           aria-label="Select language"
           aria-expanded={isOpen}
           aria-haspopup="true"
@@ -107,7 +115,7 @@ export default function PermanentLanguageSwitcher() {
         {/* Dropdown Menu */}
         {isOpen && (
           <div 
-            className="absolute top-full right-0 mt-1.5 bg-boutallion-green border border-white/30 shadow-lg shadow-black/50 overflow-hidden z-50"
+            className="absolute top-full right-0 mt-1.5 bg-boutallion-green border border-white/30 shadow-lg shadow-black/50 overflow-hidden z-[9999]"
             style={{
               animation: 'fadeIn 200ms ease-out',
             }}

@@ -1,34 +1,72 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useRouter, usePathname } from 'next/navigation'
-import Link from 'next/link'
 
-interface NavigationItem {
+interface SubItem {
   id: string
   label: string
   href: string
 }
 
-// Navigation items - can be expanded as pages are created
+interface NavigationItem {
+  id: string
+  label: string
+  href?: string
+  subItems?: SubItem[]
+}
+
+// Navigation items - About has submenu; others are direct links
 const NAVIGATION_ITEMS: NavigationItem[] = [
-  { id: 'about', label: 'About', href: '/lab/corridor/about' },
+  {
+    id: 'about',
+    label: 'About',
+    subItems: [
+      { id: 'about-us', label: 'About Us', href: '/lab/corridor/about-us' },
+      { id: 'about-us-demo', label: 'Layout Variants Demo', href: '/lab/corridor/about-us-demo' },
+      { id: 'our-story', label: 'Our Story', href: '/lab/corridor/our-story' },
+      { id: 'the-founder', label: 'The Founder', href: '/lab/corridor/the-founder' },
+    ],
+  },
   { id: 'materials', label: 'Materials', href: '/lab/corridor/materials' },
   { id: 'craftsmanship', label: 'Craftsmanship', href: '/lab/corridor/craftsmanship' },
   { id: 'collections', label: 'Collections', href: '/lab/corridor/collections' },
   { id: 'request-order', label: 'Request Order', href: '/lab/corridor/request-order' },
 ]
 
-export default function CorridorNavigation() {
+interface CorridorNavigationProps {
+  /** When true, renders inline (no fixed positioning) for use inside a header bar */
+  inline?: boolean
+}
+
+export default function CorridorNavigation({ inline }: CorridorNavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
+  const buttonRef = useRef<HTMLButtonElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const dropdownMenuRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const pathname = usePathname()
+
+  // Position dropdown based on button when opening (for portal/inline mode)
+  useEffect(() => {
+    if (isOpen && inline && buttonRef.current && typeof document !== 'undefined') {
+      const rect = buttonRef.current.getBoundingClientRect()
+      setDropdownPosition({
+        top: rect.bottom + 6,
+        left: rect.left,
+      })
+    }
+  }, [isOpen, inline])
 
   // Close dropdown when clicking outside or navigating
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      const target = event.target as Node
+      const inButton = buttonRef.current?.contains(target)
+      const inMenu = dropdownMenuRef.current?.contains(target)
+      if (!inButton && !inMenu) {
         setIsOpen(false)
       }
     }
@@ -63,18 +101,19 @@ export default function CorridorNavigation() {
   return (
     <div 
       ref={dropdownRef}
-      className="fixed top-0 left-0 z-[100] p-3 sm:p-4 md:p-6 pointer-events-none"
-      style={{
+      className={inline ? 'relative pointer-events-auto overflow-visible' : 'fixed top-0 left-0 z-[100] p-3 sm:p-4 md:p-6 pointer-events-none overflow-visible'}
+      style={inline ? undefined : {
         paddingTop: `max(0.75rem, env(safe-area-inset-top))`,
         paddingLeft: `max(0.75rem, env(safe-area-inset-left))`,
         boxSizing: 'border-box',
       }}
     >
-      <div className="relative pointer-events-auto" dir="ltr">
+      <div className={inline ? 'relative' : 'relative pointer-events-auto'} dir="ltr">
         {/* Hamburger Button */}
         <button
+          ref={buttonRef}
           onClick={() => setIsOpen(!isOpen)}
-          className="px-3 py-2 text-xs sm:text-sm bg-transparent border border-white/40 text-white/90 font-sans hover:text-gold-DEFAULT hover:border-gold-DEFAULT/60 transition-colors duration-200 font-light flex items-center justify-center gap-2"
+          className="px-3 py-2 text-xs sm:text-sm bg-transparent border border-boutallion-green text-boutallion-green font-sans hover:bg-boutallion-green hover:text-white transition-colors duration-200 font-light flex items-center justify-center gap-2"
           aria-label="Open navigation menu"
           aria-expanded={isOpen}
           aria-haspopup="true"
@@ -102,34 +141,77 @@ export default function CorridorNavigation() {
           </div>
         </button>
 
-        {/* Dropdown Menu */}
-        {isOpen && (
-          <div 
-            className="absolute top-full left-0 mt-1.5 bg-boutallion-green border border-white/30 shadow-lg shadow-black/50 overflow-hidden z-50 min-w-[200px]"
-            style={{
-              animation: 'fadeIn 200ms ease-out',
-            }}
-            dir="ltr"
-          >
-            {NAVIGATION_ITEMS.map((item) => {
-              const isActive = pathname === item.href
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleItemClick(item.href)}
-                  className={`w-full px-4 py-3 text-left text-xs sm:text-sm font-sans font-light transition-colors duration-200 border-b border-white/10 last:border-b-0 ${
-                    isActive
-                      ? 'text-gold-DEFAULT bg-white/5'
-                      : 'text-white/70 hover:text-gold-DEFAULT/90 hover:bg-white/5'
-                  }`}
-                  aria-label={`Navigate to ${item.label}`}
-                >
-                  {item.label}
-                </button>
-              )
-            })}
-          </div>
-        )}
+        {/* Dropdown Menu - use portal when inline to avoid clipping by parent overflow */}
+        {isOpen && (() => {
+          const dropdownContent = (
+            <div
+              ref={dropdownMenuRef}
+              className={`bg-boutallion-green border border-white/30 shadow-lg shadow-black/50 overflow-hidden z-[9999] min-w-[200px] ${
+                inline ? 'fixed' : 'absolute top-full left-0 mt-1.5'
+              }`}
+              style={
+                inline && typeof document !== 'undefined'
+                  ? {
+                      top: dropdownPosition.top,
+                      left: dropdownPosition.left,
+                      animation: 'fadeIn 200ms ease-out',
+                    }
+                  : {
+                      animation: 'fadeIn 200ms ease-out',
+                    }
+              }
+              dir="ltr"
+            >
+              {NAVIGATION_ITEMS.map((item) => {
+                if (item.subItems) {
+                  return (
+                    <div key={item.id} className="border-b border-white/10 last:border-b-0">
+                      <div className="px-4 py-2 text-xs sm:text-sm font-sans font-light text-white/50">
+                        {item.label}
+                      </div>
+                      {item.subItems.map((sub) => {
+                        const isActive = pathname === sub.href
+                        return (
+                          <button
+                            key={sub.id}
+                            onClick={() => handleItemClick(sub.href)}
+                            className={`w-full px-6 py-2.5 text-left text-xs sm:text-sm font-sans font-light transition-colors duration-200 ${
+                              isActive
+                                ? 'text-gold-DEFAULT bg-white/5'
+                                : 'text-white/70 hover:text-gold-DEFAULT/90 hover:bg-white/5'
+                            }`}
+                            aria-label={`Navigate to ${sub.label}`}
+                          >
+                            {sub.label}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  )
+                }
+                const isActive = pathname === item.href
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => item.href && handleItemClick(item.href)}
+                    className={`w-full px-4 py-3 text-left text-xs sm:text-sm font-sans font-light transition-colors duration-200 border-b border-white/10 last:border-b-0 ${
+                      isActive
+                        ? 'text-gold-DEFAULT bg-white/5'
+                        : 'text-white/70 hover:text-gold-DEFAULT/90 hover:bg-white/5'
+                    }`}
+                    aria-label={`Navigate to ${item.label}`}
+                  >
+                    {item.label}
+                  </button>
+                )
+              })}
+            </div>
+          )
+          if (inline && typeof document !== 'undefined') {
+            return createPortal(dropdownContent, document.body)
+          }
+          return dropdownContent
+        })()}
       </div>
     </div>
   )

@@ -75,6 +75,12 @@
 - Support AVIF and WebP formats
 - Images fade from blur to sharp with subtle zoom
 
+### Image Placeholders & Frames
+- **Use `CorridorStyleFrame`** (`components/CorridorStyleFrame.tsx`) for all image placeholders and frames site-wide
+- Matches the exact 3D corridor frame style (fluted edges, moldings, recessed panel)
+- Keeps the luxury boutique aesthetic consistent on every page
+- Props: `label`, `frameNumber`, `placeholderText`, `aspectRatio`, `children`, `className`, `style`
+
 ### Videos
 - Place videos in `/public/videos/`
 - Use silent autoplay with seamless looping

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
+import CorridorStyleFrame from '@/components/CorridorStyleFrame'
 
 export default function StoryChapter() {
   const [isVisible, setIsVisible] = useState(false)
@@ -47,17 +47,14 @@ export default function StoryChapter() {
 
           {/* Image plate */}
           <div
-            className="relative aspect-[4/5] w-full"
+            className="relative w-full"
             style={{
               opacity: isVisible ? 1 : 0,
               transform: isVisible ? 'scale(1)' : 'scale(0.98)',
               transition: 'opacity 1600ms ease-in-out 400ms, transform 1600ms ease-in-out 400ms',
             }}
           >
-            <div className="absolute inset-0 bg-white/5 animate-pulse" />
-            <div className="absolute inset-0 flex items-center justify-center text-white/20 font-refined text-sm">
-              Image Placeholder
-            </div>
+            <CorridorStyleFrame />
           </div>
 
           {/* Text block 2 */}

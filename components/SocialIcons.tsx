@@ -3,7 +3,7 @@
 import Link from 'next/link'
 
 export default function SocialIcons() {
-  const iconColor = '#d4c5a0' // Beige/gold color matching BOUTALLION logo
+  const iconColor = '#031a1d' // Boutallion green to match brand accents
   
   return (
     <div 

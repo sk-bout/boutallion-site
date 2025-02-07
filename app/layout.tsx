@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Playfair_Display, Inter } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
+import GoldDustCursor from '@/components/GoldDustCursor'
 import { defaultMetadata, structuredData, organizationStructuredData, brandTitle, brandDescription } from '@/lib/seo'
 import { pressStructuredData, mediaKitStructuredData } from '@/lib/press-seo'
 import { gccGovernmentStructuredData } from '@/lib/gcc-media-seo'
@@ -122,6 +123,7 @@ export default function RootLayout({
           `}
         </Script>
         {children}
+        <GoldDustCursor />
       </body>
     </html>
   )
