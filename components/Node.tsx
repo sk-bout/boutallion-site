@@ -76,7 +76,6 @@ const Node = forwardRef<Mesh, NodeProps>(
         onPointerOver={onHover}
         onPointerOut={onLeave}
         onClick={onClick}
-        cursor="pointer"
       />
     )
   }
