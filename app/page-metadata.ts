@@ -4,7 +4,7 @@ import { defaultMetadata } from '@/lib/seo'
 export const metadata: Metadata = {
   ...defaultMetadata,
   title: 'Boutallion | The Most Luxurious Abaya Brand in the World | Coming Soon',
-  description: 'Boutallion - The Most Luxurious Abaya Brand in the World. Italian Haute Couture Abayas Made in Italy. Exclusive Modest Fashion. Register your interest for our relaunch. Discover Alta Moda Abayas, Luxury Modest Fashion, and Exclusive Materials.',
+  description: 'Boutallion - The Most Luxurious Abaya Brand in the World. Italian Haute Couture Abayas Made in Italy. Exclusive Modest Fashion. By Invitation Only. Discover Alta Moda Abayas, Luxury Modest Fashion, and Exclusive Materials.',
   keywords: [
     'luxury abaya',
     'luxury abaya brand',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     ...defaultMetadata.openGraph,
     title: 'Boutallion | The Most Luxurious Abaya Brand - Coming Soon',
-    description: 'Boutallion - The Most Luxurious Abaya Brand in the World. Italian Haute Couture Abayas Made in Italy. Register your interest for our relaunch.',
+    description: 'Boutallion - The Most Luxurious Abaya Brand in the World. Italian Haute Couture Abayas Made in Italy. By Invitation Only.',
   },
   twitter: {
     ...defaultMetadata.twitter,

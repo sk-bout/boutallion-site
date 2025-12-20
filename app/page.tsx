@@ -133,9 +133,9 @@ export default function ComingSoon() {
           BOUTALLION
         </h1>
 
-        {/* Relaunching soon text */}
+        {/* By Invitation Only text */}
         <p className="font-refined text-base sm:text-lg md:text-xl text-white/70 mb-12 md:mb-16 tracking-[0.15em] uppercase">
-          RELAUNCHING SOON
+          BY INVITATION ONLY
         </p>
 
         {/* Subscription form */}
