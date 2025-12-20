@@ -126,8 +126,8 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
           BOUTALLION
         </h1>
         
-        {/* OG Image in front of text */}
-        <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+        {/* OG Image in front of text - Desktop only */}
+        <div className="hidden lg:flex absolute inset-0 items-center justify-center z-20 pointer-events-none">
           <div className="relative w-full max-w-2xl aspect-[1200/630]">
             <Image
               src="/og-image.png"
