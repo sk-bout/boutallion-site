@@ -186,7 +186,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
 
   // Floating 3D "B" Letter from uploaded image
   const FloatingB = () => {
-    const bMeshRef = useRef<Mesh>(null)
+    const bMeshRef = useRef<Mesh | null>(null)
     const startY = useRef(4.5) // Start above BOUTALLION
     const startTime = useRef(0)
     const [textureLoaded, setTextureLoaded] = useState(false)
@@ -335,7 +335,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
 
   // Additional smaller B logos - spread more across page
   const FloatingBSmall1 = () => {
-    const bMeshRef = useRef<Mesh>(null)
+    const bMeshRef = useRef<Mesh | null>(null)
     const startY = useRef(-3)
     const startTime = useRef(0)
     const [textureLoaded, setTextureLoaded] = useState(false)
@@ -415,7 +415,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
   }
 
   const FloatingBSmall2 = () => {
-    const bMeshRef = useRef<Mesh>(null)
+    const bMeshRef = useRef<Mesh | null>(null)
     const startY = useRef(-2.5)
     const startTime = useRef(0)
     const [textureLoaded, setTextureLoaded] = useState(false)
@@ -495,7 +495,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     }
 
   const FloatingBSmall3 = () => {
-    const bMeshRef = useRef<Mesh>(null)
+    const bMeshRef = useRef<Mesh | null>(null)
     const startY = useRef(4) // Start at top of page
     const startTime = useRef(0)
     const [textureLoaded, setTextureLoaded] = useState(false)
@@ -575,7 +575,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
   }
 
   const FloatingBSmall4 = () => {
-    const bMeshRef = useRef<Mesh>(null)
+    const bMeshRef = useRef<Mesh | null>(null)
     const startY = useRef(-2)
     const startTime = useRef(0)
     const [textureLoaded, setTextureLoaded] = useState(false)
