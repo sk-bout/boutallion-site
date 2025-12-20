@@ -85,6 +85,35 @@ After fixing on Vercel, test:
 3. **DNS mismatch**: DNS pointing to wrong server
 4. **Certificate chain incomplete**: Missing intermediate certificates
 
+## DNS Configuration Troubleshooting
+
+If you're getting errors when adding the CNAME record:
+
+### Option 1: Try Different Format
+Some DNS providers require different formats:
+- **Subdomain:** `www` (just www, not www.boutallion.com)
+- **Type:** `CNAME`
+- **Address/Value:** `42efa2b7e47cdddb.vercel-dns-017.com` (no trailing dot)
+- **TTL:** 3600 or default
+
+### Option 2: Use A Record Instead (if CNAME doesn't work)
+Some DNS providers don't allow CNAME at root. You can:
+1. Check Vercel dashboard for A record values
+2. Use A record pointing to Vercel's IP addresses
+
+### Option 3: Alternative - Use Vercel's DNS
+If your current DNS provider is causing issues:
+1. In Vercel, go to **Settings** → **Domains**
+2. Click on `www.boutallion.com`
+3. Look for option to use Vercel's nameservers
+4. Update your domain's nameservers to Vercel's
+
+### Option 4: Keep Redirect Only
+If DNS configuration continues to fail:
+- The middleware redirect (already implemented) will handle www → non-www
+- Users accessing www.boutallion.com will be redirected to boutallion.com
+- This works but doesn't provide SSL for www subdomain
+
 ## If Issue Persists
 
 1. Contact Vercel support with:
