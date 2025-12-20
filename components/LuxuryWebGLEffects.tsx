@@ -1110,19 +1110,29 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const elapsed = time * b.floatSpeed
         child.position.y = startYRefs.current[i] + elapsed
 
-        // Adjust position based on viewport width - more centered on mobile
-        const isMobile = viewport.width < 8 // Mobile viewport is typically narrower
-        const baseX = isMobile ? 1.5 : 3 // Closer to center on mobile
+        // Adjust position based on viewport width - responsive for all devices
+        const isMobile = viewport.width < 6 // Mobile: very small screens
+        const isTablet = viewport.width >= 6 && viewport.width < 10 // Tablet: medium screens
+        
+        let baseX = 3 // Desktop default
+        let minX = 2
+        let maxX = 4.5
+        
+        if (isMobile) {
+          baseX = 1.2 // Closer to center on mobile
+          minX = 0.3
+          maxX = 2.2
+        } else if (isTablet) {
+          baseX = 2.2 // Slightly left of center on tablet
+          minX = 1.2
+          maxX = 3.5
+        }
         
         // Keep B logo visible - limit drift to stay in visible area
         const driftX = Math.sin(time * 0.05) * 0.15 // Small drift
         const driftZ = Math.cos(time * 0.045) * 0.2
         child.position.x = baseX + driftX
         child.position.z = b.position[2] + driftZ
-
-        // Keep B logo visible - adjust bounds based on viewport
-        const minX = isMobile ? 0.5 : 2
-        const maxX = isMobile ? 2.5 : 4.5
         
         if (child.position.x < minX) {
           child.position.x = baseX // Keep visible, not cut off
@@ -1179,9 +1189,15 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           const aspectRatio = bTexture.image && bTexture.image.width && bTexture.image.height
             ? bTexture.image.width / bTexture.image.height
             : 1
-          // Adjust scale based on viewport - smaller on mobile
-          const isMobile = viewport.width < 8
-          const scale = isMobile ? 1.2 : 2.0 // Smaller on mobile
+          // Adjust scale based on viewport - responsive sizing for all devices
+          const isMobile = viewport.width < 6 // Mobile: very small screens
+          const isTablet = viewport.width >= 6 && viewport.width < 10 // Tablet: medium screens
+          let scale = 2.0 // Desktop default
+          if (isMobile) {
+            scale = 0.9 // Smaller on mobile
+          } else if (isTablet) {
+            scale = 1.5 // Medium on tablet
+          }
           return (
             <mesh
               key={i}
