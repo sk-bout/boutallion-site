@@ -24,7 +24,14 @@ const getLocaleFromIP = (ip: string | null, headers: Headers): string => {
 }
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
+  const { pathname, hostname } = request.nextUrl
+  const url = request.nextUrl.clone()
+  
+  // Redirect www to non-www (SSL certificate is for boutallion.com, not www.boutallion.com)
+  if (hostname.startsWith('www.')) {
+    url.hostname = hostname.replace('www.', '')
+    return NextResponse.redirect(url, 301)
+  }
   
   // Skip API routes, static files, Next.js internals, and verification files
   if (

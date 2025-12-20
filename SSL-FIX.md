@@ -8,15 +8,29 @@ This is an SSL/TLS certificate issue on the hosting/server side, not in the code
 
 ## Fix Steps (Vercel/Hosting)
 
-### 1. Check SSL Certificate in Vercel
+### 1. Add www.boutallion.com to SSL Certificate
+**IMPORTANT:** Your SSL certificate currently only covers `boutallion.com`. If users access `www.boutallion.com`, they'll see the security warning.
+
+**Solution:** Add `www.boutallion.com` as a domain in Vercel:
 1. Go to your Vercel dashboard
 2. Select your project (boutallion-site)
 3. Go to **Settings** → **Domains**
+4. Click **Add Domain**
+5. Add `www.boutallion.com`
+6. Wait for SSL certificate to be automatically provisioned (5-10 minutes)
+
+**OR** use the redirect (already implemented in code):
+- The middleware now redirects `www.boutallion.com` → `boutallion.com` (301 redirect)
+- This ensures all traffic uses the domain with the valid certificate
+
+### 2. Check SSL Certificate in Vercel
+1. Go to your Vercel dashboard
+2. Select your project (boutallion-site)
+3. Go to **Settings** → **SSL Certificates**
 4. Verify that:
-   - `boutallion.com` is properly configured
-   - `www.boutallion.com` is properly configured (if using www)
-   - SSL certificate shows as "Valid" or "Active"
-   - Certificate is not expired
+   - `boutallion.com` shows as "Valid" or "Active"
+   - Certificate expiration date is in the future
+   - Renewal is set to "Auto"
 
 ### 2. Verify DNS Configuration
 Ensure your DNS records point to Vercel:
