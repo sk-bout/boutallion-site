@@ -24,7 +24,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   ...defaultMetadata,
   other: {
-    ...defaultMetadata.other,
+    ...Object.fromEntries(
+      Object.entries(defaultMetadata.other || {}).filter(([_, value]) => value !== undefined)
+    ),
     'referrer': 'strict-origin-when-cross-origin',
   },
 }
@@ -41,8 +43,8 @@ export default function LocaleLayout({
   params: { locale: Locale }
 }) {
   return (
-    <html lang={params.locale} dir={params.locale === 'ar' ? 'rtl' : 'ltr'} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%' }}>
-      <body className={`${playfairDisplay.variable} ${inter.variable}`} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%' }}>
+    <html lang={params.locale} dir={params.locale === 'ar' ? 'rtl' : 'ltr'} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%', backgroundColor: '#031a1d' }}>
+      <body className={`${playfairDisplay.variable} ${inter.variable}`} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%', backgroundColor: '#031a1d', color: '#ffffff' }}>
         <ContentProtection />
         {/* Structured Data - Luxury Brand */}
         <Script

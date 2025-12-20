@@ -49,7 +49,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
   }), [])
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-boutallion-green">
       <LanguageSwitcher locale={params.locale || 'en'} />
       <Copyright />
       
@@ -86,8 +86,8 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         </div>
       </div>
 
-      {/* Dark border frame */}
-      <div className="absolute inset-4 border" style={{ borderColor: 'rgba(0,0,0,0.2)' }} />
+      {/* Dark border frame - hidden on mobile to prevent white stripes */}
+      <div className="hidden md:block absolute inset-4 border" style={{ borderColor: 'rgba(0,0,0,0.2)' }} />
 
       {/* WebGL Effects - Crystals and Gold Dust */}
       <div className="fixed inset-0 z-0 pointer-events-none" style={{ width: '100%', height: '100%' }}>
@@ -112,7 +112,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       <main className="relative z-10 text-center px-6 py-12 max-w-4xl mx-auto animate-fade-in flex flex-col items-center justify-center">
         {/* BOUTALLION text in Portrait font with 3D effect */}
         <h1 
-          className="font-portrait text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-[0.25em] text-gold-DEFAULT mb-12 md:mb-16 text-3d"
+          className="font-portrait text-5xl sm:text-6xl md:text-8xl lg:text-9xl tracking-[0.2em] sm:tracking-[0.25em] text-gold-light sm:text-gold-DEFAULT mb-12 md:mb-16 text-3d"
           style={{
             fontDisplay: 'block',
             textRendering: 'optimizeLegibility',
@@ -122,6 +122,8 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
             WebkitTextSizeAdjust: '100%',
             textSizeAdjust: '100%',
             willChange: 'transform',
+            fontWeight: 'normal',
+            letterSpacing: '0.2em',
           }}
         >
           BOUTALLION

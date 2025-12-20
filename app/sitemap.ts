@@ -1,10 +1,9 @@
 import { MetadataRoute } from 'next'
-import { i18n } from '@/lib/i18n'
+import { locales } from '@/lib/i18n'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const locales = i18n.locales
   const currentDate = new Date()
   
   // Base routes for each locale

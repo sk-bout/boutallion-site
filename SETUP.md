@@ -108,6 +108,26 @@ npm run build
 npm start
 ```
 
+## Environment Variables
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://boutallion.com
+INDEXNOW_KEY=23be64d4f3660aa05ef7a9b9b4e659af
+```
+
+See `.env.example` for reference.
+
+### IndexNow Setup
+
+The IndexNow key file has been created at `/public/23be64d4f3660aa05ef7a9b9b4e659af.txt`. This file must be accessible at:
+```
+https://boutallion.com/23be64d4f3660aa05ef7a9b9b4e659af.txt
+```
+
+This allows search engines to verify ownership when you submit URLs via the IndexNow API.
+
 ## Notes
 
 - The site disables text selection and right-click (luxury website standard)

@@ -181,3 +181,133 @@ Most abaya brands are not implementing:
 
 Boutallion's custom implementation gives a significant advantage in search rankings.
 
+## IndexNow Integration
+
+### Overview
+IndexNow is an open protocol that allows websites to instantly notify search engines when URLs are added, updated, or deleted. This helps search engines discover and index content faster.
+
+### Implementation
+The IndexNow functionality has been implemented in:
+- `lib/indexnow.ts` - Core utility functions for IndexNow API
+- `app/api/indexnow/route.ts` - API endpoint for triggering submissions
+
+### Setup
+
+#### 1. Generate IndexNow Key
+You need to generate an IndexNow key (8-128 hexadecimal characters: a-z, A-Z, 0-9, -).
+
+You can generate one using:
+```bash
+# Generate a random key (32 characters)
+openssl rand -hex 16
+```
+
+Or use any random string generator that creates a string matching the format.
+
+#### 2. Add Key File to Public Directory
+Create a file named with your key (e.g., `8e33e8e311c448ce87dfc450603e3f96.txt`) in the `/public` directory. The file should be accessible at:
+```
+https://boutallion.com/8e33e8e311c448ce87dfc450603e3f96.txt
+```
+
+The file content should be your key:
+```
+8e33e8e311c448ce87dfc450603e3f96
+```
+
+#### 3. Set Environment Variable
+Add your IndexNow key to your environment variables:
+```bash
+INDEXNOW_KEY=8e33e8e311c448ce87dfc450603e3f96
+```
+
+### Usage
+
+#### Submit All Sitemap URLs
+Submit all URLs from your sitemap to search engines:
+
+**Via API (POST):**
+```bash
+curl -X POST https://boutallion.com/api/indexnow \
+  -H "Content-Type: application/json" \
+  -d '{"submitSitemap": true}'
+```
+
+**Via API (GET):**
+```bash
+curl "https://boutallion.com/api/indexnow?submitSitemap=true"
+```
+
+#### Submit Specific URLs
+Submit specific URLs:
+
+**Via API (POST):**
+```bash
+curl -X POST https://boutallion.com/api/indexnow \
+  -H "Content-Type: application/json" \
+  -d '{
+    "urls": [
+      "https://boutallion.com/en",
+      "https://boutallion.com/ar"
+    ],
+    "searchEngines": ["bing", "yandex"]
+  }'
+```
+
+**Via API (GET):**
+```bash
+curl "https://boutallion.com/api/indexnow?url=https://boutallion.com/en&searchEngines=bing,yandex"
+```
+
+#### Programmatic Usage
+You can also use the utility functions directly in your code:
+
+```typescript
+import {
+  submitSitemapToSearchEngines,
+  submitSingleUrl,
+  submitToMultipleSearchEngines,
+} from '@/lib/indexnow'
+
+// Submit all sitemap URLs
+const result = await submitSitemapToSearchEngines(['bing', 'yandex'])
+
+// Submit a single URL
+const result = await submitSingleUrl('https://boutallion.com/en', ['bing'])
+
+// Submit multiple URLs
+const result = await submitToMultipleSearchEngines(
+  ['https://boutallion.com/en', 'https://boutallion.com/ar'],
+  ['bing', 'yandex']
+)
+```
+
+### Supported Search Engines
+- **Bing** (`bing`) - https://www.bing.com/indexnow
+- **Yandex** (`yandex`) - https://yandex.com/indexnow
+- **Seznam** (`seznam`) - https://search.seznam.cz/indexnow
+- **Naver** (`naver`) - https://searchadvisor.naver.com/indexnow
+
+### Best Practices
+
+1. **Submit on Content Updates**: Automatically submit URLs when content is published or updated
+2. **Batch Submissions**: The API supports up to 10,000 URLs per request
+3. **Multiple Engines**: Submit to multiple search engines simultaneously for better coverage
+4. **Error Handling**: Check the response to ensure successful submission
+5. **Rate Limiting**: Be mindful of rate limits (though IndexNow is designed to handle frequent submissions)
+
+### Automatic Submission
+You can set up automatic submissions by:
+1. Adding a webhook to your CMS when content is published
+2. Using a cron job to periodically submit updated URLs
+3. Integrating with your deployment pipeline to submit URLs after deployments
+
+### Example: Submit After Page Update
+```typescript
+// In your page/API route after content update
+import { submitSingleUrl } from '@/lib/indexnow'
+
+// After updating a page
+await submitSingleUrl(`https://boutallion.com/${locale}/${pageSlug}`, ['bing', 'yandex'])
+```
+

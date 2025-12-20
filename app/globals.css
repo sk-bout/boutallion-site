@@ -42,6 +42,13 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Ensure background color matches site */
+  background-color: #031a1d;
+  color: #ffffff;
+}
+
+html {
+  background-color: #031a1d;
 }
 
 /* Portrait font loading - optimized for mobile */
@@ -223,6 +230,30 @@ body {
   transform: perspective(1000px) rotateX(5deg);
   transition: transform 0.3s ease;
   position: relative;
+}
+
+/* Enhanced mobile readability */
+@media screen and (max-width: 768px) {
+  .text-3d {
+    color: #e8dcc0; /* Lighter gold for better contrast on mobile */
+    text-shadow: 
+      /* Stronger shadows for mobile readability */
+      -1px -1px 0 rgba(255, 255, 255, 0.5),
+      -2px -2px 0 rgba(240, 235, 220, 0.6),
+      -3px -3px 0 rgba(240, 235, 220, 0.5),
+      /* Deeper shadows for contrast */
+      1px 1px 0 rgba(100, 90, 80, 0.7),
+      2px 2px 0 rgba(80, 70, 60, 0.8),
+      3px 3px 0 rgba(60, 55, 50, 0.9),
+      4px 4px 8px rgba(0, 0, 0, 0.6),
+      5px 5px 12px rgba(0, 0, 0, 0.5),
+      /* Enhanced glow for visibility */
+      0 0 20px rgba(255, 255, 255, 0.2),
+      0 0 40px rgba(255, 255, 255, 0.15),
+      0 0 60px rgba(255, 255, 255, 0.1);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+    transform: perspective(1000px) rotateX(2deg); /* Less rotation on mobile */
+  }
 }
 
 .text-3d::before {
