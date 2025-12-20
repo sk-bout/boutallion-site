@@ -4,6 +4,7 @@ import Script from 'next/script'
 import './globals.css'
 import { defaultMetadata, structuredData, organizationStructuredData } from '@/lib/seo'
 import { pressStructuredData, mediaKitStructuredData } from '@/lib/press-seo'
+import { gccGovernmentStructuredData } from '@/lib/gcc-media-seo'
 
 const playfairDisplay = Playfair_Display({
   subsets: ['latin'],
@@ -57,6 +58,14 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(mediaKitStructuredData),
+          }}
+        />
+        {/* Structured Data - GCC Government Recognition */}
+        <Script
+          id="structured-data-gcc-government"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(gccGovernmentStructuredData),
           }}
         />
         {/* Google Analytics */}

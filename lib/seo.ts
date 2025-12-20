@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { pressKeywords } from './press-seo'
+import { gccMediaKeywords, uaeGovernmentKeywords } from './gcc-media-seo'
+import { gccMediaKeywords, uaeGovernmentKeywords } from './gcc-media-seo'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'
 const siteName = 'Boutallion'
