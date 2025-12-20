@@ -593,6 +593,8 @@ export const defaultMetadata: Metadata = {
     ...primaryKeywords,
     ...regionalKeywords,
     ...Object.values(multilingualKeywords).flat(),
+    ...gccMediaKeywords,
+    ...uaeGovernmentKeywords,
   ].join(', '),
   authors: [{ name: 'Boutallion' }],
   creator: 'Boutallion',
