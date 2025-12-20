@@ -17,44 +17,130 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
   
   const t = getTranslations(params.locale || 'en')
 
-  // Email validation function
+  // Enhanced email validation function with comprehensive checking
   const validateEmail = (emailValue: string): boolean => {
     if (!emailValue) {
       setEmailError('')
       return false
     }
     
-    // RFC 5322 compliant email regex (simplified but effective)
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    // Trim whitespace
+    const trimmedEmail = emailValue.trim()
+    if (trimmedEmail !== emailValue) {
+      setEmail(trimmedEmail)
+    }
     
-    if (!emailRegex.test(emailValue)) {
+    // Check length
+    if (trimmedEmail.length > 254) {
+      setEmailError('Email address is too long (max 254 characters)')
+      return false
+    }
+    
+    if (trimmedEmail.length < 5) {
+      setEmailError('Email address is too short')
+      return false
+    }
+    
+    // RFC 5322 compliant email regex (more comprehensive)
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+    
+    if (!emailRegex.test(trimmedEmail)) {
       setEmailError('Please enter a valid email address')
       return false
     }
     
-    // Additional checks
-    if (emailValue.length > 254) {
-      setEmailError('Email address is too long')
+    // Split email into local and domain parts
+    const parts = trimmedEmail.split('@')
+    if (parts.length !== 2) {
+      setEmailError('Invalid email format')
+      return false
+    }
+    
+    const [localPart, domain] = parts
+    
+    // Check local part
+    if (localPart.length > 64) {
+      setEmailError('Email username is too long')
+      return false
+    }
+    
+    if (localPart.length === 0) {
+      setEmailError('Email username cannot be empty')
+      return false
+    }
+    
+    // Check for consecutive dots
+    if (localPart.includes('..') || domain.includes('..')) {
+      setEmailError('Email cannot contain consecutive dots')
+      return false
+    }
+    
+    // Check domain
+    if (domain.length > 253) {
+      setEmailError('Email domain is too long')
+      return false
+    }
+    
+    // Check for valid TLD (at least 2 characters)
+    const domainParts = domain.split('.')
+    if (domainParts.length < 2) {
+      setEmailError('Email must have a valid domain (e.g., example.com)')
+      return false
+    }
+    
+    const tld = domainParts[domainParts.length - 1]
+    if (tld.length < 2 || !/^[a-zA-Z]+$/.test(tld)) {
+      setEmailError('Email must have a valid top-level domain')
       return false
     }
     
     // Check for common typos
-    const domain = emailValue.split('@')[1]
-    if (domain) {
-      const commonTypos: { [key: string]: string } = {
-        'gmial.com': 'gmail.com',
-        'gmai.com': 'gmail.com',
-        'gmal.com': 'gmail.com',
-        'yahooo.com': 'yahoo.com',
-        'yaho.com': 'yahoo.com',
-        'hotmai.com': 'hotmail.com',
-        'hotmial.com': 'hotmail.com',
-      }
-      
-      if (commonTypos[domain.toLowerCase()]) {
-        setEmailError(`Did you mean ${emailValue.split('@')[0]}@${commonTypos[domain.toLowerCase()]}?`)
-        return false
-      }
+    const domainLower = domain.toLowerCase()
+    const commonTypos: { [key: string]: string } = {
+      'gmial.com': 'gmail.com',
+      'gmai.com': 'gmail.com',
+      'gmal.com': 'gmail.com',
+      'gmaill.com': 'gmail.com',
+      'gmail.co': 'gmail.com',
+      'yahooo.com': 'yahoo.com',
+      'yaho.com': 'yahoo.com',
+      'yahoo.co': 'yahoo.com',
+      'hotmai.com': 'hotmail.com',
+      'hotmial.com': 'hotmail.com',
+      'hotmail.co': 'hotmail.com',
+      'outlok.com': 'outlook.com',
+      'outlook.co': 'outlook.com',
+      'outlok.co': 'outlook.com',
+    }
+    
+    if (commonTypos[domainLower]) {
+      setEmailError(`Did you mean ${localPart}@${commonTypos[domainLower]}?`)
+      return false
+    }
+    
+    // Check for disposable email domains (common ones)
+    const disposableDomains = [
+      'tempmail.com', '10minutemail.com', 'guerrillamail.com', 'mailinator.com',
+      'throwaway.email', 'temp-mail.org', 'getnada.com', 'mohmal.com',
+      'fakeinbox.com', 'trashmail.com', 'sharklasers.com', 'mintemail.com',
+    ]
+    
+    if (disposableDomains.some(disposable => domainLower.includes(disposable))) {
+      setEmailError('Please use a permanent email address')
+      return false
+    }
+    
+    // Check for invalid characters in domain
+    if (!/^[a-zA-Z0-9.-]+$/.test(domain)) {
+      setEmailError('Email domain contains invalid characters')
+      return false
+    }
+    
+    // Check domain doesn't start or end with dot or hyphen
+    if (domain.startsWith('.') || domain.endsWith('.') || 
+        domain.startsWith('-') || domain.endsWith('-')) {
+      setEmailError('Invalid email domain format')
+      return false
     }
     
     setEmailError('')
