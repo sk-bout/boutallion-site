@@ -584,7 +584,7 @@ const multilingualKeywords = {
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Boutallion | The Most Luxurious Abaya Brand in the World | Featured in Vogue, Forbes, Marie Claire | Made in Italy',
+    default: 'Boutallion | World\'s Most Luxurious Abaya Brand. Based in Abu Dhabi. Crafted in Italy. Featured in Vogue, Forbes',
     template: '%s | Boutallion',
   },
   description: brandDescription,
@@ -609,7 +609,7 @@ export const defaultMetadata: Metadata = {
     alternateLocale: ['ar_SA', 'ar_AE', 'ar_QA', 'ar_KW', 'ar_BH', 'ar_OM', 'fr_FR', 'it_IT', 'ru_RU', 'nl_NL'],
     url: siteUrl,
     siteName: siteName,
-    title: 'Boutallion | The Most Luxurious Abaya Brand in the World',
+    title: 'Boutallion | World\'s Most Luxurious Abaya Brand. Based in Abu Dhabi. Crafted in Italy. Featured in Vogue, Forbes',
     description: brandDescription,
     images: [
       {
@@ -622,7 +622,7 @@ export const defaultMetadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Boutallion | The Most Luxurious Abaya Brand',
+    title: 'Boutallion | World\'s Most Luxurious Abaya Brand. Based in Abu Dhabi. Crafted in Italy. Featured in Vogue, Forbes',
     description: brandDescription,
     images: [`${siteUrl}/og-image.png`],
     creator: '@boutallion',
@@ -661,6 +661,16 @@ export const defaultMetadata: Metadata = {
   },
   category: 'Luxury Fashion',
   classification: 'Luxury Abaya Brand, Haute Couture, Modest Fashion',
+  icons: {
+    icon: [
+      { url: '/og-image.png', sizes: 'any' },
+      { url: '/og-image.png', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/og-image.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/og-image.png',
+  },
   other: {
     'geo.region': 'IT',
     'geo.placename': 'Italy',
