@@ -96,9 +96,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         particles.push({
           position: [x, y, z],
           velocity: [
-            (Math.random() - 0.5) * 0.0008,
-            Math.random() * 0.0025 + 0.002, // Increased upward velocity
-            (Math.random() - 0.5) * 0.0008
+            (Math.random() - 0.5) * 0.0004, // Slower horizontal movement
+            Math.random() * 0.0012 + 0.001, // Slower upward velocity
+            (Math.random() - 0.5) * 0.0004 // Slower depth movement
           ],
           size: Math.random() * 0.08 + 0.05
         })
@@ -135,10 +135,10 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const velocity = particle.velocity
         const pos = child.position
         
-        // Floating motion - more upward movement
-        pos.x += velocity[0] + Math.sin(time + pos.y) * 0.0002
-        pos.y += velocity[1] + Math.cos(time + pos.x) * 0.0005 // Increased upward drift
-        pos.z += velocity[2] + Math.sin(time * 0.3 + pos.x) * 0.0002
+        // Elegant floating motion - slower and more graceful
+        pos.x += velocity[0] + Math.sin(time * 0.5 + pos.y) * 0.0001
+        pos.y += velocity[1] + Math.cos(time * 0.4 + pos.x) * 0.0002 // Slower upward drift
+        pos.z += velocity[2] + Math.sin(time * 0.15 + pos.x) * 0.0001
         
         // Keep particles in visible range, resetting to bottom when they go too high
         if (pos.y < -5) {
@@ -156,9 +156,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           pos.z = (Math.random() - 0.5) * 8
         }
         
-        // Subtle rotation for 3D effect
-        child.rotation.x += 0.001
-        child.rotation.y += 0.001
+        // Subtle rotation for 3D effect - slower
+        child.rotation.x += 0.0005
+        child.rotation.y += 0.0005
         
         // Subtle pulsing opacity - more subtle
         const mat = child.material as THREE.MeshStandardMaterial
