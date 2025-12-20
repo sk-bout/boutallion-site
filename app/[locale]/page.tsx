@@ -111,7 +111,19 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       {/* Main content */}
       <main className="relative z-10 text-center px-6 py-12 max-w-4xl mx-auto animate-fade-in flex flex-col items-center justify-center">
         {/* BOUTALLION text in Portrait font with 3D effect */}
-        <h1 className="font-portrait text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-[0.25em] text-gold-DEFAULT mb-12 md:mb-16 text-3d">
+        <h1 
+          className="font-portrait text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-[0.25em] text-gold-DEFAULT mb-12 md:mb-16 text-3d"
+          style={{
+            fontDisplay: 'block',
+            textRendering: 'optimizeLegibility',
+            WebkitFontSmoothing: 'antialiased',
+            MozOsxFontSmoothing: 'grayscale',
+            fontFeatureSettings: '"liga" 1, "kern" 1',
+            WebkitTextSizeAdjust: '100%',
+            textSizeAdjust: '100%',
+            willChange: 'transform',
+          }}
+        >
           BOUTALLION
         </h1>
 

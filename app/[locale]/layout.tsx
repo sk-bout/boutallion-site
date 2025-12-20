@@ -21,7 +21,13 @@ const inter = Inter({
   display: 'swap',
 })
 
-export const metadata: Metadata = defaultMetadata
+export const metadata: Metadata = {
+  ...defaultMetadata,
+  other: {
+    ...defaultMetadata.other,
+    'referrer': 'strict-origin-when-cross-origin',
+  },
+}
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -35,8 +41,8 @@ export default function LocaleLayout({
   params: { locale: Locale }
 }) {
   return (
-    <html lang={params.locale} dir={params.locale === 'ar' ? 'rtl' : 'ltr'}>
-      <body className={`${playfairDisplay.variable} ${inter.variable}`}>
+    <html lang={params.locale} dir={params.locale === 'ar' ? 'rtl' : 'ltr'} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%' }}>
+      <body className={`${playfairDisplay.variable} ${inter.variable}`} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%' }}>
         <ContentProtection />
         {/* Structured Data - Luxury Brand */}
         <Script

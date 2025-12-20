@@ -23,24 +23,75 @@ textarea {
   user-select: text;
 }
 
-body {
-  font-family: system-ui, -apple-system, sans-serif;
+html {
+  /* Prevent mobile zoom and ensure consistent scaling */
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Ensure proper rendering on mobile */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Portrait font loading */
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  /* Prevent layout shifts during font loading */
+  font-display: block;
+  /* Ensure consistent rendering */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Portrait font loading - optimized for mobile */
 @font-face {
   font-family: 'Portrait';
   src: url('/fonts/Portrait-Regular.woff2') format('woff2'),
        url('/fonts/Portrait-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
+  font-display: block; /* Changed from swap to block to prevent FOUT */
+  font-feature-settings: 'liga' 1, 'kern' 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure fonts are loaded before rendering */
+body {
+  font-display: block;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 :root {
   --font-portrait: 'Portrait', serif;
   --font-refined: 'Playfair Display', serif;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Ensure consistent scaling across all devices */
+@media screen and (max-width: 768px) {
+  html {
+    font-size: 16px; /* Prevent iOS zoom on input focus */
+  }
+  
+  /* Prevent text size adjustment on mobile */
+  * {
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+}
+
+/* Tablet and mobile consistent scaling */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  html {
+    font-size: 16px;
+  }
 }
 
 /* 3D Text Effect for BOUTALLION */

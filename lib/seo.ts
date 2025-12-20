@@ -583,6 +583,13 @@ const multilingualKeywords = {
 
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    viewportFit: 'cover',
+  },
   title: {
     default: 'Boutallion | World\'s Most Luxurious Abaya Brand. Based in Abu Dhabi. Crafted in Italy. Featured in Vogue, Forbes',
     template: '%s | Boutallion',
