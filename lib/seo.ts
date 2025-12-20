@@ -670,13 +670,14 @@ export const defaultMetadata: Metadata = {
   classification: 'Luxury Abaya Brand, Haute Couture, Modest Fashion',
   icons: {
     icon: [
-      { url: '/og-image.png', sizes: 'any' },
-      { url: '/og-image.png', type: 'image/png' },
+      { url: '/logo.png', sizes: 'any' },
+      { url: '/logo.png', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
     ],
     apple: [
-      { url: '/og-image.png', sizes: '180x180', type: 'image/png' },
+      { url: '/logo.png', sizes: '180x180', type: 'image/png' },
     ],
-    shortcut: '/og-image.png',
+    shortcut: '/logo.png',
   },
   other: {
     'geo.region': 'IT',
