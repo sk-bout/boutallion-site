@@ -10,7 +10,7 @@ interface WebGLEffectsDemoProps {
 }
 
 export default function WebGLEffectsDemo({ effectType }: WebGLEffectsDemoProps) {
-  const meshRef = useRef<Mesh>(null)
+  const meshRef = useRef<Mesh | null>(null)
   const groupRef = useRef<THREE.Group>(null)
 
   // Silk/Chiffon Simulation
@@ -283,7 +283,7 @@ export default function WebGLEffectsDemo({ effectType }: WebGLEffectsDemoProps) 
       geometry.attributes.position.needsUpdate = true
     })
 
-    return <points ref={meshRef} geometry={geometry} material={material} />
+    return <points ref={meshRef as any} geometry={geometry} material={material} />
   }
 
   // Organic Morphing Shapes
@@ -438,7 +438,7 @@ export default function WebGLEffectsDemo({ effectType }: WebGLEffectsDemoProps) 
       geometry.attributes.position.needsUpdate = true
     })
 
-    return <points ref={meshRef} geometry={geometry} material={material} />
+    return <points ref={meshRef as any} geometry={geometry} material={material} />
   }
 
   // Parallax Depth Layers
