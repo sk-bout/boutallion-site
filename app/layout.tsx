@@ -27,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
+      <body className={`${playfairDisplay.variable} ${inter.variable}`}>
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-DQM5KS13BT"
@@ -41,8 +41,8 @@ export default function RootLayout({
             gtag('config', 'G-DQM5KS13BT');
           `}
         </Script>
-      </head>
-      <body className={`${playfairDisplay.variable} ${inter.variable}`}>{children}</body>
+        {children}
+      </body>
     </html>
   )
 }
