@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  
+  <!-- English (Primary) -->
+  <url>
+    <loc>https://boutallion.com/en</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://boutallion.com/en"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://boutallion.com/ar"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://boutallion.com/it"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://boutallion.com/fr"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://boutallion.com/nl"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://boutallion.com/zh"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://boutallion.com/ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://boutallion.com/en"/>
+  </url>
+  
+  <!-- Gulf Arabic -->
+  <url>
+    <loc>https://boutallion.com/ar</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://boutallion.com/en"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://boutallion.com/ar"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://boutallion.com/it"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://boutallion.com/fr"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://boutallion.com/nl"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://boutallion.com/zh"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://boutallion.com/ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://boutallion.com/en"/>
+  </url>
+  
+  <!-- Italian -->
+  <url>
+    <loc>https://boutallion.com/it</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://boutallion.com/en"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://boutallion.com/ar"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://boutallion.com/it"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://boutallion.com/fr"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://boutallion.com/nl"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://boutallion.com/zh"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://boutallion.com/ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://boutallion.com/en"/>
+  </url>
+  
+  <!-- French -->
+  <url>
+    <loc>https://boutallion.com/fr</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://boutallion.com/en"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://boutallion.com/ar"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://boutallion.com/it"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://boutallion.com/fr"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://boutallion.com/nl"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://boutallion.com/zh"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://boutallion.com/ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://boutallion.com/en"/>
+  </url>
+  
+  <!-- Dutch -->
+  <url>
+    <loc>https://boutallion.com/nl</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://boutallion.com/en"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://boutallion.com/ar"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://boutallion.com/it"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://boutallion.com/fr"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://boutallion.com/nl"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://boutallion.com/zh"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://boutallion.com/ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://boutallion.com/en"/>
+  </url>
+  
+  <!-- Mandarin -->
+  <url>
+    <loc>https://boutallion.com/zh</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://boutallion.com/en"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://boutallion.com/ar"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://boutallion.com/it"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://boutallion.com/fr"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://boutallion.com/nl"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://boutallion.com/zh"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://boutallion.com/ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://boutallion.com/en"/>
+  </url>
+  
+  <!-- Russian -->
+  <url>
+    <loc>https://boutallion.com/ru</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://boutallion.com/en"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://boutallion.com/ar"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://boutallion.com/it"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://boutallion.com/fr"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://boutallion.com/nl"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://boutallion.com/zh"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://boutallion.com/ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://boutallion.com/en"/>
+  </url>
+  
+</urlset>
+
