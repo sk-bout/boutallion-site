@@ -26,11 +26,12 @@ const getLocaleFromIP = (ip: string | null, headers: Headers): string => {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   
-  // Skip API routes, static files, and Next.js internals
+  // Skip API routes, static files, Next.js internals, and verification files
   if (
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon.ico') ||
+    pathname.includes('googled6388a4c0fa66801.html') ||
     pathname.includes('.')
   ) {
     return NextResponse.next()
@@ -68,8 +69,8 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Skip all internal paths (_next)
-    '/((?!_next|api|favicon.ico|.*\\.).*)',
+    // Skip all internal paths (_next), API routes, static files, and verification files
+    '/((?!_next|api|favicon.ico|googled6388a4c0fa66801.html|.*\\.).*)',
   ],
 }
 

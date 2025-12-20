@@ -20,7 +20,13 @@ const inter = Inter({
   display: 'swap',
 })
 
-export const metadata: Metadata = defaultMetadata
+export const metadata: Metadata = {
+  ...defaultMetadata,
+  other: {
+    ...defaultMetadata.other,
+    'google-site-verification': 'oe-IdMeW_e3yX04G-KY6DLC_SBTHOe8ca5rE2_qRbZw',
+  },
+}
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
