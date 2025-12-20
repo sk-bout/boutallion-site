@@ -1110,22 +1110,47 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const elapsed = time * b.floatSpeed
         child.position.y = startYRefs.current[i] + elapsed
 
-        // Adjust position based on viewport width - responsive for all devices
+        // Adjust position and scale based on viewport width - responsive for all devices
         const isMobile = viewport.width < 6 // Mobile: very small screens
         const isTablet = viewport.width >= 6 && viewport.width < 10 // Tablet: medium screens
         
+        // Calculate scale dynamically
+        let scale = 2.0 // Desktop default
+        if (isMobile) {
+          scale = 0.9 // Smaller on mobile
+        } else if (isTablet) {
+          scale = 1.5 // Medium on tablet
+        }
+        
+        // Update scale in real-time
+        child.scale.setScalar(scale)
+        
+        // Calculate logo half-width based on actual size (geometry width * scale)
+        const aspectRatio = bTexture.image && bTexture.image.width && bTexture.image.height
+          ? bTexture.image.width / bTexture.image.height
+          : 1
+        const logoHalfWidth = (aspectRatio * 1.2 * scale) / 2 // Half width of the logo
+        const logoHalfHeight = (1.2 * scale) / 2 // Half height of the logo
+        
+        // Adjust position bounds to account for logo size - ensure it's never cut off
+        const viewportHalfWidth = viewport.width / 2
+        const viewportHalfHeight = viewport.height / 2
+        
         let baseX = 3 // Desktop default
-        let minX = 2
-        let maxX = 4.5
+        let minX = -viewportHalfWidth + logoHalfWidth + 0.2 // Left edge + logo half + padding
+        let maxX = viewportHalfWidth - logoHalfWidth - 0.2 // Right edge - logo half - padding
         
         if (isMobile) {
-          baseX = 1.2 // Closer to center on mobile
-          minX = 0.3
-          maxX = 2.2
+          baseX = 1.0 // Closer to center on mobile
+          minX = -viewportHalfWidth + logoHalfWidth + 0.3
+          maxX = viewportHalfWidth - logoHalfWidth - 0.3
         } else if (isTablet) {
-          baseX = 2.2 // Slightly left of center on tablet
-          minX = 1.2
-          maxX = 3.5
+          baseX = 2.0 // Slightly left of center on tablet
+          minX = -viewportHalfWidth + logoHalfWidth + 0.25
+          maxX = viewportHalfWidth - logoHalfWidth - 0.25
+        } else {
+          // Desktop: keep it on the right side but ensure visibility
+          minX = Math.max(minX, 1.5) // Don't go too far left on desktop
         }
         
         // Keep B logo visible - limit drift to stay in visible area
@@ -1134,10 +1159,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.position.x = baseX + driftX
         child.position.z = b.position[2] + driftZ
         
+        // Enforce horizontal bounds to prevent cutoff
         if (child.position.x < minX) {
-          child.position.x = baseX // Keep visible, not cut off
+          child.position.x = minX
         } else if (child.position.x > maxX) {
-          child.position.x = baseX + 0.3 // Prevent going too far right and getting cut off
+          child.position.x = maxX
         }
         
         // Keep B logo away from BOUTALLION text area (y between -1.5 and 1.5)
@@ -1147,13 +1173,16 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           startYRefs.current[0] = -2
         }
         
-        // Keep within vertical bounds - fully visible
-        if (child.position.y < -3.5) {
-          child.position.y = -3
-          startYRefs.current[0] = -3
-        } else if (child.position.y > 3.5) {
-          child.position.y = 3
-          startYRefs.current[0] = 3
+        // Keep within vertical bounds - account for logo height to prevent cutoff
+        const minY = -viewportHalfHeight + logoHalfHeight + 0.3
+        const maxY = viewportHalfHeight - logoHalfHeight - 0.3
+        
+        if (child.position.y < minY) {
+          child.position.y = minY
+          startYRefs.current[0] = minY
+        } else if (child.position.y > maxY) {
+          child.position.y = maxY
+          startYRefs.current[0] = maxY
         }
 
         child.rotation.y = Math.sin(time * 0.1 + i) * 0.05
@@ -1189,21 +1218,21 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           const aspectRatio = bTexture.image && bTexture.image.width && bTexture.image.height
             ? bTexture.image.width / bTexture.image.height
             : 1
-          // Adjust scale based on viewport - responsive sizing for all devices
-          const isMobile = viewport.width < 6 // Mobile: very small screens
-          const isTablet = viewport.width >= 6 && viewport.width < 10 // Tablet: medium screens
-          let scale = 2.0 // Desktop default
+          // Initial scale - will be updated dynamically in useFrame
+          const isMobile = viewport.width < 6
+          const isTablet = viewport.width >= 6 && viewport.width < 10
+          let initialScale = 2.0
           if (isMobile) {
-            scale = 0.9 // Smaller on mobile
+            initialScale = 0.9
           } else if (isTablet) {
-            scale = 1.5 // Medium on tablet
+            initialScale = 1.5
           }
           return (
             <mesh
               key={i}
               position={b.position}
               material={bMaterial.clone()}
-              scale={scale}
+              scale={initialScale}
             >
               <planeGeometry args={[aspectRatio * 1.2, 1.2]} />
             </mesh>
