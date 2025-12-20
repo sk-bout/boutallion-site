@@ -26,6 +26,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
           it: `${baseUrl}/it`,
           ru: `${baseUrl}/ru`,
           'ru-RU': `${baseUrl}/ru-ru`,
+          nl: `${baseUrl}/nl`,
+          'nl-NL': `${baseUrl}/nl-nl`,
         },
       },
     },
