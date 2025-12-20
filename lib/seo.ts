@@ -613,7 +613,7 @@ export const defaultMetadata: Metadata = {
     description: brandDescription,
     images: [
       {
-        url: `${siteUrl}/og-image.jpg`,
+        url: `${siteUrl}/og-image.png`,
         width: 1200,
         height: 630,
         alt: 'Boutallion - Luxury Abaya Brand',
@@ -624,7 +624,7 @@ export const defaultMetadata: Metadata = {
     card: 'summary_large_image',
     title: 'Boutallion | The Most Luxurious Abaya Brand',
     description: brandDescription,
-    images: [`${siteUrl}/og-image.jpg`],
+    images: [`${siteUrl}/og-image.png`],
     creator: '@boutallion',
   },
   robots: {
@@ -702,7 +702,7 @@ export const structuredData = {
   description: brandDescription,
   url: siteUrl,
   logo: `${siteUrl}/logo.png`,
-  image: `${siteUrl}/og-image.jpg`,
+  image: `${siteUrl}/og-image.png`,
   sameAs: [
     // Add social media URLs when available
     // 'https://www.instagram.com/boutallion',
