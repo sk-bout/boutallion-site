@@ -6,6 +6,7 @@ import { defaultMetadata, structuredData, organizationStructuredData } from '@/l
 import { pressStructuredData, mediaKitStructuredData } from '@/lib/press-seo'
 import { gccGovernmentStructuredData } from '@/lib/gcc-media-seo'
 import { Locale, locales } from '@/lib/i18n'
+import ContentProtection from '@/components/ContentProtection'
 
 const playfairDisplay = Playfair_Display({
   subsets: ['latin'],
@@ -35,6 +36,7 @@ export default function LocaleLayout({
   return (
     <html lang={params.locale} dir={params.locale === 'ar' ? 'rtl' : 'ltr'}>
       <body className={`${playfairDisplay.variable} ${inter.variable}`}>
+        <ContentProtection />
         {/* Structured Data - Luxury Brand */}
         <Script
           id="structured-data-brand"
