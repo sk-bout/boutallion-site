@@ -8,6 +8,12 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['three', '@react-three/fiber', '@react-three/drei'],
   },
+  // SEO optimizations
+  compress: true,
+  poweredByHeader: false,
+  generateEtags: true,
+  // Ensure proper trailing slash handling for SEO
+  trailingSlash: false,
 }
 
 module.exports = nextConfig

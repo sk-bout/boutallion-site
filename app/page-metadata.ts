@@ -1,0 +1,50 @@
+import type { Metadata } from 'next'
+import { defaultMetadata } from '@/lib/seo'
+
+export const metadata: Metadata = {
+  ...defaultMetadata,
+  title: 'Boutallion | The Most Luxurious Abaya Brand in the World | Coming Soon',
+  description: 'Boutallion - The Most Luxurious Abaya Brand in the World. Italian Haute Couture Abayas Made in Italy. Exclusive Modest Fashion. Register your interest for our relaunch. Discover Alta Moda Abayas, Luxury Modest Fashion, and Exclusive Materials.',
+  keywords: [
+    'luxury abaya',
+    'luxury abaya brand',
+    'most luxurious abaya brand',
+    'most expensive abaya',
+    'expensive abaya',
+    'exclusive abaya',
+    'haute couture abaya',
+    'couture abaya',
+    'abaya made in italy',
+    'abaya brand',
+    'modest fashion',
+    'exclusive materials',
+    'made in italy',
+    'alta moda',
+    'luxury modest fashion',
+    'italian abaya',
+    'couture modest fashion',
+    'luxury islamic fashion',
+    'premium abaya',
+    'designer abaya',
+    'coming soon',
+    'boutallion',
+    'luxury abaya dubai',
+    'luxury abaya saudi arabia',
+    'luxury abaya uae',
+    'luxury abaya qatar',
+    'luxury abaya kuwait',
+    'luxury abaya bahrain',
+    'luxury abaya oman',
+  ].join(', '),
+  openGraph: {
+    ...defaultMetadata.openGraph,
+    title: 'Boutallion | The Most Luxurious Abaya Brand - Coming Soon',
+    description: 'Boutallion - The Most Luxurious Abaya Brand in the World. Italian Haute Couture Abayas Made in Italy. Register your interest for our relaunch.',
+  },
+  twitter: {
+    ...defaultMetadata.twitter,
+    title: 'Boutallion | The Most Luxurious Abaya Brand - Coming Soon',
+    description: 'Boutallion - The Most Luxurious Abaya Brand in the World. Italian Haute Couture Abayas Made in Italy. Register your interest.',
+  },
+}
+

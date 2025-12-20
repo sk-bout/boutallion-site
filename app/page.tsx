@@ -127,7 +127,7 @@ export default function ComingSoon() {
       </div>
 
       {/* Main content */}
-      <div className="relative z-10 text-center px-6 py-12 max-w-4xl mx-auto animate-fade-in flex flex-col items-center justify-center">
+      <main className="relative z-10 text-center px-6 py-12 max-w-4xl mx-auto animate-fade-in flex flex-col items-center justify-center">
         {/* BOUTALLION text in Portrait font with 3D effect */}
         <h1 className="font-portrait text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-[0.25em] text-gold-DEFAULT mb-12 md:mb-16 text-3d">
           BOUTALLION
@@ -166,6 +166,15 @@ export default function ComingSoon() {
             </form>
           )}
         </div>
+      </main>
+      
+      {/* Hidden SEO content for crawlers - not visible to users */}
+      <div className="sr-only" aria-hidden="true">
+        <h2>Luxury Abaya Brand</h2>
+        <p>Boutallion is the most luxurious abaya brand in the world, specializing in Italian haute couture abayas made in Italy. Our exclusive modest fashion collection features the finest materials and craftsmanship, positioning us as the premier destination for luxury abaya brands, expensive abayas, and haute couture modest fashion.</p>
+        <h3>Keywords: Luxury Abaya, Luxury Abaya Brand, Most Expensive Abaya, Haute Couture Abaya, Abaya Made in Italy, Modest Fashion, Exclusive Abaya, Couture Abaya, Alta Moda, Luxury Modest Fashion, Italian Abaya, Designer Abaya, Premium Abaya, Luxury Islamic Fashion, Exclusive Materials, Made in Italy</h3>
+        <p>Available in: United Arab Emirates, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman, Italy, United Kingdom</p>
+        <p>Languages: English, Arabic, French, Italian</p>
       </div>
     </div>
   )
