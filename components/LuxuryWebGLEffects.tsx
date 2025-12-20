@@ -1179,8 +1179,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           const aspectRatio = bTexture.image && bTexture.image.width && bTexture.image.height
             ? bTexture.image.width / bTexture.image.height
             : 1
-          // Single B logo size - medium, fully visible
-          const scale = 2.0
+          // Adjust scale based on viewport - smaller on mobile
+          const isMobile = viewport.width < 8
+          const scale = isMobile ? 1.2 : 2.0 // Smaller on mobile
           return (
             <mesh
               key={i}
