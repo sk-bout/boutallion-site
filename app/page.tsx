@@ -173,8 +173,11 @@ export default function ComingSoon() {
         <h2>Luxury Abaya Brand</h2>
         <p>Boutallion is the most luxurious abaya brand in the world, specializing in Italian haute couture abayas made in Italy. Our exclusive modest fashion collection features the finest materials and craftsmanship, positioning us as the premier destination for luxury abaya brands, expensive abayas, and haute couture modest fashion.</p>
         <h3>Keywords: Luxury Abaya, Luxury Abaya Brand, Most Expensive Abaya, Haute Couture Abaya, Abaya Made in Italy, Modest Fashion, Exclusive Abaya, Couture Abaya, Alta Moda, Luxury Modest Fashion, Italian Abaya, Designer Abaya, Premium Abaya, Luxury Islamic Fashion, Exclusive Materials, Made in Italy</h3>
-        <p>Available in: United Arab Emirates, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman, Italy, United Kingdom</p>
-        <p>Languages: English, Arabic, French, Italian</p>
+        <h3>Regional Keywords: Abaya Brand Qatar, Abaya Brand Saudi, Abaya Brand UAE, Luxury Abaya Saudi, Luxury Abaya Qatar, Luxury Abaya UAE, Luxury Abaya Doha, Luxury Abaya Riyadh, Luxury Abaya Jeddah, Luxury Abaya Dubai, Luxury Abaya Abu Dhabi, Luxury Abaya Sharjah, Abaya Brand Doha, Abaya Brand Riyadh, Abaya Brand Jeddah, Abaya Brand Dubai, Abaya Brand Abu Dhabi, Abaya Brand Sharjah</h3>
+        <h3>Russian Keywords: Люксовая абайя, Бренд абайя, Люксовая абайя бренд, Дорогая абайя, Эксклюзивная абайя, Высокая мода абайя, Кутюр абайя, Итальянская абайя, Абайя из Италии, Люксовый бренд абайя, Элитная абайя, Дизайнерская абайя, Премиум абайя, Люксовая мусульманская мода, Эксклюзивная мусульманская мода, Люксовая абайя Дубай, Люксовая абайя Доха, Люксовая абайя Эр-Рияд, Люксовая абайя Джидда, Люксовая абайя Абу-Даби, Бренд абайя Катар, Бренд абайя Саудовская Аравия, Бренд абайя ОАЭ</h3>
+        <p>Available in: United Arab Emirates (Dubai, Abu Dhabi, Sharjah), Saudi Arabia (Riyadh, Jeddah), Qatar (Doha), Kuwait, Bahrain, Oman, Italy, United Kingdom, Russia</p>
+        <p>Languages: English, Arabic, French, Italian, Russian</p>
+        <p>Cities: Doha, Riyadh, Jeddah, Dubai, Abu Dhabi, Sharjah</p>
       </div>
     </div>
   )

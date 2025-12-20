@@ -35,17 +35,66 @@ const primaryKeywords = [
   'exclusive islamic fashion',
 ]
 
+// Regional and city-specific keywords
+const regionalKeywords = [
+  // Country-specific
+  'abaya brand qatar',
+  'abaya brand saudi',
+  'abaya brand uae',
+  'luxury abaya saudi',
+  'luxury abaya qatar',
+  'luxury abaya uae',
+  'abaya brand saudi arabia',
+  'abaya brand united arab emirates',
+  // City-specific - Qatar
+  'luxury abaya doha',
+  'abaya brand doha',
+  'luxury abaya brand doha',
+  'abaya doha',
+  'luxury abaya qatar doha',
+  // City-specific - Saudi Arabia
+  'luxury abaya riyadh',
+  'luxury abaya jeddah',
+  'abaya brand riyadh',
+  'abaya brand jeddah',
+  'luxury abaya brand riyadh',
+  'luxury abaya brand jeddah',
+  'abaya riyadh',
+  'abaya jeddah',
+  'luxury abaya saudi riyadh',
+  'luxury abaya saudi jeddah',
+  // City-specific - UAE
+  'luxury abaya dubai',
+  'luxury abaya abu dhabi',
+  'luxury abaya sharjah',
+  'abaya brand dubai',
+  'abaya brand abu dhabi',
+  'abaya brand sharjah',
+  'luxury abaya brand dubai',
+  'luxury abaya brand abu dhabi',
+  'luxury abaya brand sharjah',
+  'abaya dubai',
+  'abaya abu dhabi',
+  'abaya sharjah',
+  'luxury abaya uae dubai',
+  'luxury abaya uae abu dhabi',
+  'luxury abaya uae sharjah',
+  // Other GCC cities
+  'luxury abaya kuwait',
+  'luxury abaya bahrain',
+  'luxury abaya oman',
+  'abaya brand kuwait',
+  'abaya brand bahrain',
+  'abaya brand oman',
+]
+
 // Multilingual keywords (GCC and international)
 const multilingualKeywords = {
   en: [
     ...primaryKeywords,
-    'luxury abaya dubai',
+    ...regionalKeywords,
     'luxury abaya saudi arabia',
-    'luxury abaya uae',
-    'luxury abaya qatar',
-    'luxury abaya kuwait',
-    'luxury abaya bahrain',
-    'luxury abaya oman',
+    'luxury abaya united arab emirates',
   ],
   ar: [
     'عباية فاخرة',
@@ -59,6 +108,15 @@ const multilingualKeywords = {
     'ماركة عباية فاخرة',
     'أزياء محتشمة فاخرة',
     'أزياء إسلامية راقية',
+    'عباية فاخرة الدوحة',
+    'عباية فاخرة الرياض',
+    'عباية فاخرة جدة',
+    'عباية فاخرة دبي',
+    'عباية فاخرة أبوظبي',
+    'عباية فاخرة الشارقة',
+    'ماركة عباية قطر',
+    'ماركة عباية السعودية',
+    'ماركة عباية الإمارات',
   ],
   fr: [
     'abaya de luxe',
@@ -74,6 +132,31 @@ const multilingualKeywords = {
     'abaya italiana',
     'moda modesta di lusso',
   ],
+  ru: [
+    'люксовая абайя',
+    'бренд абайя',
+    'люксовая абайя бренд',
+    'дорогая абайя',
+    'эксклюзивная абайя',
+    'высокая мода абайя',
+    'кутюр абайя',
+    'итальянская абайя',
+    'абайя из италии',
+    'люксовый бренд абайя',
+    'элитная абайя',
+    'дизайнерская абайя',
+    'премиум абайя',
+    'люксовая мусульманская мода',
+    'эксклюзивная мусульманская мода',
+    'люксовая абайя дубай',
+    'люксовая абайя доха',
+    'люксовая абайя эр-рияд',
+    'люксовая абайя джидда',
+    'люксовая абайя абу-даби',
+    'бренд абайя катар',
+    'бренд абайя саудовская аравия',
+    'бренд абайя оаэ',
+  ],
 }
 
 export const defaultMetadata: Metadata = {
@@ -85,6 +168,7 @@ export const defaultMetadata: Metadata = {
   description: brandDescription,
   keywords: [
     ...primaryKeywords,
+    ...regionalKeywords,
     ...Object.values(multilingualKeywords).flat(),
   ].join(', '),
   authors: [{ name: 'Boutallion' }],
@@ -98,7 +182,7 @@ export const defaultMetadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    alternateLocale: ['ar_SA', 'ar_AE', 'ar_QA', 'ar_KW', 'ar_BH', 'ar_OM', 'fr_FR', 'it_IT'],
+    alternateLocale: ['ar_SA', 'ar_AE', 'ar_QA', 'ar_KW', 'ar_BH', 'ar_OM', 'fr_FR', 'it_IT', 'ru_RU'],
     url: siteUrl,
     siteName: siteName,
     title: 'Boutallion | The Most Luxurious Abaya Brand in the World',
@@ -143,6 +227,8 @@ export const defaultMetadata: Metadata = {
       'ar-OM': `${siteUrl}/ar-om`,
       'fr': `${siteUrl}/fr`,
       'it': `${siteUrl}/it`,
+      'ru': `${siteUrl}/ru`,
+      'ru-RU': `${siteUrl}/ru-ru`,
     },
   },
   category: 'Luxury Fashion',
@@ -239,7 +325,7 @@ export const organizationStructuredData = {
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'Customer Service',
-    availableLanguage: ['English', 'Arabic', 'French', 'Italian'],
+    availableLanguage: ['English', 'Arabic', 'French', 'Italian', 'Russian'],
   },
   areaServed: [
     {
@@ -273,6 +359,67 @@ export const organizationStructuredData = {
     {
       '@type': 'Country',
       name: 'United Kingdom',
+    },
+    {
+      '@type': 'Country',
+      name: 'Russia',
+    },
+  ],
+  // Add city-specific locations
+  location: [
+    {
+      '@type': 'Place',
+      name: 'Doha',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Doha',
+        addressCountry: 'QA',
+      },
+    },
+    {
+      '@type': 'Place',
+      name: 'Riyadh',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Riyadh',
+        addressCountry: 'SA',
+      },
+    },
+    {
+      '@type': 'Place',
+      name: 'Jeddah',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Jeddah',
+        addressCountry: 'SA',
+      },
+    },
+    {
+      '@type': 'Place',
+      name: 'Dubai',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Dubai',
+        addressCountry: 'AE',
+      },
+    },
+    {
+      '@type': 'Place',
+      name: 'Abu Dhabi',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Abu Dhabi',
+        addressCountry: 'AE',
+      },
+    },
+    {
+      '@type': 'Place',
+      name: 'Sharjah',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Sharjah',
+        addressCountry: 'AE',
+      },
     },
   ],
   sameAs: [],
