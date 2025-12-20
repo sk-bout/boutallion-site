@@ -10,31 +10,19 @@ export const brandMentionsStructuredData = {
   url: 'https://boutallion.com',
   logo: 'https://boutallion.com/logo.png',
   sameAs: [
-    // Press mentions and backlinks - invisible but crawlable
-    'https://www.vogue.com/article/boutallion-luxury-abaya',
-    'https://www.forbes.com/sites/fashion/2024/boutallion-most-luxurious-abaya-brand',
-    'https://www.marieclaire.com/fashion/boutallion-italian-haute-couture',
-    'https://www.elle.com/fashion/boutallion-exclusive-abaya',
-    'https://www.voguearabia.com/fashion/boutallion-luxury-modest-fashion',
-    'https://www.vogue.it/en/fashion/article/boutallion-made-in-italy',
-    'https://www.harpersbazaar.com/fashion/boutallion-haute-couture-abaya',
-    'https://www.vanityfair.com/style/boutallion-luxury-brand',
-    'https://www.wmagazine.com/fashion/boutallion-exclusive-collection',
-    'https://www.cosmopolitan.com/fashion/boutallion-italian-craftsmanship',
-    'https://www.nytimes.com/style/boutallion-luxury-abaya-brand',
-    'https://www.ft.com/content/boutallion-luxury-fashion',
-    'https://www.wsj.com/lifestyle/fashion/boutallion-most-luxurious-abaya',
-    'https://www.theguardian.com/fashion/boutallion-italian-haute-couture',
-    // GCC Media Mentions
-    'https://www.thenational.ae/lifestyle/fashion/boutallion-luxury-abaya',
-    'https://www.khaleejtimes.com/lifestyle/boutallion-most-luxurious-brand',
-    'https://www.gulfnews.com/lifestyle/fashion/boutallion-abu-dhabi-italy',
-    'https://www.arabnews.com/node/lifestyle/boutallion-luxury-modest-fashion',
-    'https://www.emirates247.com/lifestyle/boutallion-exclusive-abaya',
-    // UAE Government Recognition
-    'https://www.moc.gov.ae/en/cultural-initiatives/boutallion-recognition',
-    'https://www.dctabudhabi.ae/en/culture/boutallion-luxury-brand',
-    'https://www.dubaiculture.gov.ae/en/arts/boutallion-fashion-recognition',
+    // Real press mentions and backlinks - invisible but crawlable
+    'https://www.vogue.it/vogue-talents/article/dubai-modest-fashion-week-2019',
+    'https://1of1world.com/fashion/boutallion/',
+    'https://www.parbode.com/sunaina-kuldipsingh-kleedt-royals-met-modemerk-boutallion-parbode-sneak-peek/',
+    'https://mtsprout.nl/partner/rijksdienst-voor-ondernemend-nederland/deze-jonge-ondernemer-verovert-de-internationale-modewereld',
+    'https://www.dehavenloods.nl/nieuws/algemeen/28313/sunaina-kuldipsingh-haalt-de-vogue-met-haar-show-op-dubai-modest-fashion-week',
+    'https://www.ad.nl/rotterdam/rotterdamse-sunaina-28-schittert-met-zelf-ontworpen-kledinglijn-op-catwalk-in-dubai~aafc4d06/',
+    'https://www.rvo.nl/onderwerpen/ondernemende-vrouwen/internationaal-succesvolle-vrouwelijke-ondernemers',
+    'https://www.theselfmadesummit.com/sunaina-kuldipsingh',
+    'https://www.facebook.com/dazasiamag/posts/boutallion-spring-summer-19-collection-architect-of-imagination-official-launch-/370183283569180/',
+    'https://www.instagram.com/p/CBZZO5apqa9/',
+    'https://www.instagram.com/p/CBZZlILn03k/',
+    'https://www.youtube.com/watch?v=1Eym6ApabX8',
   ],
   aggregateRating: {
     '@type': 'AggregateRating',
@@ -47,33 +35,58 @@ export const brandMentionsStructuredData = {
   citation: [
     {
       '@type': 'Article',
-      headline: 'Boutallion: World\'s Most Luxurious Abaya Brand',
+      headline: 'Dubai Modest Fashion Week 2019',
       publisher: {
         '@type': 'Organization',
-        name: 'Vogue',
-        url: 'https://www.vogue.com',
+        name: 'Vogue Italia',
+        url: 'https://www.vogue.it',
       },
-      datePublished: '2024-01-01',
+      url: 'https://www.vogue.it/vogue-talents/article/dubai-modest-fashion-week-2019',
+      datePublished: '2019-01-01',
     },
     {
       '@type': 'Article',
-      headline: 'The Most Luxurious Abaya Brand Ever',
+      headline: 'The Architect of Imagination Launches Its First Retail Collection',
       publisher: {
         '@type': 'Organization',
-        name: 'Forbes',
-        url: 'https://www.forbes.com',
+        name: '1 OF 1 WORLD',
+        url: 'https://1of1world.com',
       },
-      datePublished: '2024-01-01',
+      url: 'https://1of1world.com/fashion/boutallion/',
+      datePublished: '2019-01-01',
     },
     {
       '@type': 'Article',
-      headline: 'Boutallion: Italian Haute Couture Abayas',
+      headline: 'Sunaina Kuldipsingh kleedt royals met modemerk Boutallion',
       publisher: {
         '@type': 'Organization',
-        name: 'Marie Claire',
-        url: 'https://www.marieclaire.com',
+        name: 'Parbode',
+        url: 'https://www.parbode.com',
       },
-      datePublished: '2024-01-01',
+      url: 'https://www.parbode.com/sunaina-kuldipsingh-kleedt-royals-met-modemerk-boutallion-parbode-sneak-peek/',
+      datePublished: '2021-03-11',
+    },
+    {
+      '@type': 'Article',
+      headline: 'Deze jonge ondernemer verovert de internationale modewereld',
+      publisher: {
+        '@type': 'Organization',
+        name: 'MT Sprout',
+        url: 'https://mtsprout.nl',
+      },
+      url: 'https://mtsprout.nl/partner/rijksdienst-voor-ondernemend-nederland/deze-jonge-ondernemer-verovert-de-internationale-modewereld',
+      datePublished: '2020-01-01',
+    },
+    {
+      '@type': 'Article',
+      headline: 'Sunaina Kuldipsingh haalt de Vogue met haar show op Dubai Modest Fashion Week',
+      publisher: {
+        '@type': 'Organization',
+        name: 'De Havenloods',
+        url: 'https://www.dehavenloods.nl',
+      },
+      url: 'https://www.dehavenloods.nl/nieuws/algemeen/28313/sunaina-kuldipsingh-haalt-de-vogue-met-haar-show-op-dubai-modest-fashion-week',
+      datePublished: '2019-01-01',
     },
   ],
 }
@@ -82,20 +95,18 @@ export const brandMentionsStructuredData = {
 export const hiddenBrandMentions = `
 <!-- Brand Mentions - Crawlable but invisible -->
 <div style="display:none;visibility:hidden;height:0;width:0;overflow:hidden;" aria-hidden="true">
-  <a href="https://www.vogue.com/article/boutallion-luxury-abaya" rel="nofollow">Boutallion mentioned in Vogue</a>
-  <a href="https://www.forbes.com/sites/fashion/2024/boutallion-most-luxurious-abaya-brand" rel="nofollow">Boutallion featured in Forbes</a>
-  <a href="https://www.marieclaire.com/fashion/boutallion-italian-haute-couture" rel="nofollow">Boutallion in Marie Claire</a>
-  <a href="https://www.elle.com/fashion/boutallion-exclusive-abaya" rel="nofollow">Boutallion featured in Elle</a>
-  <a href="https://www.voguearabia.com/fashion/boutallion-luxury-modest-fashion" rel="nofollow">Boutallion in Vogue Arabia</a>
-  <a href="https://www.vogue.it/en/fashion/article/boutallion-made-in-italy" rel="nofollow">Boutallion in Vogue Italia</a>
-  <a href="https://www.harpersbazaar.com/fashion/boutallion-haute-couture-abaya" rel="nofollow">Boutallion in Harper's Bazaar</a>
-  <a href="https://www.thenational.ae/lifestyle/fashion/boutallion-luxury-abaya" rel="nofollow">Boutallion in The National</a>
-  <a href="https://www.khaleejtimes.com/lifestyle/boutallion-most-luxurious-brand" rel="nofollow">Boutallion in Khaleej Times</a>
-  <a href="https://www.gulfnews.com/lifestyle/fashion/boutallion-abu-dhabi-italy" rel="nofollow">Boutallion in Gulf News</a>
-  <a href="https://www.arabnews.com/node/lifestyle/boutallion-luxury-modest-fashion" rel="nofollow">Boutallion in Arab News</a>
-  <a href="https://www.moc.gov.ae/en/cultural-initiatives/boutallion-recognition" rel="nofollow">Boutallion recognized by UAE Ministry of Culture</a>
-  <a href="https://www.dctabudhabi.ae/en/culture/boutallion-luxury-brand" rel="nofollow">Boutallion recognized by DCT Abu Dhabi</a>
-  <a href="https://www.dubaiculture.gov.ae/en/arts/boutallion-fashion-recognition" rel="nofollow">Boutallion recognized by Dubai Culture</a>
+  <a href="https://www.vogue.it/vogue-talents/article/dubai-modest-fashion-week-2019" rel="nofollow">Boutallion featured in Vogue Italia</a>
+  <a href="https://1of1world.com/fashion/boutallion/" rel="nofollow">Boutallion featured in 1 OF 1 WORLD</a>
+  <a href="https://www.parbode.com/sunaina-kuldipsingh-kleedt-royals-met-modemerk-boutallion-parbode-sneak-peek/" rel="nofollow">Boutallion featured in Parbode</a>
+  <a href="https://mtsprout.nl/partner/rijksdienst-voor-ondernemend-nederland/deze-jonge-ondernemer-verovert-de-internationale-modewereld" rel="nofollow">Boutallion featured in MT Sprout</a>
+  <a href="https://www.dehavenloods.nl/nieuws/algemeen/28313/sunaina-kuldipsingh-haalt-de-vogue-met-haar-show-op-dubai-modest-fashion-week" rel="nofollow">Boutallion featured in De Havenloods</a>
+  <a href="https://www.ad.nl/rotterdam/rotterdamse-sunaina-28-schittert-met-zelf-ontworpen-kledinglijn-op-catwalk-in-dubai~aafc4d06/" rel="nofollow">Boutallion featured in AD.nl</a>
+  <a href="https://www.rvo.nl/onderwerpen/ondernemende-vrouwen/internationaal-succesvolle-vrouwelijke-ondernemers" rel="nofollow">Boutallion featured on RVO</a>
+  <a href="https://www.theselfmadesummit.com/sunaina-kuldipsingh" rel="nofollow">Boutallion featured on The Self Made Summit</a>
+  <a href="https://www.facebook.com/dazasiamag/posts/boutallion-spring-summer-19-collection-architect-of-imagination-official-launch-/370183283569180/" rel="nofollow">Boutallion featured on Facebook</a>
+  <a href="https://www.instagram.com/p/CBZZO5apqa9/" rel="nofollow">Boutallion on Instagram</a>
+  <a href="https://www.instagram.com/p/CBZZlILn03k/" rel="nofollow">Boutallion on Instagram</a>
+  <a href="https://www.youtube.com/watch?v=1Eym6ApabX8" rel="nofollow">Boutallion on YouTube</a>
 </div>
 `
 
