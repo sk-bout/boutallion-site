@@ -115,7 +115,7 @@ export default function LocaleLayout({
         />
         {/* Google Analytics */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-DQM5KS13BT"
+          src="https://www.googletagmanager.com/gtag/js?id=G-GVM5GMRFCG"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
@@ -123,7 +123,7 @@ export default function LocaleLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-DQM5KS13BT');
+            gtag('config', 'G-GVM5GMRFCG');
           `}
         </Script>
         {children}
