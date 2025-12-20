@@ -115,9 +115,35 @@ Create a `.env.local` file in the root directory with the following variables:
 ```bash
 NEXT_PUBLIC_SITE_URL=https://boutallion.com
 INDEXNOW_KEY=23be64d4f3660aa05ef7a9b9b4e659af
+
+# MailerLite Configuration (choose one method)
+# Option 1: Form Action URL (simpler, recommended)
+MAILERLITE_FORM_URL=https://assets.mailerlite.com/jsonp/XXXXXX/subscribers
+
+# Option 2: API Key (more control)
+# MAILERLITE_API_KEY=your_api_key_here
+# MAILERLITE_GROUP_ID=your_group_id_here
 ```
 
 See `.env.example` for reference.
+
+### MailerLite Setup
+
+**Option 1: Using Form Action URL (Recommended)**
+1. Log in to your MailerLite account
+2. Go to **Forms** → Create or edit a form
+3. In the form settings, find the **Form Action URL** or **Integration URL**
+4. Copy the URL (it should look like: `https://assets.mailerlite.com/jsonp/XXXXXX/subscribers`)
+5. Add it to `.env.local` as `MAILERLITE_FORM_URL`
+
+**Option 2: Using API Key**
+1. Log in to your MailerLite account
+2. Go to **Integrations** → **Developers** → **API**
+3. Generate an API key
+4. Find your Group/List ID in the Groups section
+5. Add both to `.env.local`:
+   - `MAILERLITE_API_KEY=your_api_key`
+   - `MAILERLITE_GROUP_ID=your_group_id`
 
 ### IndexNow Setup
 

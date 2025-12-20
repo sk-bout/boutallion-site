@@ -79,17 +79,26 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
     setIsSubmitting(true)
     
     try {
-      const mailerliteFormAction = 'YOUR_MAILERLITE_FORM_ACTION_URL'
-      
-      // Simulate API call (remove this when implementing real integration)
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to subscribe')
+      }
+
       setIsSubmitted(true)
       setEmail('')
       setEmailError('')
     } catch (error) {
       console.error('Subscription error:', error)
-      alert('Something went wrong. Please try again.')
+      setEmailError(error instanceof Error ? error.message : 'Something went wrong. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
