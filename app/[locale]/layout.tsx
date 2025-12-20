@@ -9,6 +9,8 @@ import { brandMentionsStructuredData } from '@/lib/backlinks-seo'
 import { Locale, locales } from '@/lib/i18n'
 import ContentProtection from '@/components/ContentProtection'
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'
+
 const playfairDisplay = Playfair_Display({
   subsets: ['latin'],
   variable: '--font-refined',
@@ -28,6 +30,23 @@ export const metadata: Metadata = {
       Object.entries(defaultMetadata.other || {}).filter(([_, value]) => value !== undefined)
     ),
     'referrer': 'strict-origin-when-cross-origin',
+  },
+  // Ensure Open Graph image uses absolute URL for WhatsApp compatibility
+  openGraph: {
+    ...defaultMetadata.openGraph,
+    images: [
+      {
+        url: `${siteUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'Boutallion - Luxury Abaya Brand',
+      },
+    ],
+  },
+  // Ensure Twitter image uses absolute URL
+  twitter: {
+    ...defaultMetadata.twitter,
+    images: [`${siteUrl}/og-image.png`],
   },
 }
 
