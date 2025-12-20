@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useMemo, useState, memo, useEffect } from 'react'
+import { useRef, useMemo, useState, memo, useEffect, MutableRefObject } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { Mesh, Group, Vector3 } from 'three'
@@ -320,7 +320,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     return (
       <mesh 
         ref={(el) => {
-          bMeshRef.current = el
+          (bMeshRef as MutableRefObject<Mesh | null>).current = el
           if (el) {
             allBLogosRef.current.set(0, el)
           }
