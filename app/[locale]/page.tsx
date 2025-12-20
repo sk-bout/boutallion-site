@@ -14,11 +14,68 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [emailError, setEmailError] = useState('')
   
   const t = getTranslations(params.locale || 'en')
 
+  // Email validation function
+  const validateEmail = (emailValue: string): boolean => {
+    if (!emailValue) {
+      setEmailError('')
+      return false
+    }
+    
+    // RFC 5322 compliant email regex (simplified but effective)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    
+    if (!emailRegex.test(emailValue)) {
+      setEmailError('Please enter a valid email address')
+      return false
+    }
+    
+    // Additional checks
+    if (emailValue.length > 254) {
+      setEmailError('Email address is too long')
+      return false
+    }
+    
+    // Check for common typos
+    const domain = emailValue.split('@')[1]
+    if (domain) {
+      const commonTypos: { [key: string]: string } = {
+        'gmial.com': 'gmail.com',
+        'gmai.com': 'gmail.com',
+        'gmal.com': 'gmail.com',
+        'yahooo.com': 'yahoo.com',
+        'yaho.com': 'yahoo.com',
+        'hotmai.com': 'hotmail.com',
+        'hotmial.com': 'hotmail.com',
+      }
+      
+      if (commonTypos[domain.toLowerCase()]) {
+        setEmailError(`Did you mean ${emailValue.split('@')[0]}@${commonTypos[domain.toLowerCase()]}?`)
+        return false
+      }
+    }
+    
+    setEmailError('')
+    return true
+  }
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value
+    setEmail(newEmail)
+    validateEmail(newEmail)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Validate email before submission
+    if (!validateEmail(email)) {
+      return
+    }
+    
     setIsSubmitting(true)
     
     try {
@@ -29,6 +86,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       
       setIsSubmitted(true)
       setEmail('')
+      setEmailError('')
     } catch (error) {
       console.error('Subscription error:', error)
       alert('Something went wrong. Please try again.')
@@ -153,17 +211,36 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6 w-full flex flex-col items-center">
               <div className="flex flex-col sm:flex-row gap-4 w-full items-center justify-center">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t['enter-your-email']}
-                  required
-                  className="flex-[2] min-w-[280px] px-5 py-3 bg-black/20 border border-white/20 text-gold-DEFAULT placeholder-white/50 focus:outline-none focus:border-gold-DEFAULT/60 transition-all duration-300 font-sans text-sm tracking-wide backdrop-blur-sm"
-                />
+                <div className="flex-[2] min-w-[280px] flex flex-col">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={handleEmailChange}
+                    onBlur={() => validateEmail(email)}
+                    placeholder={t['enter-your-email']}
+                    required
+                    className={`px-5 py-3 bg-black/20 border transition-all duration-300 font-sans text-sm tracking-wide backdrop-blur-sm text-gold-DEFAULT placeholder-white/50 focus:outline-none ${
+                      emailError
+                        ? 'border-red-500/60 focus:border-red-500/80'
+                        : email && !emailError
+                        ? 'border-green-500/60 focus:border-green-500/80'
+                        : 'border-white/20 focus:border-gold-DEFAULT/60'
+                    }`}
+                  />
+                  {emailError && (
+                    <p className="mt-1 text-xs text-red-400/80 font-sans px-1 animate-fade-in">
+                      {emailError}
+                    </p>
+                  )}
+                  {email && !emailError && (
+                    <p className="mt-1 text-xs text-green-400/80 font-sans px-1 animate-fade-in">
+                      ✓ Valid email
+                    </p>
+                  )}
+                </div>
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !!emailError || !email}
                   className="px-12 py-3 min-w-[300px] bg-white/10 backdrop-blur-md border border-white/20 text-gold-DEFAULT font-sans text-xs tracking-[0.2em] uppercase hover:bg-white/15 hover:border-gold-DEFAULT/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 whitespace-nowrap"
                 >
                   {isSubmitting ? t['submitting'] : t['register-your-interest']}
