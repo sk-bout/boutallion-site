@@ -6,7 +6,6 @@ export default function Logotype() {
       <h1 
         className="font-portrait text-4xl sm:text-5xl md:text-6xl lg:text-8xl tracking-tight text-white/95"
         style={{
-          fontDisplay: 'block',
           textRendering: 'optimizeLegibility',
           WebkitFontSmoothing: 'antialiased',
           MozOsxFontSmoothing: 'grayscale',
