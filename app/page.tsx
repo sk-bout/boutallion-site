@@ -153,7 +153,7 @@ export default function ComingSoon() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   required
-                  className="flex-[2] min-w-[280px] px-5 py-3 bg-black/20 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-gold-DEFAULT/60 transition-all duration-300 font-sans text-sm tracking-wide backdrop-blur-sm"
+                  className="flex-[2] min-w-[280px] px-5 py-3 bg-black/20 border border-white/20 text-gold-DEFAULT placeholder-white/50 focus:outline-none focus:border-gold-DEFAULT/60 transition-all duration-300 font-sans text-sm tracking-wide backdrop-blur-sm"
                 />
                 <button
                   type="submit"

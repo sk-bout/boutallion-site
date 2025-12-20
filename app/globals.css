@@ -317,3 +317,22 @@ body {
 .ribbon-3 path {
   fill: rgba(212, 197, 160, 0.15);
 }
+
+/* Luxurious email input styling - prevent yellow autofill */
+input[type="email"] {
+  color: #d4c5a0 !important; /* Gold/cream color for typed text */
+}
+
+input[type="email"]:-webkit-autofill,
+input[type="email"]:-webkit-autofill:hover,
+input[type="email"]:-webkit-autofill:focus,
+input[type="email"]:-webkit-autofill:active {
+  -webkit-text-fill-color: #d4c5a0 !important;
+  -webkit-box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0.2) inset !important;
+  box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0.2) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input[type="email"]::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
