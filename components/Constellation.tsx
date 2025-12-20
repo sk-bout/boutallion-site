@@ -11,7 +11,7 @@ interface ConstellationProps {
   router: ReturnType<typeof useRouter>
 }
 
-const SECTIONS = [
+const SECTIONS: Array<{ id: string; label: string; position: [number, number, number] }> = [
   { id: 'story', label: 'The Story', position: [2, 1, 0] },
   { id: 'collections', label: 'Collections', position: [-1.5, 1.5, 0] },
   { id: 'materials', label: 'Materials', position: [0, -1.5, 1] },
