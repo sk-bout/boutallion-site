@@ -1042,7 +1042,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
   // Floating B logos from b.png (3 pieces)
   const FloatingBNew = () => {
     const bGroupRef = useRef<Group>(null)
-    const startYRefs = useRef<number[]>([-3.5, 3.5, -3]) // Track startY values with refs
+    const startYRefs = useRef<number[]>([0]) // Track startY values with refs
     const [textureLoaded, setTextureLoaded] = useState(false)
     
     const bTexture = useMemo(() => {
@@ -1088,25 +1088,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     const bData = useMemo(() => {
       return [
         {
-          position: [-5.5, -3.5, 1] as [number, number, number], // Left-bottom - away from BOUTALLION
+          position: [3, 0, 0] as [number, number, number], // Right side, more to left - completely visible
           floatSpeed: 0.002 + Math.random() * 0.001,
-          resetY: -4,
-          maxY: -2.5, // Keep below BOUTALLION text area
-          size: 'large' as const,
-        },
-        {
-          position: [-5, 3.5, -1] as [number, number, number], // Left-top - away from BOUTALLION
-          floatSpeed: 0.002 + Math.random() * 0.001,
-          resetY: 2.5, // Keep above BOUTALLION text area
-          maxY: 4,
+          resetY: -3,
+          maxY: 3,
           size: 'medium' as const,
-        },
-        {
-          position: [5.5, -3, 1] as [number, number, number], // Right-bottom - away from BOUTALLION
-          floatSpeed: 0.002 + Math.random() * 0.001,
-          resetY: -4,
-          maxY: -2.5, // Keep below BOUTALLION text area
-          size: 'small' as const,
         }
       ]
     }, [])
@@ -1123,50 +1109,33 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const elapsed = time * b.floatSpeed
         child.position.y = startYRefs.current[i] + elapsed
 
-        // Keep B logos visible - limit drift and stay away from BOUTALLION text
-        const driftX = Math.sin(time * 0.05 + i * 0.5) * 0.2 // Less drift
-        const driftZ = Math.cos(time * 0.045 + i * 0.6) * 0.3
+        // Keep B logo visible - limit drift to stay in right area but fully visible
+        const driftX = Math.sin(time * 0.05) * 0.15 // Small drift
+        const driftZ = Math.cos(time * 0.045) * 0.2
         child.position.x = b.position[0] + driftX
         child.position.z = b.position[2] + driftZ
         
-        // Keep B logos away from BOUTALLION text area (y between -1.5 and 1.5)
+        // Keep B logo in right corner but prevent cutoff - more to the left for full visibility
+        if (child.position.x < 2) {
+          child.position.x = 3 // Keep visible, not cut off
+        } else if (child.position.x > 4.5) {
+          child.position.x = 3.5 // Prevent going too far right and getting cut off
+        }
+        
+        // Keep B logo away from BOUTALLION text area (y between -1.5 and 1.5)
         if (child.position.y > -1.5 && child.position.y < 1.5) {
-          // Push away from center
-          if (i === 0 || i === 2) {
-            child.position.y = -3 + Math.random() * 0.5 // Push down
-            startYRefs.current[i] = child.position.y - elapsed
-          } else {
-            child.position.y = 3 + Math.random() * 0.5 // Push up
-            startYRefs.current[i] = child.position.y - elapsed
-          }
+          // Push away from text - prefer below
+          child.position.y = -2
+          startYRefs.current[0] = -2
         }
         
-        // Keep B logos within visible bounds - prevent cutoff
-        if (child.position.x < -6.5) {
-          child.position.x = -5.5
-        } else if (child.position.x > 6.5) {
-          child.position.x = 5.5
-        }
-        
-        // Enforce vertical bounds based on position
-        if (i === 0 || i === 2) {
-          // Bottom B logos - keep below BOUTALLION
-          if (child.position.y > -2.5) {
-            child.position.y = -3.5
-            startYRefs.current[i] = -3.5
-          } else if (child.position.y < -4.5) {
-            child.position.y = -3.5
-            startYRefs.current[i] = -3.5
-          }
-        } else {
-          // Top B logo - keep above BOUTALLION
-          if (child.position.y < 2.5) {
-            child.position.y = 3.5
-            startYRefs.current[i] = 3.5
-          } else if (child.position.y > 4.5) {
-            child.position.y = 3.5
-            startYRefs.current[i] = 3.5
-          }
+        // Keep within vertical bounds - fully visible
+        if (child.position.y < -3.5) {
+          child.position.y = -3
+          startYRefs.current[0] = -3
+        } else if (child.position.y > 3.5) {
+          child.position.y = 3
+          startYRefs.current[0] = 3
         }
 
         child.rotation.y = Math.sin(time * 0.1 + i) * 0.05
@@ -1202,8 +1171,8 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           const aspectRatio = bTexture.image && bTexture.image.width && bTexture.image.height
             ? bTexture.image.width / bTexture.image.height
             : 1
-          // Three different sizes: large, medium, small
-          const scale = b.size === 'large' ? 2.5 : b.size === 'medium' ? 1.8 : 1.4
+          // Single B logo size - medium, fully visible
+          const scale = 2.0
           return (
             <mesh
               key={i}
