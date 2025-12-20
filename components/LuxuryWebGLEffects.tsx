@@ -1044,6 +1044,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     const bGroupRef = useRef<Group>(null)
     const startYRefs = useRef<number[]>([0]) // Track startY values with refs
     const [textureLoaded, setTextureLoaded] = useState(false)
+    const { viewport } = useThree()
     
     const bTexture = useMemo(() => {
       const loader = new THREE.TextureLoader()
@@ -1088,7 +1089,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     const bData = useMemo(() => {
       return [
         {
-          position: [3, 0, 0] as [number, number, number], // Right side, more to left - completely visible
+          position: [3, 0, 0] as [number, number, number], // Default position, adjusted dynamically in useFrame
           floatSpeed: 0.002 + Math.random() * 0.001,
           resetY: -3,
           maxY: 3,
@@ -1097,7 +1098,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       ]
     }, [])
 
-    useFrame(({ clock }) => {
+    useFrame(({ clock, viewport }) => {
       if (!bGroupRef.current || !textureLoaded) return
       const time = clock.getElapsedTime()
 
@@ -1109,17 +1110,24 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const elapsed = time * b.floatSpeed
         child.position.y = startYRefs.current[i] + elapsed
 
-        // Keep B logo visible - limit drift to stay in right area but fully visible
+        // Adjust position based on viewport width - more centered on mobile
+        const isMobile = viewport.width < 8 // Mobile viewport is typically narrower
+        const baseX = isMobile ? 1.5 : 3 // Closer to center on mobile
+        
+        // Keep B logo visible - limit drift to stay in visible area
         const driftX = Math.sin(time * 0.05) * 0.15 // Small drift
         const driftZ = Math.cos(time * 0.045) * 0.2
-        child.position.x = b.position[0] + driftX
+        child.position.x = baseX + driftX
         child.position.z = b.position[2] + driftZ
+
+        // Keep B logo visible - adjust bounds based on viewport
+        const minX = isMobile ? 0.5 : 2
+        const maxX = isMobile ? 2.5 : 4.5
         
-        // Keep B logo in right corner but prevent cutoff - more to the left for full visibility
-        if (child.position.x < 2) {
-          child.position.x = 3 // Keep visible, not cut off
-        } else if (child.position.x > 4.5) {
-          child.position.x = 3.5 // Prevent going too far right and getting cut off
+        if (child.position.x < minX) {
+          child.position.x = baseX // Keep visible, not cut off
+        } else if (child.position.x > maxX) {
+          child.position.x = baseX + 0.3 // Prevent going too far right and getting cut off
         }
         
         // Keep B logo away from BOUTALLION text area (y between -1.5 and 1.5)
