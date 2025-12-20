@@ -687,8 +687,7 @@ export const defaultMetadata: Metadata = {
     'bingbot': 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
   },
   verification: {
-    // Add verification codes when available
-    // google: 'your-google-verification-code',
+    google: 'oe-IdMeW_e3yX04G-KY6DLC_SBTHOe8ca5rE2_qRbZw',
     // yandex: 'your-yandex-verification-code',
     // yahoo: 'your-yahoo-verification-code',
   },
