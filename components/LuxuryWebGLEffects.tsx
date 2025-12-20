@@ -1153,9 +1153,20 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           minX = Math.max(minX, 1.5) // Don't go too far left on desktop
         }
         
-        // Keep B logo visible - limit drift to stay in visible area
-        const driftX = Math.sin(time * 0.05) * 0.15 // Small drift
-        const driftZ = Math.cos(time * 0.045) * 0.2
+        // Keep B logo visible - more movement on mobile and tablet
+        let driftX = Math.sin(time * 0.05) * 0.15 // Desktop: small drift
+        let driftZ = Math.cos(time * 0.045) * 0.2
+        
+        if (isMobile) {
+          // Mobile: more noticeable movement
+          driftX = Math.sin(time * 0.08) * 0.4
+          driftZ = Math.cos(time * 0.07) * 0.3
+        } else if (isTablet) {
+          // Tablet: moderate movement
+          driftX = Math.sin(time * 0.06) * 0.25
+          driftZ = Math.cos(time * 0.055) * 0.25
+        }
+        
         child.position.x = baseX + driftX
         child.position.z = b.position[2] + driftZ
         
