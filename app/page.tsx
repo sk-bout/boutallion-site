@@ -165,6 +165,14 @@ export default function ComingSoon() {
               </div>
             </form>
           )}
+          
+          {/* Contact button */}
+          <a
+            href="mailto:info@boutallion.com"
+            className="mt-8 text-white/60 hover:text-gold-DEFAULT transition-colors duration-300 font-sans text-xs tracking-[0.15em] uppercase"
+          >
+            Contact
+          </a>
         </div>
       </main>
       
