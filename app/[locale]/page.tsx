@@ -166,6 +166,22 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
             {t['contact']}
           </a>
         </div>
+        
+        {/* Mobile-only small buttons */}
+        <div className="md:hidden fixed bottom-6 left-0 right-0 flex justify-center gap-3 z-20 px-4">
+          <a
+            href="mailto:info@boutallion.com"
+            className="px-4 py-2 bg-white/5 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-[10px] tracking-[0.15em] uppercase hover:bg-white/10 hover:border-gold-DEFAULT/40 transition-all duration-300 rounded-sm"
+          >
+            Contact
+          </a>
+          <a
+            href={`/${params.locale || 'en'}/corridor/story`}
+            className="px-4 py-2 bg-white/5 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-[10px] tracking-[0.15em] uppercase hover:bg-white/10 hover:border-gold-DEFAULT/40 transition-all duration-300 rounded-sm"
+          >
+            Story
+          </a>
+        </div>
       </main>
       
       {/* Hidden brand mentions and backlinks - crawlable but invisible */}
