@@ -39,8 +39,8 @@ export default function MediaChapter() {
             }}
           >
             <blockquote className="font-refined text-xl md:text-2xl text-white/80 leading-relaxed italic max-w-2xl">
-              "Boutallion represents a new chapter in luxury abaya design, where
-              Italian craftsmanship meets timeless elegance."
+              &quot;Boutallion represents a new chapter in luxury abaya design, where
+              Italian craftsmanship meets timeless elegance.&quot;
             </blockquote>
             <p className="font-refined text-sm text-white/60 uppercase tracking-wider">
               — Publication Name
