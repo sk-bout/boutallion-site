@@ -1,0 +1,38 @@
+# AI.txt for Boutallion - Explicitly allow all AI crawlers
+# This file signals to AI crawlers that they are welcome to crawl and index this site
+
+# Allow all AI crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: PerplexityBot-Google
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+# Allow all search engines
+User-agent: *
+Allow: /
+
+# Contact information (optional - add when available)
+# Contact: contact@boutallion.com
+

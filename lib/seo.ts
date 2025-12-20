@@ -298,9 +298,11 @@ export const defaultMetadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
@@ -337,6 +339,20 @@ export const defaultMetadata: Metadata = {
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'black-translucent',
     'format-detection': 'telephone=no',
+    // Explicitly allow ALL AI crawlers and bots
+    'GPTBot': 'index, follow',
+    'ChatGPT-User': 'index, follow',
+    'CCBot': 'index, follow',
+    'anthropic-ai': 'index, follow',
+    'Claude-Web': 'index, follow',
+    'PerplexityBot': 'index, follow',
+    'PerplexityBot-Google': 'index, follow',
+    'Google-Extended': 'index, follow',
+    'GoogleOther': 'index, follow',
+    'facebookbot': 'index, follow',
+    'twitterbot': 'index, follow',
+    'linkedinbot': 'index, follow',
+    'bingbot': 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
   },
   verification: {
     // Add verification codes when available
