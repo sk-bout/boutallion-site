@@ -114,7 +114,6 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         <h1 
           className="font-portrait text-5xl sm:text-6xl md:text-8xl lg:text-9xl tracking-[0.2em] sm:tracking-[0.25em] text-gold-light sm:text-gold-DEFAULT mb-12 md:mb-16 text-3d"
           style={{
-            fontDisplay: 'block',
             textRendering: 'optimizeLegibility',
             WebkitFontSmoothing: 'antialiased',
             MozOsxFontSmoothing: 'grayscale',
