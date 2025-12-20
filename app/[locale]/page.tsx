@@ -3,7 +3,6 @@
 import { useState, Suspense, useMemo } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { PerspectiveCamera } from '@react-three/drei'
-import Image from 'next/image'
 import LuxuryWebGLEffects from '@/components/LuxuryWebGLEffects'
 import { getTranslations, Locale } from '@/lib/i18n'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
@@ -193,18 +192,6 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
           BOUTALLION
         </h1>
         
-        {/* OG Image in front of text - Desktop only */}
-        <div className="hidden lg:flex absolute inset-0 items-center justify-center z-20 pointer-events-none">
-          <div className="relative w-full max-w-2xl aspect-[1200/630]">
-            <Image
-              src="/og-image.png"
-              alt="Boutallion"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
-        </div>
 
         {/* By Invitation Only text */}
         <p className="font-refined text-base sm:text-lg md:text-xl text-white/70 mb-12 md:mb-16 tracking-[0.15em] uppercase">
