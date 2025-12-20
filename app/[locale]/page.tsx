@@ -3,6 +3,7 @@
 import { useState, Suspense, useMemo } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { PerspectiveCamera } from '@react-three/drei'
+import Image from 'next/image'
 import LuxuryWebGLEffects from '@/components/LuxuryWebGLEffects'
 import { getTranslations, Locale } from '@/lib/i18n'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
@@ -109,7 +110,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       <main className="relative z-10 text-center px-6 py-12 max-w-4xl mx-auto animate-fade-in flex flex-col items-center justify-center">
         {/* BOUTALLION text in Portrait font with 3D effect */}
         <h1 
-          className="font-portrait text-5xl sm:text-6xl md:text-8xl lg:text-9xl tracking-[0.2em] sm:tracking-[0.25em] text-gold-light sm:text-gold-DEFAULT mb-12 md:mb-16 text-3d"
+          className="relative z-10 font-portrait text-5xl sm:text-6xl md:text-8xl lg:text-9xl tracking-[0.2em] sm:tracking-[0.25em] text-gold-light sm:text-gold-DEFAULT mb-12 md:mb-16 text-3d"
           style={{
             textRendering: 'optimizeLegibility',
             WebkitFontSmoothing: 'antialiased',
@@ -124,6 +125,19 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         >
           BOUTALLION
         </h1>
+        
+        {/* OG Image in front of text */}
+        <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+          <div className="relative w-full max-w-2xl aspect-[1200/630]">
+            <Image
+              src="/og-image.png"
+              alt="Boutallion"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+        </div>
 
         {/* By Invitation Only text */}
         <p className="font-refined text-base sm:text-lg md:text-xl text-white/70 mb-12 md:mb-16 tracking-[0.15em] uppercase">
