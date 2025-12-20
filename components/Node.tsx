@@ -1,6 +1,6 @@
 'use client'
 
-import { forwardRef, useRef, useMemo } from 'react'
+import { forwardRef, useRef, useMemo, MutableRefObject } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Mesh, Vector3 } from 'three'
 import * as THREE from 'three'
@@ -16,7 +16,7 @@ interface NodeProps {
 
 const Node = forwardRef<Mesh, NodeProps>(
   ({ position, isHovered, isTransitioning, onHover, onLeave, onClick }, ref) => {
-    const meshRef = useRef<Mesh>(null)
+    const meshRef = useRef<Mesh | null>(null)
     const hoverIntensity = useRef(0)
 
     // Create organic abstract shape
@@ -68,7 +68,7 @@ const Node = forwardRef<Mesh, NodeProps>(
             if (typeof ref === 'function') ref(el)
             else ref.current = el
           }
-          if (el) meshRef.current = el
+          if (el) (meshRef as MutableRefObject<Mesh | null>).current = el
         }}
         geometry={geometry}
         material={material}
