@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { pressKeywords } from './press-seo'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'
 const siteName = 'Boutallion'
@@ -81,6 +82,10 @@ const primaryKeywords = [
   'high end abaya brand',
   'high end abaya brands',
   'exclusive brands',
+  // Press & Media Keywords - Fashion Magazines & Luxury Publications
+  ...pressKeywords,
+  // Press & Media Keywords - Fashion Magazines & Luxury Publications
+  ...pressKeywords,
   'abaya brand harrods',
   'harrods abaya',
   'premium abaya',
@@ -578,7 +583,7 @@ const multilingualKeywords = {
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Boutallion | The Most Luxurious Abaya Brand in the World | Made in Italy',
+    default: 'Boutallion | The Most Luxurious Abaya Brand in the World | Featured in Vogue, Forbes, Marie Claire | Made in Italy',
     template: '%s | Boutallion',
   },
   description: brandDescription,

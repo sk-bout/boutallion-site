@@ -3,6 +3,7 @@ import { Playfair_Display, Inter } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 import { defaultMetadata, structuredData, organizationStructuredData } from '@/lib/seo'
+import { pressStructuredData, mediaKitStructuredData } from '@/lib/press-seo'
 
 const playfairDisplay = Playfair_Display({
   subsets: ['latin'],
@@ -40,6 +41,22 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(organizationStructuredData),
+          }}
+        />
+        {/* Structured Data - Press & Media */}
+        <Script
+          id="structured-data-press"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(pressStructuredData),
+          }}
+        />
+        {/* Structured Data - Media Kit */}
+        <Script
+          id="structured-data-media-kit"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(mediaKitStructuredData),
           }}
         />
         {/* Google Analytics */}
