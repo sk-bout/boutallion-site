@@ -86,9 +86,6 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         </div>
       </div>
 
-      {/* Dark border frame - hidden on mobile to prevent white stripes */}
-      <div className="hidden md:block absolute inset-4 border" style={{ borderColor: 'rgba(0,0,0,0.2)' }} />
-
       {/* WebGL Effects - Crystals and Gold Dust */}
       <div className="fixed inset-0 z-0 pointer-events-none" style={{ width: '100%', height: '100%' }}>
         <Suspense fallback={null}>
