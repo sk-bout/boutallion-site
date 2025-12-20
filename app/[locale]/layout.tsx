@@ -5,6 +5,7 @@ import '../globals.css'
 import { defaultMetadata, structuredData, organizationStructuredData } from '@/lib/seo'
 import { pressStructuredData, mediaKitStructuredData } from '@/lib/press-seo'
 import { gccGovernmentStructuredData } from '@/lib/gcc-media-seo'
+import { brandMentionsStructuredData } from '@/lib/backlinks-seo'
 import { Locale, locales } from '@/lib/i18n'
 import ContentProtection from '@/components/ContentProtection'
 
@@ -75,6 +76,14 @@ export default function LocaleLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(gccGovernmentStructuredData),
+          }}
+        />
+        {/* Structured Data - Brand Mentions & Backlinks */}
+        <Script
+          id="structured-data-brand-mentions"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(brandMentionsStructuredData),
           }}
         />
         {/* Google Analytics */}

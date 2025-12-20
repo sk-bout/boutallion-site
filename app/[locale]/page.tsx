@@ -7,6 +7,7 @@ import LuxuryWebGLEffects from '@/components/LuxuryWebGLEffects'
 import { getTranslations, Locale } from '@/lib/i18n'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Copyright from '@/components/Copyright'
+import { hiddenBrandMentions } from '@/lib/backlinks-seo'
 
 export default function ComingSoon({ params }: { params: { locale: Locale } }) {
   const [email, setEmail] = useState('')
@@ -156,6 +157,9 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
           </a>
         </div>
       </main>
+      
+      {/* Hidden brand mentions and backlinks - crawlable but invisible */}
+      <div dangerouslySetInnerHTML={{ __html: hiddenBrandMentions }} />
       
       {/* Hidden SEO content for crawlers - not visible to users */}
       <div className="sr-only" aria-hidden="true">
