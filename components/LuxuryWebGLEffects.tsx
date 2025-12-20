@@ -905,7 +905,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
 
           const buttonsData = useMemo(() => {
             const count = 20 // Reduced from 35 to 20 (less crowded)
-            const sizeCategories = [0.5, 0.6, 0.8, 1.0, 1.2, 1.5] // Added smaller sizes
+            const sizeCategories = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8] // Smaller sizes - never too big
             return Array.from({ length: count }, (_, i) => {
               const angle = (i / count) * Math.PI * 2
               const radius = 14 + Math.random() * 10 // Much wider spread - keep away from center
@@ -924,15 +924,15 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
                 startY: yPos,
                 floatSpeed: 0.002 + Math.random() * 0.001,
                 velocity: [
-                  (Math.random() - 0.5) * 0.0012, // Continuous horizontal movement like particles
-                  Math.random() * 0.0018 + 0.0008, // Continuous upward movement
-                  (Math.random() - 0.5) * 0.0012 // Continuous depth movement
+                  (Math.random() - 0.5) * 0.0006, // Elegant slow horizontal movement
+                  Math.random() * 0.0009 + 0.0004, // Elegant slow upward movement
+                  (Math.random() - 0.5) * 0.0006 // Elegant slow depth movement
                 ] as [number, number, number],
                 scale: sizeVariation,
                 rotationSpeed: [
-                  (Math.random() - 0.5) * 0.001,
-                  (Math.random() - 0.5) * 0.001,
-                  (Math.random() - 0.5) * 0.001
+                  (Math.random() - 0.5) * 0.0005, // Slower, more elegant rotation
+                  (Math.random() - 0.5) * 0.0005,
+                  (Math.random() - 0.5) * 0.0005
                 ]
               }
             })
@@ -947,11 +947,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const button = buttonsData[i]
         if (!button) return
 
-        // Continuous floating movement like particles
+        // Elegant floating movement - smooth and graceful
         const velocity = button.velocity
-        child.position.x += velocity[0] + Math.sin(time * 0.025 + i) * 0.0002
-        child.position.y += velocity[1] + Math.cos(time * 0.02 + i) * 0.0004
-        child.position.z += velocity[2] + Math.sin(time * 0.023 + i * 0.6) * 0.0002
+        child.position.x += velocity[0] + Math.sin(time * 0.012 + i) * 0.0001
+        child.position.y += velocity[1] + Math.cos(time * 0.01 + i) * 0.0002
+        child.position.z += velocity[2] + Math.sin(time * 0.011 + i * 0.6) * 0.0001
         
         let newX = child.position.x
         let newZ = child.position.z
@@ -1031,7 +1031,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
               material={buttonMaterial.clone()}
               scale={button.scale}
             >
-              <planeGeometry args={[aspectRatio * 1.5, 1.5]} />
+              <planeGeometry args={[aspectRatio * 0.8, 0.8]} />
             </mesh>
           )
         })}
@@ -1242,16 +1242,16 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           startY: yPos,
           floatSpeed: 0.003 + Math.random() * 0.002, // Increased speed for visible movement
           velocity: [
-            (Math.random() - 0.5) * 0.0015, // Continuous horizontal movement
-            Math.random() * 0.002 + 0.001, // Continuous upward movement
-            (Math.random() - 0.5) * 0.0015 // Continuous depth movement
+            (Math.random() - 0.5) * 0.0008, // Elegant slow horizontal movement
+            Math.random() * 0.001 + 0.0005, // Elegant slow upward movement
+            (Math.random() - 0.5) * 0.0008 // Elegant slow depth movement
           ] as [number, number, number],
           scale: sizeVariation,
           mirrored: i % 2 === 0, // 50% mirrored (alternating)
           rotationSpeed: [
-            (Math.random() - 0.5) * 0.0003,
-            (Math.random() - 0.5) * 0.0003,
-            (Math.random() - 0.5) * 0.0003
+            (Math.random() - 0.5) * 0.00015, // Slower, more elegant rotation
+            (Math.random() - 0.5) * 0.00015,
+            (Math.random() - 0.5) * 0.00015
           ]
         }
       })
@@ -1273,11 +1273,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const leaf = leavesData[i]
         if (!leaf) return
 
-        // Continuous floating movement like particles
+        // Elegant floating movement - smooth and graceful
         const velocity = leaf.velocity
-        child.position.x += velocity[0] + Math.sin(time * 0.03 + i) * 0.0003
-        child.position.y += velocity[1] + Math.cos(time * 0.025 + i) * 0.0005
-        child.position.z += velocity[2] + Math.sin(time * 0.028 + i * 0.7) * 0.0003
+        child.position.x += velocity[0] + Math.sin(time * 0.015 + i) * 0.0001
+        child.position.y += velocity[1] + Math.cos(time * 0.012 + i) * 0.0002
+        child.position.z += velocity[2] + Math.sin(time * 0.014 + i * 0.7) * 0.0001
         
         let newX = child.position.x
         let newZ = child.position.z
@@ -1459,9 +1459,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           scale: sizeVariation,
           mirrored: i % 3 !== 0, // More mirrored (2 out of 3)
           rotationSpeed: [
-            (Math.random() - 0.5) * 0.0003,
-            (Math.random() - 0.5) * 0.0003,
-            (Math.random() - 0.5) * 0.0003
+            (Math.random() - 0.5) * 0.00015, // Slower, more elegant rotation
+            (Math.random() - 0.5) * 0.00015,
+            (Math.random() - 0.5) * 0.00015
           ]
         }
       })
@@ -1483,11 +1483,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const leaf = leavesData[i]
         if (!leaf) return
 
-        // Continuous floating movement like particles
+        // Elegant floating movement - smooth and graceful
         const velocity = leaf.velocity
-        child.position.x += velocity[0] + Math.sin(time * 0.03 + i) * 0.0003
-        child.position.y += velocity[1] + Math.cos(time * 0.025 + i) * 0.0005
-        child.position.z += velocity[2] + Math.sin(time * 0.028 + i * 0.7) * 0.0003
+        child.position.x += velocity[0] + Math.sin(time * 0.015 + i) * 0.0001
+        child.position.y += velocity[1] + Math.cos(time * 0.012 + i) * 0.0002
+        child.position.z += velocity[2] + Math.sin(time * 0.014 + i * 0.7) * 0.0001
         
         let newX = child.position.x
         let newZ = child.position.z
@@ -1643,9 +1643,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           scale: sizeVariation,
           mirrored: i % 3 !== 0, // More mirrored (2 out of 3)
           rotationSpeed: [
-            (Math.random() - 0.5) * 0.0003,
-            (Math.random() - 0.5) * 0.0003,
-            (Math.random() - 0.5) * 0.0003
+            (Math.random() - 0.5) * 0.00015, // Slower, more elegant rotation
+            (Math.random() - 0.5) * 0.00015,
+            (Math.random() - 0.5) * 0.00015
           ]
         }
       })
@@ -1667,11 +1667,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const leaf = leavesData[i]
         if (!leaf) return
 
-        // Continuous floating movement like particles
+        // Elegant floating movement - smooth and graceful
         const velocity = leaf.velocity
-        child.position.x += velocity[0] + Math.sin(time * 0.03 + i) * 0.0003
-        child.position.y += velocity[1] + Math.cos(time * 0.025 + i) * 0.0005
-        child.position.z += velocity[2] + Math.sin(time * 0.028 + i * 0.7) * 0.0003
+        child.position.x += velocity[0] + Math.sin(time * 0.015 + i) * 0.0001
+        child.position.y += velocity[1] + Math.cos(time * 0.012 + i) * 0.0002
+        child.position.z += velocity[2] + Math.sin(time * 0.014 + i * 0.7) * 0.0001
         
         let newX = child.position.x
         let newZ = child.position.z
