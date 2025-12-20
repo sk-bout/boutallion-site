@@ -168,7 +168,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         </div>
         
         {/* Mobile-only small buttons */}
-        <div className="md:hidden fixed bottom-6 left-0 right-0 flex justify-center gap-6 z-20 px-4">
+        <div className="md:hidden fixed bottom-6 left-0 right-0 flex justify-center gap-8 z-20 px-4">
           <a
             href={`/${params.locale || 'en'}/corridor/story`}
             className="px-6 py-3 bg-white/5 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-xs tracking-[0.15em] uppercase hover:bg-white/10 hover:border-gold-DEFAULT/40 transition-all duration-300 rounded-sm"
