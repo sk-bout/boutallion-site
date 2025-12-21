@@ -160,6 +160,39 @@ body, html {
   }
 }
 
+/* Subscription confirmation message - mobile only fixes */
+@media screen and (max-width: 768px) {
+  /* Ensure thank you message container is never cut off */
+  .max-w-md {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  /* Thank you message text - prevent edge cutoff */
+  div.text-gold-light.font-refined {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    max-width: calc(100% - 3rem) !important;
+    box-sizing: border-box !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    hyphens: auto !important;
+  }
+}
+
+/* Extra small devices (iPhone SE, small Android) - extra padding */
+@media screen and (max-width: 374px) {
+  /* Subscription confirmation message */
+  div[class*="text-gold-light"][class*="font-refined"] {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    font-size: 0.875rem !important;
+    line-height: 1.6 !important;
+  }
+}
+
 /* 3D Text Effect for BOUTALLION */
 @keyframes float3d {
   0%, 100% { 

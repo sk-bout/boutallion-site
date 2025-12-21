@@ -322,10 +322,22 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         </p>
 
         {/* Subscription form */}
-        <div className="max-w-md mx-auto flex flex-col items-center w-full px-4">
+        <div className="max-w-md mx-auto flex flex-col items-center w-full px-4 sm:px-6">
           {isSubmitted ? (
-            <div className="text-gold-light text-base sm:text-lg md:text-xl lg:text-2xl font-refined animate-fade-in text-center px-4 break-words leading-relaxed">
-              {t['thank-you']}
+            <div className="text-gold-light text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-refined animate-fade-in text-center px-6 sm:px-4 py-4 break-words leading-relaxed w-full" style={{ 
+              maxWidth: 'calc(100% - 2rem)',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              boxSizing: 'border-box',
+            }}>
+              <div className="block mb-2 sm:mb-3 px-2">
+                {t['thank-you-part1'] || (t['thank-you']?.split('.')[0]?.trim() + (t['thank-you']?.includes('.') ? '.' : '')) || 'Thank you for your interest.'}
+              </div>
+              <div className="block px-2">
+                {t['thank-you-part2'] || t['thank-you']?.split('.').slice(1).join('.').trim() || 'We\'ll be in touch soon.'}
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6 w-full flex flex-col items-center">

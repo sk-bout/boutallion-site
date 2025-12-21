@@ -4,6 +4,8 @@ export const translations = {
   'register-your-interest': '注册您的兴趣',
   'submitting': '提交中...',
   'thank-you': '感谢您的关注。我们会尽快与您联系。',
+  'thank-you-part1': '感谢您的关注。',
+  'thank-you-part2': '我们会尽快与您联系。',
   'contact': '联系',
 }
 
