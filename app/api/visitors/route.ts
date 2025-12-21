@@ -165,12 +165,22 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // SIMPLIFIED: A new visitor is someone with a NEW SESSION ID (first time we see this session)
+    // CRITICAL: A new visitor is someone with a NEW SESSION ID (first time we see this session)
     // This ensures EVERY new visit gets notified, regardless of IP history
     const isTrulyNewVisitor = existingVisitor.rows.length === 0
 
-    // For existing visitors in same session (same session ID), update and only notify if unusual
-    if (existingVisitor.rows.length > 0) {
+    console.log('📊 ========================================')
+    console.log('📊 VISITOR TRACKING DEBUG')
+    console.log('📊 ========================================')
+    console.log('📊 Session ID:', sessionId)
+    console.log('📊 Existing visitor found:', existingVisitor.rows.length > 0)
+    console.log('📊 Is Truly New Visitor (new session):', isTrulyNewVisitor)
+    console.log('📊 IP Address:', ipAddress)
+    console.log('📊 Location:', location ? `${location.city}, ${location.country}` : 'Unknown')
+
+    // For existing visitors in same session (same session ID), update but DON'T notify
+    // Only notify for NEW sessions or unusual patterns
+    if (existingVisitor.rows.length > 0 && !isUnusualPattern && !isDailyVisitor) {
       // Update existing visitor (same session, recent visit)
       const visitor = existingVisitor.rows[0]
       const pagesVisited = visitor.pages_visited || []
@@ -231,28 +241,26 @@ export async function POST(request: NextRequest) {
         sessionId,
       ])
 
-      // Send notification for returning visitors only if unusual pattern or daily visitor
-      // Otherwise, just update and return (don't send notification for normal returning visitors)
-      if (!isUnusualPattern && !isDailyVisitor) {
-        return NextResponse.json({
-          success: true,
-          visitor: {
-            ...visitor,
-            pagesVisited,
-            visitCount: newVisitCount,
-            sessionDuration: currentSessionDuration,
-          },
-          country: location?.country,
-          countryCode: location?.countryCode,
-        })
-      }
-      // Continue to send notification below for unusual patterns/daily visitors
+      // For existing visitors (same session), don't send notification unless unusual
+      console.log('📊 Skipping notification - existing visitor in same session (not unusual)')
+      return NextResponse.json({
+        success: true,
+        visitor: {
+          ...visitor,
+          pagesVisited,
+          visitCount: newVisitCount,
+          sessionDuration: currentSessionDuration,
+        },
+        country: location?.country,
+        countryCode: location?.countryCode,
+      })
     }
 
     // Create or update visitor record
     let visitorRecord
-    if (existingVisitor.rows.length > 0) {
-      // Update existing
+    if (existingVisitor.rows.length > 0 && !isTrulyNewVisitor) {
+      // This should not happen if we handled it above, but just in case
+      // Update existing visitor for unusual patterns/daily visitors
       const visitor = existingVisitor.rows[0]
       const pagesVisited = visitor.pages_visited || []
       if (pageUrl && !pagesVisited.includes(pageUrl)) {
@@ -307,6 +315,8 @@ export async function POST(request: NextRequest) {
       ])
       visitorRecord = result.rows[0]
     } else {
+      // NEW VISITOR - Create new record
+      console.log('📊 Creating NEW visitor record for session:', sessionId)
       // Create new visitor
       const result = await db.query(`
         INSERT INTO visitors (
@@ -366,11 +376,11 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // SIMPLIFIED LOGIC: ALWAYS notify for new visitors (new session)
+    // CRITICAL: ALWAYS notify for new visitors (new session)
     // Also notify for unusual patterns or daily visitors
     const shouldNotify = isTrulyNewVisitor || isUnusualPattern || isDailyVisitor
     
-    // Log notification decision
+    // Log notification decision with detailed info
     console.log('📱 ========================================')
     console.log('📱 NOTIFICATION DECISION')
     console.log('📱 ========================================')
@@ -380,16 +390,23 @@ export async function POST(request: NextRequest) {
     console.log('📱 Should Notify:', shouldNotify)
     console.log('📱 Session ID:', sessionId)
     console.log('📱 IP Address:', ipAddress)
+    console.log('📱 Visitor Record exists:', !!visitorRecord)
+    console.log('📱 Visitor Record visit_count:', visitorRecord?.visit_count)
     
     if (!shouldNotify) {
       // Normal returning visitor (same session, no unusual patterns), no notification needed
-      console.log('📱 Skipping notification - normal returning visitor')
+      console.log('📱 ⚠️ SKIPPING NOTIFICATION - normal returning visitor (same session)')
       return NextResponse.json({
         success: true,
         visitor: visitorRecord,
         country: location?.country,
         countryCode: location?.countryCode,
       })
+    }
+    
+    // FORCE notification for new visitors
+    if (isTrulyNewVisitor) {
+      console.log('📱 ✅ FORCING NOTIFICATION - NEW VISITOR DETECTED!')
     }
 
     // Send enhanced Slack notification
