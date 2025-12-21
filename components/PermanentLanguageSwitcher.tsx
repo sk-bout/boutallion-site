@@ -80,18 +80,18 @@ export default function PermanentLanguageSwitcher() {
         {/* Dropdown Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="px-4 py-2.5 sm:px-4 sm:py-2.5 text-xs sm:text-sm bg-white/10 backdrop-blur-md border border-white/20 text-gold-DEFAULT font-sans tracking-wide hover:bg-white/15 hover:border-gold-DEFAULT/50 transition-all duration-200 font-normal shadow-sm hover:shadow-md whitespace-nowrap flex items-center justify-between gap-2 min-w-[120px] sm:min-w-[140px] rounded-sm"
+          className="px-3 py-2 text-xs sm:text-sm bg-transparent border border-white/30 text-white/80 font-sans hover:text-gold-DEFAULT hover:border-gold-DEFAULT/50 transition-colors duration-200 font-light whitespace-nowrap flex items-center justify-center gap-1.5"
           aria-label="Select language"
           aria-expanded={isOpen}
           aria-haspopup="true"
           dir="ltr"
         >
-          <span className="text-left truncate" dir={isRTL ? 'rtl' : 'ltr'}>{currentLanguage.nativeLabel}</span>
+          <span className="text-left" dir={isRTL ? 'rtl' : 'ltr'}>{currentLanguage.nativeLabel}</span>
           <svg
-            className={`w-3 h-3 transition-transform duration-200 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+            className={`w-2.5 h-2.5 transition-transform duration-200 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
             fill="none"
             stroke="currentColor"
-            strokeWidth={2}
+            strokeWidth={1.5}
             viewBox="0 0 24 24"
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -101,7 +101,7 @@ export default function PermanentLanguageSwitcher() {
         {/* Dropdown Menu */}
         {isOpen && (
           <div 
-            className="absolute top-full right-0 mt-1.5 min-w-[120px] sm:min-w-[140px] bg-boutallion-green/98 backdrop-blur-xl border border-white/20 shadow-lg shadow-black/40 overflow-hidden z-50 rounded-sm"
+            className="absolute top-full right-0 mt-1.5 bg-boutallion-green border border-white/30 shadow-lg shadow-black/50 overflow-hidden z-50"
             style={{
               animation: 'fadeIn 200ms ease-out',
             }}
@@ -114,26 +114,15 @@ export default function PermanentLanguageSwitcher() {
                 <button
                   key={lang.code}
                   onClick={() => switchLanguage(lang.code)}
-                  className={`w-full px-4 py-2.5 sm:px-4 sm:py-2.5 text-left text-xs sm:text-sm font-sans tracking-wide transition-all duration-200 border-b border-white/5 last:border-b-0 ${
+                  className={`w-full px-3 py-2 text-xs sm:text-sm font-sans font-light transition-colors duration-200 border-b border-white/10 last:border-b-0 ${
                     isActive
-                      ? 'bg-white/10 text-gold-DEFAULT'
-                      : 'text-white/70 hover:bg-white/8 hover:text-gold-DEFAULT/90'
+                      ? 'text-gold-DEFAULT bg-white/5'
+                      : 'text-white/70 hover:text-gold-DEFAULT/90 hover:bg-white/5'
                   }`}
                   aria-label={`Switch to ${lang.label}`}
                   dir="ltr"
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="flex-1 text-left truncate" dir={isLangRTL ? 'rtl' : 'ltr'}>{lang.nativeLabel}</span>
-                    {isActive && (
-                      <svg 
-                        className="w-3 h-3 text-gold-DEFAULT flex-shrink-0" 
-                        fill="currentColor" 
-                        viewBox="0 0 20 20"
-                      >
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                  </div>
+                  <span className="text-left" dir={isLangRTL ? 'rtl' : 'ltr'}>{lang.nativeLabel}</span>
                 </button>
               )
             })}
