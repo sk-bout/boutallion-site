@@ -4,8 +4,8 @@ import { gccMediaKeywords, uaeGovernmentKeywords } from './gcc-media-seo'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'
 const siteName = 'Boutallion'
-const brandTitle = 'Boutallion | World\'s Most Exclusive Abaya Brand. Crafted With Excellence In Italy.'
-const brandDescription = 'Founded in 2016, Boutallion is the first abaya brand defined by European luxury standards, crafted in Italy with exceptional materials and refined craftsmanship.'
+export const brandTitle = 'Boutallion | World\'s Most Exclusive Abaya Brand. Crafted With Excellence In Italy.'
+export const brandDescription = 'Founded in 2016, Boutallion is the first abaya brand defined by European luxury standards, crafted in Italy with exceptional materials and refined craftsmanship.'
 
 // Primary keywords targeting
 const primaryKeywords = [

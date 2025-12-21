@@ -13,6 +13,7 @@ import { royalAudienceStructuredData } from '@/lib/royal-seo'
 import { Locale, locales } from '@/lib/i18n'
 import ContentProtection from '@/components/ContentProtection'
 import AnalyticsTracker from '@/components/AnalyticsTracker'
+import { brandTitle, brandDescription } from '@/lib/seo'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'
 
@@ -78,6 +79,27 @@ export default function LocaleLayout({
 }) {
   return (
     <html lang={params.locale} dir={params.locale === 'ar' ? 'rtl' : 'ltr'} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%', backgroundColor: '#031a1d' }}>
+      <head>
+        {/* Explicit meta tags for WhatsApp compatibility */}
+        <meta property="og:title" content={brandTitle} />
+        <meta property="og:description" content={brandDescription} />
+        <meta property="og:image" content={`${siteUrl}/og-image.png`} />
+        <meta property="og:image:url" content={`${siteUrl}/og-image.png`} />
+        <meta property="og:image:secure_url" content={`${siteUrl}/og-image.png`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={siteUrl} />
+        <meta property="og:site_name" content="Boutallion" />
+        <meta property="og:locale" content={params.locale === 'ar' ? 'ar_SA' : 'en_US'} />
+        {/* Twitter Card tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={brandTitle} />
+        <meta name="twitter:description" content={brandDescription} />
+        <meta name="twitter:image" content={`${siteUrl}/og-image.png`} />
+        <meta name="twitter:image:alt" content="Boutallion - World's Most Exclusive Abaya Brand" />
+      </head>
       <body className={`${playfairDisplay.variable} ${inter.variable}`} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%', backgroundColor: '#031a1d', color: '#ffffff' }}>
         <ContentProtection />
         <AnalyticsTracker />
