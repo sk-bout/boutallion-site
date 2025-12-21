@@ -69,11 +69,13 @@ export default function PermanentLanguageSwitcher() {
   return (
     <div 
       ref={dropdownRef}
-      className="fixed top-0 right-0 z-50 p-3 sm:p-4 md:p-6 pointer-events-none"
+      className="fixed top-0 right-0 z-[100] p-3 sm:p-4 md:p-6 pointer-events-none"
       style={{
         paddingTop: `max(0.75rem, env(safe-area-inset-top))`,
         paddingRight: `max(0.75rem, env(safe-area-inset-right))`,
         boxSizing: 'border-box',
+        visibility: 'visible',
+        opacity: 1,
       }}
     >
       <div className="relative pointer-events-auto" dir="ltr">
