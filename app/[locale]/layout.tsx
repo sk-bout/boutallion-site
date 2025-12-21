@@ -8,6 +8,7 @@ import { gccGovernmentStructuredData } from '@/lib/gcc-media-seo'
 import { brandMentionsStructuredData } from '@/lib/backlinks-seo'
 import { Locale, locales } from '@/lib/i18n'
 import ContentProtection from '@/components/ContentProtection'
+import AnalyticsTracker from '@/components/AnalyticsTracker'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'
 
@@ -65,6 +66,7 @@ export default function LocaleLayout({
     <html lang={params.locale} dir={params.locale === 'ar' ? 'rtl' : 'ltr'} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%', backgroundColor: '#031a1d' }}>
       <body className={`${playfairDisplay.variable} ${inter.variable}`} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%', backgroundColor: '#031a1d', color: '#ffffff' }}>
         <ContentProtection />
+        <AnalyticsTracker />
         {/* Structured Data - Luxury Brand */}
         <Script
           id="structured-data-brand"

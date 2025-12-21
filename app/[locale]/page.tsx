@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, Suspense, useMemo } from 'react'
+import { useState, Suspense, useMemo, useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { PerspectiveCamera } from '@react-three/drei'
 import LuxuryWebGLEffects from '@/components/LuxuryWebGLEffects'
@@ -8,6 +8,7 @@ import { getTranslations, Locale } from '@/lib/i18n'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Copyright from '@/components/Copyright'
 import { hiddenBrandMentions } from '@/lib/backlinks-seo'
+import { getAnalyticsTracker } from '@/lib/analytics'
 
 export default function ComingSoon({ params }: { params: { locale: Locale } }) {
   const [email, setEmail] = useState('')
@@ -16,6 +17,12 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
   const [emailError, setEmailError] = useState('')
   
   const t = getTranslations(params.locale || 'en')
+  
+  // Initialize analytics tracking
+  useEffect(() => {
+    const tracker = getAnalyticsTracker()
+    tracker.trackPageView()
+  }, [])
 
   // Enhanced email validation function with comprehensive checking
   const validateEmail = (emailValue: string): boolean => {
@@ -184,11 +191,31 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         throw new Error(data.error || 'Failed to subscribe')
       }
 
+      // Track successful subscription with analytics
+      // Note: Location data is captured server-side in the API
+      const tracker = getAnalyticsTracker()
+      await tracker.trackSubscription(email, {
+        subscriptionMethod: 'email_form',
+        subscriptionSuccess: true,
+        locale: params.locale,
+        // Location will be added server-side from IP address
+      })
+
       setIsSubmitted(true)
       setEmail('')
       setEmailError('')
     } catch (error) {
       console.error('Subscription error:', error)
+      
+      // Track failed subscription attempt
+      const tracker = getAnalyticsTracker()
+      await tracker.trackEvent('subscription', {
+        email,
+        subscriptionSuccess: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        locale: params.locale,
+      })
+      
       setEmailError(error instanceof Error ? error.message : 'Something went wrong. Please try again.')
     } finally {
       setIsSubmitting(false)
