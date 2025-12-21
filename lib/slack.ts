@@ -142,6 +142,7 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
             emoji: true,
           },
         },
+        // Section 1: Basic Info (10 fields max per section)
         {
           type: 'section',
           fields: [
@@ -194,6 +195,12 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
               type: 'mrkdwn',
               text: `*Browser:*\n${data.device?.browser || 'Unknown'}`,
             },
+          ],
+        },
+        // Section 2: Additional Info
+        {
+          type: 'section',
+          fields: [
             {
               type: 'mrkdwn',
               text: `*OS:*\n${data.device?.os || 'Unknown'}`,
