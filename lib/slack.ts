@@ -272,14 +272,28 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
     
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        console.log(`📱 Attempting to send Slack notification (attempt ${attempt}/${maxRetries})...`)
+        console.log(`📱 ========================================`)
+        console.log(`📱 ATTEMPT ${attempt}/${maxRetries} - SENDING SLACK NOTIFICATION`)
+        console.log(`📱 ========================================`)
         console.log(`📱 Webhook URL: ${webhookUrl.substring(0, 50)}...`)
+        console.log(`📱 Webhook URL full length: ${webhookUrl.length} characters`)
         console.log(`📱 Message blocks count: ${slackMessage.blocks.length}`)
         console.log(`📱 Message text: ${slackMessage.text}`)
+        console.log(`📱 Message JSON size: ${JSON.stringify(slackMessage).length} bytes`)
+        
+        // Validate webhook URL format
+        if (!webhookUrl.startsWith('https://hooks.slack.com/services/')) {
+          console.error('❌ INVALID WEBHOOK URL FORMAT')
+          console.error('❌ Expected: https://hooks.slack.com/services/...')
+          console.error(`❌ Got: ${webhookUrl.substring(0, 50)}...`)
+          lastError = new Error('Invalid webhook URL format')
+          continue
+        }
         
         const controller = new AbortController()
         timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
         
+        console.log(`📱 Making fetch request to Slack...`)
         const response = await fetch(webhookUrl, {
           method: 'POST',
           headers: {
@@ -289,6 +303,8 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
           body: JSON.stringify(slackMessage),
           signal: controller.signal,
         })
+        
+        console.log(`📱 Response received - Status: ${response.status} ${response.statusText}`)
         
         if (timeoutId) {
           clearTimeout(timeoutId)

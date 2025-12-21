@@ -343,8 +343,8 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6 w-full flex flex-col items-center">
-              <div className="flex flex-col sm:flex-row gap-4 w-full items-center justify-center">
-                <div className="flex-[2] min-w-[280px] flex flex-col">
+              <div className="flex flex-col sm:flex-row gap-4 w-full items-stretch sm:items-center justify-center max-w-2xl">
+                <div className="flex-1 flex flex-col min-w-0">
                   <input
                     type="email"
                     value={email}
@@ -352,7 +352,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                     onBlur={() => validateEmail(email)}
                     placeholder={t['enter-your-email']}
                     required
-                    className={`px-5 py-3 bg-black/20 border transition-all duration-300 font-sans text-sm tracking-wide backdrop-blur-sm text-gold-DEFAULT placeholder-white/50 focus:outline-none ${
+                    className={`w-full px-5 py-3 bg-black/20 border transition-all duration-300 font-sans text-sm tracking-wide backdrop-blur-sm text-gold-DEFAULT placeholder-white/50 focus:outline-none ${
                       emailError
                         ? 'border-red-500/60 focus:border-red-500/80'
                         : email && !emailError
@@ -374,7 +374,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                 <button
                   type="submit"
                   disabled={isSubmitting || !!emailError || !email}
-                  className="px-8 sm:px-12 py-3 w-full sm:w-auto sm:min-w-[300px] bg-white/10 backdrop-blur-md border border-white/20 text-gold-DEFAULT font-sans text-xs tracking-[0.2em] uppercase hover:bg-white/15 hover:border-gold-DEFAULT/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 whitespace-nowrap"
+                  className="w-full sm:w-auto sm:flex-1 px-8 sm:px-12 py-3 bg-white/10 backdrop-blur-md border border-white/20 text-gold-DEFAULT font-sans text-xs tracking-[0.2em] uppercase hover:bg-white/15 hover:border-gold-DEFAULT/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 whitespace-nowrap"
                 >
                   {isSubmitting ? t['submitting'] : t['register-your-interest']}
                 </button>

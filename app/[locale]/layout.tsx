@@ -85,12 +85,12 @@ export default function LocaleLayout({
     <html lang={params.locale} dir={params.locale === 'ar' ? 'rtl' : 'ltr'} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%', backgroundColor: '#031a1d' }}>
       <head>
         {/* Explicit meta tags for WhatsApp/Facebook compatibility - ORDER MATTERS! */}
-        <meta property="og:url" content={siteUrl} />
+        <meta property="og:url" content={`${siteUrl}/${params.locale}`} />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Boutallion" />
         <meta property="og:title" content={brandTitle} />
         <meta property="og:description" content={brandDescription} />
-        <meta property="og:locale" content={params.locale === 'ar' ? 'ar_SA' : 'en_US'} />
+        <meta property="og:locale" content={params.locale === 'ar' ? 'ar_SA' : params.locale === 'it' ? 'it_IT' : params.locale === 'fr' ? 'fr_FR' : params.locale === 'nl' ? 'nl_NL' : params.locale === 'ru' ? 'ru_RU' : 'en_US'} />
         <meta property="og:image" content={`${siteUrl}/og-image.png`} />
         <meta property="og:image:url" content={`${siteUrl}/og-image.png`} />
         <meta property="og:image:secure_url" content={`${siteUrl}/og-image.png`} />
@@ -98,6 +98,11 @@ export default function LocaleLayout({
         <meta property="og:image:height" content="630" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:alt" content="Boutallion - World's Most Exclusive Abaya Brand" />
+        {/* Additional OG tags for better compatibility */}
+        <meta name="description" content={brandDescription} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@boutallion" />
+        <meta name="twitter:creator" content="@boutallion" />
         {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={brandTitle} />
