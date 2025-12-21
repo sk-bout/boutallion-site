@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, Suspense, useMemo, useEffect } from 'react'
+import { useState, Suspense, useMemo, useEffect, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { PerspectiveCamera } from '@react-three/drei'
 import LuxuryWebGLEffects from '@/components/LuxuryWebGLEffects'
@@ -15,6 +15,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [emailError, setEmailError] = useState('')
+  const logoRef = useRef<HTMLHeadingElement>(null)
   
   const t = getTranslations(params.locale || 'en')
   
@@ -26,21 +27,73 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
 
   // Force Portrait font to be applied - especially important when switching languages
   useEffect(() => {
-    const logoElement = document.getElementById('boutallion-logo')
-    if (logoElement) {
-      // Force Portrait font via inline style
-      logoElement.style.fontFamily = "'Portrait', var(--font-portrait), serif"
-      logoElement.style.fontWeight = 'normal'
-      logoElement.style.fontStyle = 'normal'
-      logoElement.style.direction = 'ltr'
-      logoElement.style.unicodeBidi = 'bidi-override'
-      
-      // Also ensure the font is loaded
-      if (document.fonts && document.fonts.check) {
-        document.fonts.ready.then(() => {
-          logoElement.style.fontFamily = "'Portrait', var(--font-portrait), serif"
-        })
+    const applyPortraitFont = () => {
+      const logoElement = logoRef.current || document.getElementById('boutallion-logo')
+      if (logoElement) {
+        // Force Portrait font via inline style with !important equivalent
+        const style = logoElement.style
+        style.setProperty('font-family', "'Portrait', var(--font-portrait), serif", 'important')
+        style.setProperty('font-weight', 'normal', 'important')
+        style.setProperty('font-style', 'normal', 'important')
+        style.setProperty('direction', 'ltr', 'important')
+        style.setProperty('unicode-bidi', 'bidi-override', 'important')
+        style.setProperty('font-variant', 'normal', 'important')
+        style.setProperty('font-stretch', 'normal', 'important')
       }
+    }
+
+    // Apply immediately
+    applyPortraitFont()
+
+    // Apply after a short delay to catch any late style changes
+    const timeout1 = setTimeout(applyPortraitFont, 0)
+    const timeout2 = setTimeout(applyPortraitFont, 50)
+    const timeout3 = setTimeout(applyPortraitFont, 100)
+
+    // Also ensure the font is loaded
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        applyPortraitFont()
+      })
+    }
+
+    // Use MutationObserver to watch for style changes
+    const logoElement = logoRef.current || document.getElementById('boutallion-logo')
+    if (logoElement) {
+      const observer = new MutationObserver(() => {
+        applyPortraitFont()
+      })
+      
+      observer.observe(logoElement, {
+        attributes: true,
+        attributeFilter: ['style', 'class', 'dir'],
+        childList: false,
+        subtree: false,
+      })
+
+      // Also observe the html element for dir changes
+      const htmlObserver = new MutationObserver(() => {
+        applyPortraitFont()
+      })
+      
+      htmlObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['dir'],
+      })
+
+      return () => {
+        clearTimeout(timeout1)
+        clearTimeout(timeout2)
+        clearTimeout(timeout3)
+        observer.disconnect()
+        htmlObserver.disconnect()
+      }
+    }
+
+    return () => {
+      clearTimeout(timeout1)
+      clearTimeout(timeout2)
+      clearTimeout(timeout3)
     }
   }, [params.locale]) // Re-run when locale changes
 
@@ -315,8 +368,10 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       <main className="relative z-10 text-center px-4 sm:px-6 py-8 sm:py-12 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-center min-h-[100vh] min-h-[100dvh] safe-area-inset">
         {/* BOUTALLION text in Portrait font with 3D effect - always LTR for proper font rendering */}
         <h1 
+          ref={logoRef}
           id="boutallion-logo"
           data-font="portrait"
+          key={`boutallion-logo-${params.locale}`}
           className="relative z-10 font-portrait text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-7xl 2xl:text-7xl tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.2em] lg:tracking-[0.15em] xl:tracking-[0.12em] 2xl:tracking-[0.1em] text-gold-light sm:text-gold-DEFAULT mb-8 sm:mb-12 md:mb-16 text-3d break-words hyphens-none leading-tight w-full px-4 sm:px-6 md:px-8"
           style={{
             fontFamily: "'Portrait', var(--font-portrait), serif",
