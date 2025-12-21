@@ -63,6 +63,7 @@ html {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  unicode-range: U+0000-10FFFF; /* Support all Unicode characters */
 }
 
 /* Ensure fonts are loaded before rendering */
@@ -322,7 +323,10 @@ h1[class*="font-portrait"],
 [dir="rtl"] .text-3d,
 html[dir="rtl"] h1.font-portrait,
 html[dir="rtl"] h1[class*="font-portrait"],
-html[dir="rtl"] .text-3d {
+html[dir="rtl"] .text-3d,
+html[dir="rtl"] body h1.font-portrait,
+html[dir="rtl"] body h1[class*="font-portrait"],
+html[dir="rtl"] body .text-3d {
   font-family: 'Portrait', var(--font-portrait), serif !important;
   font-weight: normal !important;
   font-style: normal !important;
@@ -330,6 +334,14 @@ html[dir="rtl"] .text-3d {
   unicode-bidi: bidi-override !important;
   font-variant: normal !important;
   font-stretch: normal !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+}
+
+/* Additional rule to ensure Portrait font is used even when switching languages */
+h1.text-3d.font-portrait {
+  font-family: 'Portrait' !important;
 }
 
 /* Enhanced mobile readability */
