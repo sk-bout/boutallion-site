@@ -387,7 +387,11 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
           {/* Contact button */}
           <a
             href="mailto:info@boutallion.com"
-            className="mt-6 sm:mt-8 text-white/60 hover:text-gold-DEFAULT transition-colors duration-300 font-sans text-xs tracking-[0.15em] uppercase px-4"
+            className={`mt-6 sm:mt-8 text-white/60 hover:text-gold-DEFAULT transition-colors duration-300 font-sans tracking-[0.15em] uppercase px-4 ${
+              params.locale === 'ar' || params.locale === 'ru'
+                ? 'text-sm sm:text-base'
+                : 'text-xs'
+            }`}
           >
             {t['contact']}
           </a>
