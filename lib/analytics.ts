@@ -404,7 +404,8 @@ class AnalyticsTracker {
     
     // Also track visitor info with enhanced details
     try {
-      await fetch('/api/visitors', {
+      console.log('📊 Calling visitor API from analytics tracker...')
+      const response = await fetch('/api/visitors', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -416,7 +417,10 @@ class AnalyticsTracker {
           referer: typeof document !== 'undefined' ? document.referrer : '',
         }),
       })
+      const result = await response.json()
+      console.log('📊 Visitor API response:', result.success ? '✅ Success' : '❌ Failed', result)
     } catch (error) {
+      console.error('❌ Visitor API call failed:', error)
       // Silent fail - don't block page view tracking
     }
   }
