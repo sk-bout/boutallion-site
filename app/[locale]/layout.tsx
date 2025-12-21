@@ -31,6 +31,10 @@ export const metadata: Metadata = {
       Object.entries(defaultMetadata.other || {}).filter(([_, value]) => value !== undefined)
     ),
     'referrer': 'strict-origin-when-cross-origin',
+    // Explicit meta tags for WhatsApp compatibility
+    'og:image:width': '1200',
+    'og:image:height': '630',
+    'og:image:type': 'image/png',
   },
   // Ensure Open Graph image uses absolute URL for WhatsApp compatibility
   openGraph: {
@@ -41,13 +45,19 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt: 'Boutallion - Luxury Abaya Brand',
+        type: 'image/png',
       },
     ],
   },
   // Ensure Twitter image uses absolute URL
   twitter: {
     ...defaultMetadata.twitter,
-    images: [`${siteUrl}/og-image.png`],
+    images: [
+      {
+        url: `${siteUrl}/og-image.png`,
+        alt: 'Boutallion - Luxury Abaya Brand',
+      },
+    ],
   },
 }
 
