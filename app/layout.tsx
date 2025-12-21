@@ -39,12 +39,18 @@ export const metadata: Metadata = {
   },
   // Add explicit other tags for WhatsApp/Facebook
   other: {
-    ...defaultMetadata.other,
+    ...(defaultMetadata.other && typeof defaultMetadata.other === 'object' && !Array.isArray(defaultMetadata.other)
+      ? Object.fromEntries(
+          Object.entries(defaultMetadata.other)
+            .filter(([_, value]) => value !== undefined && value !== null)
+            .map(([key, value]) => [key, String(value)])
+        )
+      : {}),
     'og:url': process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com',
     'og:title': brandTitle,
     'og:description': brandDescription,
     'og:image:secure_url': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'}/og-image.png`,
-  },
+  } as Record<string, string>,
 }
 
 export default function RootLayout({
