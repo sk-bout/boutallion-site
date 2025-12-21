@@ -396,8 +396,11 @@ export async function POST(request: NextRequest) {
     console.log('📱 Device:', `${device.type} - ${device.browser} - ${device.os}`)
     console.log('📱 Session Duration:', formatDuration(sessionDuration))
     console.log('📱 Visit Count:', visitorRecord.visit_count)
+    console.log('📱 SLACK_COMINGSOON_WEBHOOK exists:', !!process.env.SLACK_COMINGSOON_WEBHOOK)
     console.log('📱 SLACK_VISITOR_WEBHOOK_URL exists:', !!process.env.SLACK_VISITOR_WEBHOOK_URL)
-    console.log('📱 SLACK_VISITOR_WEBHOOK_URL value:', process.env.SLACK_VISITOR_WEBHOOK_URL ? `${process.env.SLACK_VISITOR_WEBHOOK_URL.substring(0, 50)}...` : 'NOT SET')
+    console.log('📱 SLACK_WEBHOOK_URL exists (fallback):', !!process.env.SLACK_WEBHOOK_URL)
+    const webhookUrl = process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL
+    console.log('📱 Using webhook:', webhookUrl ? `${webhookUrl.substring(0, 50)}...` : 'NOT SET')
     
     try {
       const notificationResult = await sendVisitorNotification({
@@ -433,7 +436,7 @@ export async function POST(request: NextRequest) {
       console.log('📱 ========================================')
       if (!notificationResult) {
         console.error('❌ Slack notification returned false')
-        console.error('❌ Check SLACK_VISITOR_WEBHOOK_URL environment variable in Vercel')
+        console.error('❌ Check SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, or SLACK_WEBHOOK_URL environment variable in Vercel')
       }
     } catch (error) {
       console.error('❌ ========================================')

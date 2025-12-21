@@ -63,19 +63,20 @@ export interface VisitorNotificationData {
  * Send visitor notification to Slack
  */
 export async function sendVisitorNotification(data: VisitorNotificationData): Promise<boolean> {
-  // Use separate webhook for visitors if available, otherwise fall back to main webhook
-  const webhookUrl = process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL
+  // Check for visitor webhook in order: SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, then fallback to SLACK_WEBHOOK_URL
+  const webhookUrl = process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL
 
   console.log('📱 ========================================')
   console.log('📱 sendVisitorNotification called')
   console.log('📱 ========================================')
+  console.log('📱 SLACK_COMINGSOON_WEBHOOK exists:', !!process.env.SLACK_COMINGSOON_WEBHOOK)
   console.log('📱 SLACK_VISITOR_WEBHOOK_URL exists:', !!process.env.SLACK_VISITOR_WEBHOOK_URL)
   console.log('📱 SLACK_WEBHOOK_URL exists (fallback):', !!process.env.SLACK_WEBHOOK_URL)
   console.log('📱 Using webhook:', webhookUrl ? webhookUrl.substring(0, 50) + '...' : 'NOT SET')
   
   if (!webhookUrl) {
     console.error('❌ Slack webhook not configured, skipping visitor notification')
-    console.error('❌ Please set SLACK_VISITOR_WEBHOOK_URL or SLACK_WEBHOOK_URL in Vercel environment variables')
+    console.error('❌ Please set SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, or SLACK_WEBHOOK_URL in Vercel environment variables')
     return false
   }
   

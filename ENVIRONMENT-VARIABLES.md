@@ -8,10 +8,15 @@ Add these in **Vercel Dashboard → Your Project → Settings → Environment Va
 
 #### Visitor Tracking (New Channel)
 ```
+SLACK_COMINGSOON_WEBHOOK=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
+```
+OR
+```
 SLACK_VISITOR_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
 ```
 - **Purpose**: Sends visitor notifications to `#comingsoon-visitors` channel
 - **Required**: ✅ Yes (for visitor tracking)
+- **Priority**: `SLACK_COMINGSOON_WEBHOOK` is checked first, then `SLACK_VISITOR_WEBHOOK_URL`, then `SLACK_WEBHOOK_URL` as fallback
 - **Set for**: Production, Preview, Development
 
 #### Subscription Notifications (Existing Channel)
