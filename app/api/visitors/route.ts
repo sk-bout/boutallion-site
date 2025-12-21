@@ -180,10 +180,11 @@ export async function POST(request: NextRequest) {
     console.log('📊 Is Daily Visitor:', isDailyVisitor)
     console.log('📊 Is Unusual Pattern:', isUnusualPattern)
 
-    // CRITICAL: ALWAYS notify for new visitors (new session ID)
-    // For existing visitors in same session, only notify if unusual patterns
-    if (existingVisitor.rows.length > 0 && !isUnusualPattern && !isDailyVisitor && !isTrulyNewVisitor) {
-      // Update existing visitor (same session, recent visit)
+    // CRITICAL: Only skip notification for existing visitors in SAME session with NO unusual patterns
+    // ALWAYS notify for new visitors (new session ID) - this is the key fix!
+    if (existingVisitor.rows.length > 0 && !isUnusualPattern && !isDailyVisitor) {
+      // This is an existing visitor in the same session with no unusual patterns
+      // Update but don't notify (to avoid spam)
       const visitor = existingVisitor.rows[0]
       const pagesVisited = visitor.pages_visited || []
       
@@ -243,8 +244,8 @@ export async function POST(request: NextRequest) {
         sessionId,
       ])
 
-      // For existing visitors (same session), don't send notification unless unusual
-      console.log('📊 Skipping notification - existing visitor in same session (not unusual)')
+      console.log('📊 Skipping notification - existing visitor in same session (not unusual, not daily)')
+      console.log('📊 This visitor will NOT trigger a notification')
       return NextResponse.json({
         success: true,
         visitor: {
@@ -257,6 +258,12 @@ export async function POST(request: NextRequest) {
         countryCode: location?.countryCode,
       })
     }
+    
+    // If we reach here, it's either:
+    // 1. A NEW visitor (isTrulyNewVisitor = true) - ALWAYS notify
+    // 2. An existing visitor with unusual patterns - notify
+    // 3. An existing visitor who is a daily visitor - notify
+    console.log('📊 ✅ PROCEEDING TO NOTIFICATION - New visitor or unusual pattern detected')
 
     // Create or update visitor record
     let visitorRecord
