@@ -4,7 +4,8 @@ import { gccMediaKeywords, uaeGovernmentKeywords } from './gcc-media-seo'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'
 const siteName = 'Boutallion'
-const brandDescription = 'Boutallion - The Most Luxurious Abaya Brand in the World. Italian Haute Couture Abayas Made in Italy. Exclusive Modest Fashion for the Discerning Woman. Discover Alta Moda Abayas at Boutallion.'
+const brandTitle = 'Boutallion | World\'s Most Exclusive Abaya Brand. Crafted With Excellence In Italy.'
+const brandDescription = 'Founded in 2016, Boutallion is the first abaya brand defined by European luxury standards, crafted in Italy with exceptional materials and refined craftsmanship.'
 
 // Primary keywords targeting
 const primaryKeywords = [
@@ -591,7 +592,7 @@ export const defaultMetadata: Metadata = {
     viewportFit: 'cover',
   },
   title: {
-    default: 'Boutallion | World\'s Most Luxurious Abaya Brand. Based in Abu Dhabi. Crafted in Italy. Featured in Vogue, Forbes',
+    default: brandTitle,
     template: '%s | Boutallion',
   },
   description: brandDescription,
@@ -616,7 +617,7 @@ export const defaultMetadata: Metadata = {
     alternateLocale: ['ar_SA', 'ar_AE', 'ar_QA', 'ar_KW', 'ar_BH', 'ar_OM', 'fr_FR', 'it_IT', 'ru_RU', 'nl_NL'],
     url: siteUrl,
     siteName: siteName,
-    title: 'Boutallion | World\'s Most Luxurious Abaya Brand. Based in Abu Dhabi. Crafted in Italy. Featured in Vogue, Forbes',
+    title: brandTitle,
     description: brandDescription,
     images: [
       {
@@ -629,7 +630,7 @@ export const defaultMetadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Boutallion | World\'s Most Luxurious Abaya Brand. Based in Abu Dhabi. Crafted in Italy. Featured in Vogue, Forbes',
+    title: brandTitle,
     description: brandDescription,
     images: [`${siteUrl}/og-image.png`],
     creator: '@boutallion',

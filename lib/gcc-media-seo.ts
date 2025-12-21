@@ -423,7 +423,7 @@ export const gccGovernmentStructuredData = {
   '@context': 'https://schema.org',
   '@type': 'Brand',
   name: 'Boutallion',
-  description: 'The Most Luxurious Abaya Brand in the World. Recognized by UAE Ministry of Culture, Department of Culture and Tourism Abu Dhabi, and GCC government authorities.',
+  description: 'Founded in 2016, Boutallion is the first abaya brand defined by European luxury standards, crafted in Italy with exceptional materials and refined craftsmanship.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com',
   logo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'}/logo.png`,
   // Government recognition

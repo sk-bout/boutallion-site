@@ -4,9 +4,9 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Boutallion - The Most Luxurious Abaya Brand',
+    name: 'Boutallion - World\'s Most Exclusive Abaya Brand',
     short_name: 'Boutallion',
-    description: 'The Most Luxurious Abaya Brand in the World. Italian Haute Couture Abayas Made in Italy.',
+    description: 'Founded in 2016, Boutallion is the first abaya brand defined by European luxury standards, crafted in Italy with exceptional materials and refined craftsmanship.',
     start_url: '/',
     display: 'standalone',
     background_color: '#031a1d',

@@ -6,7 +6,7 @@ export const brandMentionsStructuredData = {
   '@type': 'Brand',
   '@id': 'https://boutallion.com#brand',
   name: 'Boutallion',
-  description: 'World\'s Most Luxurious Abaya Brand. Based in Abu Dhabi. Crafted in Italy.',
+  description: 'Founded in 2016, Boutallion is the first abaya brand defined by European luxury standards, crafted in Italy with exceptional materials and refined craftsmanship.',
   url: 'https://boutallion.com',
   logo: 'https://boutallion.com/logo.png',
   sameAs: [

@@ -518,7 +518,7 @@ export const pressStructuredData = {
   '@context': 'https://schema.org',
   '@type': 'Brand',
   name: 'Boutallion',
-  description: 'The Most Luxurious Abaya Brand in the World. Italian Haute Couture Abayas Made in Italy. Exclusive Modest Fashion for the Discerning Woman.',
+  description: 'Founded in 2016, Boutallion is the first abaya brand defined by European luxury standards, crafted in Italy with exceptional materials and refined craftsmanship.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com',
   logo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'}/logo.png`,
   slogan: 'The Architect of Imagination',
