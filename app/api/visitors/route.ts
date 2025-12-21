@@ -248,6 +248,8 @@ export async function POST(request: NextRequest) {
             visitCount: newVisitCount,
             sessionDuration: currentSessionDuration,
           },
+          country: location?.country,
+          countryCode: location?.countryCode,
         })
       }
       // Continue to send notification below for unusual patterns/daily visitors
@@ -379,6 +381,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         success: true,
         visitor: visitorRecord,
+        country: location?.country,
+        countryCode: location?.countryCode,
       })
     }
 
@@ -449,6 +453,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       visitor: visitorRecord,
+      country: location?.country,
+      countryCode: location?.countryCode,
     })
   } catch (error) {
     console.error('Error tracking visitor:', error)
