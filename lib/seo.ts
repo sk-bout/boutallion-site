@@ -92,6 +92,8 @@ const primaryKeywords = [
   'harrods abaya',
   'premium abaya',
   'designer abaya',
+  'abaya designer',
+  'abaya art',
   'italian abaya',
   // Competitor-related searches (people searching for alternatives)
   'abaya brand like shayma',
@@ -222,13 +224,14 @@ const regionalKeywords = [
   'luxury abaya uk',
   'luxury abaya united kingdom',
   'luxury abaya london',
+  'london abaya',
+  'abaya london',
   'luxury abaya manchester',
   'luxury abaya birmingham',
   'abaya brand london',
   'abaya brand manchester',
   'abaya brand birmingham',
   'luxury abaya brand london',
-  'abaya london',
   'abaya manchester',
   'abaya birmingham',
   'luxury abaya uk london',
@@ -457,6 +460,13 @@ const multilingualKeywords = {
     'moda di lusso milano',
     'moda di lusso roma',
     'moda di lusso firenze',
+    // Additional Italian keywords
+    'abaya designer',
+    'abaya arte',
+    'abaya londra',
+    'londra abaya',
+    'moda di lusso',
+    'moda modesta',
   ],
   ru: [
     'люксовая абайя',
@@ -482,6 +492,15 @@ const multilingualKeywords = {
     'бренд абайя катар',
     'бренд абайя саудовская аравия',
     'бренд абайя оаэ',
+    // Additional Russian keywords
+    'дизайнер абайя',
+    'абайя дизайнер',
+    'абайя искусство',
+    'абайя лондон',
+    'лондон абайя',
+    'люксовая мода',
+    'скромная мода',
+    'модная абайя',
   ],
   nl: [
     'luxe abaya',
@@ -533,6 +552,13 @@ const multilingualKeywords = {
     'modest fashion brands',
     'abaya brand',
     'abaya brands',
+    // Additional Dutch keywords
+    'abaya designer',
+    'abaya kunst',
+    'londen abaya',
+    'abaya londen',
+    'luxe mode',
+    'modest fashion',
   ],
   // Khaleeji Arabic dialects
   'ar-SA': [
