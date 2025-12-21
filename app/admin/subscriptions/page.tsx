@@ -36,9 +36,16 @@ export default function SubscriptionsAdminPage() {
     byCity: {} as Record<string, number>,
   })
 
-  useEffect(() => {
-    fetchSubscriptions()
-  }, [])
+  const calculateStats = (subs: Subscription[], field: 'country' | 'city') => {
+    const stats: Record<string, number> = {}
+    subs.forEach(sub => {
+      const value = sub[field]
+      if (value) {
+        stats[value] = (stats[value] || 0) + 1
+      }
+    })
+    return stats
+  }
 
   const fetchSubscriptions = async () => {
     try {
@@ -65,16 +72,10 @@ export default function SubscriptionsAdminPage() {
     }
   }
 
-  const calculateStats = (subs: Subscription[], field: 'country' | 'city') => {
-    const stats: Record<string, number> = {}
-    subs.forEach(sub => {
-      const value = sub[field]
-      if (value) {
-        stats[value] = (stats[value] || 0) + 1
-      }
-    })
-    return stats
-  }
+  useEffect(() => {
+    fetchSubscriptions()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleFilterChange = (field: string, value: string) => {
     setFilters(prev => ({ ...prev, [field]: value }))

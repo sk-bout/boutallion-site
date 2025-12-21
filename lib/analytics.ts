@@ -427,15 +427,26 @@ class AnalyticsTracker {
 // Singleton instance
 let trackerInstance: AnalyticsTracker | null = null
 
+// Server-side mock tracker class
+class ServerAnalyticsTracker {
+  private sessionId: string = 'server-session'
+  private sessionStartTime: number = Date.now()
+  private pageViewCount: number = 0
+  private clickCount: number = 0
+  private maxScrollDepth: number = 0
+  private lastActivityTime: number = Date.now()
+  private trackingEndpoint: string = '/api/track'
+
+  async trackPageView(): Promise<void> {}
+  async trackSubscription(email: string, additionalData?: Record<string, any>): Promise<void> {}
+  async trackEvent(eventType: TrackingData['eventType'], eventData?: Record<string, any>): Promise<void> {}
+  getSessionId(): string { return this.sessionId }
+}
+
 export function getAnalyticsTracker(): AnalyticsTracker {
   if (typeof window === 'undefined') {
     // Server-side: return a mock tracker
-    return {
-      trackPageView: async () => {},
-      trackSubscription: async () => {},
-      trackEvent: async () => {},
-      getSessionId: () => 'server-session',
-    } as AnalyticsTracker
+    return new ServerAnalyticsTracker() as unknown as AnalyticsTracker
   }
 
   if (!trackerInstance) {
