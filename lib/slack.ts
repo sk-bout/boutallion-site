@@ -322,7 +322,7 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
           await new Promise(resolve => setTimeout(resolve, delay))
         }
         
-        lastError = new Error(`HTTP ${response.status}: ${errorText}`)
+        lastError = new Error(`HTTP ${response.status}: ${responseText}`)
       } catch (error) {
         if (timeoutId) {
           clearTimeout(timeoutId)
