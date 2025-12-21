@@ -297,7 +297,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       <main className="relative z-10 text-center px-4 sm:px-6 py-8 sm:py-12 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-center min-h-[100vh] min-h-[100dvh] safe-area-inset">
         {/* BOUTALLION text in Portrait font with 3D effect */}
         <h1 
-          className="relative z-10 font-portrait text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-8xl 2xl:text-8xl tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.2em] lg:tracking-[0.15em] xl:tracking-[0.12em] 2xl:tracking-[0.1em] text-gold-light sm:text-gold-DEFAULT mb-8 sm:mb-12 md:mb-16 text-3d break-words hyphens-none leading-tight w-full px-4 sm:px-6 md:px-8"
+          className="relative z-10 font-portrait text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-7xl 2xl:text-7xl tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.2em] lg:tracking-[0.15em] xl:tracking-[0.12em] 2xl:tracking-[0.1em] text-gold-light sm:text-gold-DEFAULT mb-8 sm:mb-12 md:mb-16 text-3d break-words hyphens-none leading-tight w-full px-4 sm:px-6 md:px-8"
           style={{
             textRendering: 'optimizeLegibility',
             WebkitFontSmoothing: 'antialiased',
@@ -351,7 +351,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                     onBlur={() => validateEmail(email)}
                     placeholder={t['enter-your-email']}
                     required
-                    className={`w-full px-5 py-3 bg-white/10 backdrop-blur-md border border-white/20 text-gold-DEFAULT font-sans text-xs tracking-[0.2em] uppercase transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-white/15 focus:border-gold-DEFAULT/40 font-medium shadow-lg shadow-black/20 ${
+                    className={`w-full px-5 py-3 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10 ${
                       emailError
                         ? 'border-red-500/60 focus:border-red-500/80'
                         : email && !emailError
@@ -373,7 +373,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                 <button
                   type="submit"
                   disabled={isSubmitting || !!emailError || !email}
-                  className="w-full px-5 py-3 bg-white/20 backdrop-blur-md border border-white/30 text-gold-DEFAULT font-sans text-xs tracking-[0.2em] uppercase hover:bg-white/25 hover:border-gold-DEFAULT/50 active:bg-white/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-lg shadow-black/30 hover:shadow-xl hover:shadow-black/40 whitespace-nowrap"
+                  className="w-full px-5 py-3 bg-gold-DEFAULT/20 backdrop-blur-md border-2 border-gold-DEFAULT/40 text-gold-DEFAULT font-sans text-xs tracking-[0.2em] uppercase hover:bg-gold-DEFAULT/30 hover:border-gold-DEFAULT/60 active:bg-gold-DEFAULT/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-semibold shadow-lg shadow-gold-DEFAULT/20 hover:shadow-xl hover:shadow-gold-DEFAULT/30 whitespace-nowrap"
                 >
                   {isSubmitting ? t['submitting'] : t['register-your-interest']}
                 </button>
