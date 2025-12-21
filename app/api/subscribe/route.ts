@@ -335,8 +335,38 @@ export async function POST(request: NextRequest) {
     
     console.log(`📍 Subscription: ${email} | Location: ${locationSummary.location} | IP: ${ipAddress} | Country: ${locationSummary.country || 'Unknown'} | City: ${locationSummary.city || 'Unknown'}`)
     
+    // Send Slack notification (non-blocking)
+    try {
+      await sendSlackNotification({
+        email,
+        ipAddress,
+        location: {
+          country: locationSummary.country,
+          city: locationSummary.city,
+          region: locationSummary.region,
+          location_string: locationSummary.location,
+          latitude: locationData?.latitude,
+          longitude: locationData?.longitude,
+        },
+        userAgent,
+        referer,
+        timestamp: new Date().toISOString(),
+        mailerliteSuccess,
+      })
+    } catch (slackError) {
+      console.error('⚠️ Slack notification error (non-critical):', slackError)
+      // Don't fail subscription if Slack fails
+    }
+    
+    console.log('✅ Total processing time:', Date.now() - startTime, 'ms')
+    
     // Always return success to user
-    return NextResponse.json({ success: true, message: 'Successfully subscribed' })
+    return NextResponse.json({ 
+      success: true, 
+      message: 'Successfully subscribed',
+      mailerliteSuccess,
+      timestamp: new Date().toISOString(),
+    })
 
     // If neither method is configured, log warning but don't block users
     console.warn('MailerLite is not configured. Please set MAILERLITE_FORM_URL or MAILERLITE_API_KEY in environment variables.')
