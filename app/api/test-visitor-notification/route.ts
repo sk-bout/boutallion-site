@@ -18,6 +18,12 @@ export async function GET(request: NextRequest) {
   }
 
   // Check environment variables
+  results.checks.slackComingsoonWebhookUrl = {
+    exists: !!process.env.SLACK_COMINGSOON_WEBHOOK_URL,
+    preview: process.env.SLACK_COMINGSOON_WEBHOOK_URL 
+      ? process.env.SLACK_COMINGSOON_WEBHOOK_URL.substring(0, 30) + '...' 
+      : 'NOT SET',
+  }
   results.checks.slackComingsoonWebhook = {
     exists: !!process.env.SLACK_COMINGSOON_WEBHOOK,
     preview: process.env.SLACK_COMINGSOON_WEBHOOK 
@@ -37,7 +43,7 @@ export async function GET(request: NextRequest) {
       : 'NOT SET',
   }
   
-  const webhookUrl = process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL
+  const webhookUrl = process.env.SLACK_COMINGSOON_WEBHOOK_URL || process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL
   results.checks.usingWebhook = webhookUrl ? webhookUrl.substring(0, 50) + '...' : 'NONE'
 
   // Test sending a notification
@@ -47,9 +53,10 @@ export async function GET(request: NextRequest) {
       console.log('🧪 TESTING VISITOR SLACK NOTIFICATION')
       console.log('🧪 ========================================')
       console.log('🧪 Webhook URL:', webhookUrl.substring(0, 50) + '...')
-      console.log('🧪 Using webhook:', webhookUrl === process.env.SLACK_COMINGSOON_WEBHOOK ? 'SLACK_COMINGSOON_WEBHOOK' : 
-                                         webhookUrl === process.env.SLACK_VISITOR_WEBHOOK_URL ? 'SLACK_VISITOR_WEBHOOK_URL' : 
-                                         'SLACK_WEBHOOK_URL (fallback)')
+      console.log('🧪 Using webhook:', webhookUrl === process.env.SLACK_COMINGSOON_WEBHOOK_URL ? 'SLACK_COMINGSOON_WEBHOOK_URL' :
+                                     webhookUrl === process.env.SLACK_COMINGSOON_WEBHOOK ? 'SLACK_COMINGSOON_WEBHOOK' : 
+                                     webhookUrl === process.env.SLACK_VISITOR_WEBHOOK_URL ? 'SLACK_VISITOR_WEBHOOK_URL' : 
+                                     'SLACK_WEBHOOK_URL (fallback)')
       
       const testResult = await sendVisitorNotification({
         ipAddress: '127.0.0.1',
@@ -102,8 +109,8 @@ export async function GET(request: NextRequest) {
     }
   } else {
     results.test.notificationSent = false
-    results.test.message = '❌ SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, or SLACK_WEBHOOK_URL not set - cannot test'
-    results.errors.push('SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, or SLACK_WEBHOOK_URL environment variable must be set')
+    results.test.message = '❌ SLACK_COMINGSOON_WEBHOOK_URL, SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, or SLACK_WEBHOOK_URL not set - cannot test'
+    results.errors.push('SLACK_COMINGSOON_WEBHOOK_URL, SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, or SLACK_WEBHOOK_URL environment variable must be set')
   }
 
   // Overall status

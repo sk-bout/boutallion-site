@@ -7,16 +7,16 @@ export const dynamic = 'force-dynamic'
  * GET /api/test-slack-webhook
  */
 export async function GET(request: NextRequest) {
-  // Check for visitor webhook in order: SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, then fallback to SLACK_WEBHOOK_URL
-  const webhookUrl = process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL
+  // Check for visitor webhook in order: SLACK_COMINGSOON_WEBHOOK_URL, SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, then fallback to SLACK_WEBHOOK_URL
+  const webhookUrl = process.env.SLACK_COMINGSOON_WEBHOOK_URL || process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL
   
   if (!webhookUrl) {
     return NextResponse.json({
       success: false,
-      error: 'SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, or SLACK_WEBHOOK_URL not set',
+      error: 'SLACK_COMINGSOON_WEBHOOK_URL, SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, or SLACK_WEBHOOK_URL not set',
       instructions: [
         '1. Go to Vercel Dashboard → Settings → Environment Variables',
-        '2. Add SLACK_COMINGSOON_WEBHOOK (preferred) or SLACK_VISITOR_WEBHOOK_URL',
+        '2. Add SLACK_COMINGSOON_WEBHOOK_URL (preferred) or SLACK_COMINGSOON_WEBHOOK',
         '3. Value: https://hooks.slack.com/services/YOUR/WEBHOOK/URL',
         '4. Redeploy your site',
       ],

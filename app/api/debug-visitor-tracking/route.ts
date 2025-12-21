@@ -11,13 +11,20 @@ export async function GET(request: NextRequest) {
   const diagnostics: any = {
     timestamp: new Date().toISOString(),
     environment: {
-      slackComingsoonWebhook: {
-        exists: !!process.env.SLACK_COMINGSOON_WEBHOOK,
-        length: process.env.SLACK_COMINGSOON_WEBHOOK?.length || 0,
-        preview: process.env.SLACK_COMINGSOON_WEBHOOK 
-          ? `${process.env.SLACK_COMINGSOON_WEBHOOK.substring(0, 30)}...` 
-          : 'NOT SET',
-      },
+    slackComingsoonWebhookUrl: {
+      exists: !!process.env.SLACK_COMINGSOON_WEBHOOK_URL,
+      length: process.env.SLACK_COMINGSOON_WEBHOOK_URL?.length || 0,
+      preview: process.env.SLACK_COMINGSOON_WEBHOOK_URL 
+        ? `${process.env.SLACK_COMINGSOON_WEBHOOK_URL.substring(0, 30)}...` 
+        : 'NOT SET',
+    },
+    slackComingsoonWebhook: {
+      exists: !!process.env.SLACK_COMINGSOON_WEBHOOK,
+      length: process.env.SLACK_COMINGSOON_WEBHOOK?.length || 0,
+      preview: process.env.SLACK_COMINGSOON_WEBHOOK 
+        ? `${process.env.SLACK_COMINGSOON_WEBHOOK.substring(0, 30)}...` 
+        : 'NOT SET',
+    },
       slackVisitorWebhookUrl: {
         exists: !!process.env.SLACK_VISITOR_WEBHOOK_URL,
         length: process.env.SLACK_VISITOR_WEBHOOK_URL?.length || 0,
@@ -38,8 +45,8 @@ export async function GET(request: NextRequest) {
       },
     },
     webhook: {
-      selected: process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL || 'NONE',
-      selectedPreview: (process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL)?.substring(0, 50) + '...' || 'NONE',
+      selected: process.env.SLACK_COMINGSOON_WEBHOOK_URL || process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL || 'NONE',
+      selectedPreview: (process.env.SLACK_COMINGSOON_WEBHOOK_URL || process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL)?.substring(0, 50) + '...' || 'NONE',
     },
     test: {
       notificationSent: false,
@@ -49,11 +56,11 @@ export async function GET(request: NextRequest) {
   }
 
   // Check which webhook will be used
-  const webhookUrl = process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL
+  const webhookUrl = process.env.SLACK_COMINGSOON_WEBHOOK_URL || process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL
 
   if (!webhookUrl) {
-    diagnostics.recommendations.push('❌ No Slack webhook URL found. Set SLACK_COMINGSOON_WEBHOOK in Vercel environment variables.')
-    diagnostics.recommendations.push('Go to Vercel Dashboard → Settings → Environment Variables → Add SLACK_COMINGSOON_WEBHOOK')
+    diagnostics.recommendations.push('❌ No Slack webhook URL found. Set SLACK_COMINGSOON_WEBHOOK_URL in Vercel environment variables.')
+    diagnostics.recommendations.push('Go to Vercel Dashboard → Settings → Environment Variables → Add SLACK_COMINGSOON_WEBHOOK_URL')
   } else {
     // Test sending a notification
     try {

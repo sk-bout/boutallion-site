@@ -17,6 +17,12 @@ export async function GET(request: NextRequest) {
 
   // Check environment variables
   results.checks.slackWebhookUrl = {
+    comingsoonWebhookUrl: {
+      exists: !!process.env.SLACK_COMINGSOON_WEBHOOK_URL,
+      preview: process.env.SLACK_COMINGSOON_WEBHOOK_URL 
+        ? process.env.SLACK_COMINGSOON_WEBHOOK_URL.substring(0, 30) + '...' 
+        : 'NOT SET',
+    },
     comingsoonWebhook: {
       exists: !!process.env.SLACK_COMINGSOON_WEBHOOK,
       preview: process.env.SLACK_COMINGSOON_WEBHOOK 
@@ -35,11 +41,11 @@ export async function GET(request: NextRequest) {
         ? process.env.SLACK_WEBHOOK_URL.substring(0, 30) + '...' 
         : 'NOT SET',
     },
-    usingWebhook: process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL || 'NONE',
+    usingWebhook: process.env.SLACK_COMINGSOON_WEBHOOK_URL || process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL || 'NONE',
   }
 
-  // Test sending a notification - check in order: SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, SLACK_WEBHOOK_URL
-  const webhookUrl = process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL
+  // Test sending a notification - check in order: SLACK_COMINGSOON_WEBHOOK_URL, SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, SLACK_WEBHOOK_URL
+  const webhookUrl = process.env.SLACK_COMINGSOON_WEBHOOK_URL || process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL
   
   if (webhookUrl) {
     try {
@@ -78,14 +84,14 @@ export async function GET(request: NextRequest) {
     }
   } else {
     results.test.notificationSent = false
-    results.test.message = '❌ SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, or SLACK_WEBHOOK_URL not set - cannot test'
-    results.errors.push('SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, or SLACK_WEBHOOK_URL environment variable must be set')
+    results.test.message = '❌ SLACK_COMINGSOON_WEBHOOK_URL, SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, or SLACK_WEBHOOK_URL not set - cannot test'
+    results.errors.push('SLACK_COMINGSOON_WEBHOOK_URL, SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, or SLACK_WEBHOOK_URL environment variable must be set')
   }
 
   // Overall status
   results.status = results.errors.length === 0 && results.test.notificationSent ? 'OK' : 'ERRORS FOUND'
   results.summary = {
-    slackConfigured: !!(process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL),
+    slackConfigured: !!(process.env.SLACK_COMINGSOON_WEBHOOK_URL || process.env.SLACK_COMINGSOON_WEBHOOK || process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL),
     testPassed: results.test.notificationSent === true,
     ready: results.errors.length === 0 && !!webhookUrl && results.test.notificationSent === true,
   }
