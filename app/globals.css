@@ -302,6 +302,9 @@ body, html {
   transform-style: preserve-3d;
   color: #d4c5a0;
   text-shadow: 
+    /* White shadow behind letters for subtle 3D effect */
+    0 0 8px rgba(255, 255, 255, 0.15),
+    0 0 12px rgba(255, 255, 255, 0.1),
     /* Subtle highlight (top-left) */
     -1px -1px 0 rgba(255, 255, 255, 0.2),
     /* Subtle shadow (bottom-right) */
@@ -315,6 +318,9 @@ body, html {
   .text-3d {
     color: #e8dcc0; /* Lighter gold for better contrast on mobile */
     text-shadow: 
+      /* White shadow behind letters for subtle 3D effect */
+      0 0 6px rgba(255, 255, 255, 0.18),
+      0 0 10px rgba(255, 255, 255, 0.12),
       /* Subtle highlight */
       -1px -1px 0 rgba(255, 255, 255, 0.25),
       /* Subtle shadow */
