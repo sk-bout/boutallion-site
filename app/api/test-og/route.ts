@@ -9,9 +9,16 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: NextRequest) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'
   
+  // Import the actual metadata values
+  const { defaultMetadata } = await import('@/lib/seo')
+  
   const results = {
     timestamp: new Date().toISOString(),
     siteUrl,
+    title: typeof defaultMetadata.title === 'string' 
+      ? defaultMetadata.title 
+      : defaultMetadata.title?.default || 'Not set',
+    description: defaultMetadata.description || 'Not set',
     ogImage: {
       url: `${siteUrl}/og-image.png`,
       expectedDimensions: '1200x630',
@@ -21,6 +28,10 @@ export async function GET(request: NextRequest) {
       openGraph: {
         url: siteUrl,
         type: 'website',
+        title: typeof defaultMetadata.openGraph?.title === 'string'
+          ? defaultMetadata.openGraph.title
+          : defaultMetadata.openGraph?.title || 'Not set',
+        description: defaultMetadata.openGraph?.description || 'Not set',
         image: `${siteUrl}/og-image.png`,
         imageWidth: 1200,
         imageHeight: 630,
@@ -28,6 +39,10 @@ export async function GET(request: NextRequest) {
       },
       twitter: {
         card: 'summary_large_image',
+        title: typeof defaultMetadata.twitter?.title === 'string'
+          ? defaultMetadata.twitter.title
+          : defaultMetadata.twitter?.title || 'Not set',
+        description: defaultMetadata.twitter?.description || 'Not set',
         image: `${siteUrl}/og-image.png`,
       },
     },
