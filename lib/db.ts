@@ -132,6 +132,57 @@ export async function initDatabase(): Promise<void> {
       CREATE INDEX IF NOT EXISTS idx_subscriptions_created_at ON subscriptions(created_at)
     `)
 
+    // Create visitors table for tracking unique visitors
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS visitors (
+        id SERIAL PRIMARY KEY,
+        session_id VARCHAR(100) UNIQUE NOT NULL,
+        ip_address VARCHAR(45),
+        
+        -- Location data
+        country VARCHAR(100),
+        country_code VARCHAR(2),
+        city VARCHAR(100),
+        region VARCHAR(100),
+        latitude DECIMAL(10, 8),
+        longitude DECIMAL(11, 8),
+        timezone VARCHAR(50),
+        
+        -- Device data
+        device_type VARCHAR(20),
+        browser VARCHAR(50),
+        os VARCHAR(50),
+        screen_resolution VARCHAR(20),
+        
+        -- Visit tracking
+        pages_visited TEXT[], -- Array of page URLs
+        visit_count INTEGER DEFAULT 1,
+        first_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        last_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        uae_time VARCHAR(50), -- Local time in UAE
+        
+        -- Additional data
+        user_agent TEXT,
+        referer TEXT,
+        entry_point VARCHAR(50),
+        
+        -- Timestamps
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `)
+
+    // Create indexes for visitors table
+    await db.query(`
+      CREATE INDEX IF NOT EXISTS idx_visitors_session_id ON visitors(session_id)
+    `)
+    await db.query(`
+      CREATE INDEX IF NOT EXISTS idx_visitors_ip_address ON visitors(ip_address)
+    `)
+    await db.query(`
+      CREATE INDEX IF NOT EXISTS idx_visitors_last_visit ON visitors(last_visit)
+    `)
+
     // Create tracking_events table for all tracking events
     await db.query(`
       CREATE TABLE IF NOT EXISTS tracking_events (

@@ -18,6 +18,13 @@ export interface SlackNotificationData {
   referer?: string
   timestamp: string
   mailerliteSuccess?: boolean
+  device?: {
+    type?: string
+    browser?: string
+    os?: string
+  }
+  uaeTime?: string
+  pagesVisited?: number
 }
 
 /**
@@ -84,6 +91,22 @@ export async function sendSlackNotification(data: SlackNotificationData): Promis
             {
               type: 'mrkdwn',
               text: `*Time:*\n${new Date(data.timestamp).toLocaleString()}`,
+            },
+            {
+              type: 'mrkdwn',
+              text: `*UAE Time:*\n${data.uaeTime || 'N/A'}`,
+            },
+            {
+              type: 'mrkdwn',
+              text: `*Device:*\n${data.device?.type || 'Unknown'} • ${data.device?.browser || 'Unknown'}`,
+            },
+            {
+              type: 'mrkdwn',
+              text: `*OS:*\n${data.device?.os || 'Unknown'}`,
+            },
+            {
+              type: 'mrkdwn',
+              text: `*Pages Visited:*\n${data.pagesVisited || 1}`,
             },
           ],
         },
