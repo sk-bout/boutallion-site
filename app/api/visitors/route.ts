@@ -318,117 +318,113 @@ export async function POST(request: NextRequest) {
       session_duration: 0,
     }
     
-    if (dbAvailable && db && existingVisitor.rows.length > 0 && !isTrulyNewVisitor) {
-      // This should not happen if we handled it above, but just in case
-      // Update existing visitor for unusual patterns/daily visitors
-      try {
-        const visitor = existingVisitor.rows[0]
-        const pagesVisited = visitor.pages_visited || []
-        if (pageUrl && !pagesVisited.includes(pageUrl)) {
-          pagesVisited.push(pageUrl)
+    if (dbAvailable && db) {
+      if (existingVisitor.rows.length > 0 && !isTrulyNewVisitor) {
+        // Update existing visitor for unusual patterns/daily visitors
+        try {
+          const visitor = existingVisitor.rows[0]
+          const pagesVisited = visitor.pages_visited || []
+          if (pageUrl && !pagesVisited.includes(pageUrl)) {
+            pagesVisited.push(pageUrl)
+          }
+          
+          const result = await db.query(`
+            UPDATE visitors SET
+              ip_address = $1,
+              country = $2,
+              country_code = $3,
+              city = $4,
+              region = $5,
+              latitude = $6,
+              longitude = $7,
+              timezone = $8,
+              device_type = $9,
+              browser = $10,
+              os = $11,
+              screen_resolution = $12,
+              pages_visited = $13,
+              visit_count = COALESCE(visit_count, 0) + 1,
+              last_visit = NOW(),
+              session_start = COALESCE(session_start, NOW()),
+              session_duration = $14,
+              total_session_time = COALESCE(total_session_time, 0) + $14,
+              uae_time = $15,
+              user_agent = $16,
+              referer = $17,
+              updated_at = NOW()
+            WHERE session_id = $18
+            RETURNING *
+          `, [
+            ipAddress,
+            location?.country || null,
+            location?.countryCode || null,
+            location?.city || null,
+            location?.region || null,
+            location?.latitude || null,
+            location?.longitude || null,
+            location?.timezone || null,
+            device.type,
+            device.browser,
+            device.os,
+            device.screenResolution,
+            pagesVisited,
+            sessionDuration,
+            sessionDuration,
+            uaeTime,
+            userAgent || null,
+            referer || null,
+            sessionId,
+          ])
+          visitorRecord = result.rows[0]
+        } catch (dbError) {
+          console.error('❌ Error updating visitor record:', dbError)
+          // Continue without database - will still send Slack notification
         }
-        
-        const result = await db.query(`
-        UPDATE visitors SET
-          ip_address = $1,
-          country = $2,
-          country_code = $3,
-          city = $4,
-          region = $5,
-          latitude = $6,
-          longitude = $7,
-          timezone = $8,
-          device_type = $9,
-          browser = $10,
-          os = $11,
-          screen_resolution = $12,
-          pages_visited = $13,
-          visit_count = COALESCE(visit_count, 0) + 1,
-          last_visit = NOW(),
-          session_start = COALESCE(session_start, NOW()),
-          session_duration = $14,
-          total_session_time = COALESCE(total_session_time, 0) + $14,
-          uae_time = $15,
-          user_agent = $16,
-          referer = $17,
-          updated_at = NOW()
-        WHERE session_id = $18
-        RETURNING *
-      `, [
-        ipAddress,
-        location?.country || null,
-        location?.countryCode || null,
-        location?.city || null,
-        location?.region || null,
-        location?.latitude || null,
-        location?.longitude || null,
-        location?.timezone || null,
-        device.type,
-        device.browser,
-        device.os,
-        device.screenResolution,
-        pageUrl ? [pageUrl] : [],
-        sessionDuration,
-        uaeTime,
-        userAgent || null,
-        referer || null,
-        sessionId,
-      ])
-      visitorRecord = result.rows[0]
-    } else {
-      // NEW VISITOR - Create new record
-      console.log('📊 Creating NEW visitor record for session:', sessionId)
-      // Create new visitor
-      const result = await db.query(`
-        INSERT INTO visitors (
-          session_id, ip_address,
-          country, country_code, city, region, latitude, longitude, timezone,
-          device_type, browser, os, screen_resolution,
-          pages_visited, visit_count, uae_time,
-          user_agent, referer, entry_point,
-          session_start, session_duration, total_session_time,
-          first_visit, last_visit
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, NOW(), 0, 0, NOW(), NOW())
-        RETURNING *
-      `, [
-        sessionId,
-        ipAddress,
-        location?.country || null,
-        location?.countryCode || null,
-        location?.city || null,
-        location?.region || null,
-        location?.latitude || null,
-        location?.longitude || null,
-        location?.timezone || null,
-        device.type,
-        device.browser,
-        device.os,
-        device.screenResolution,
-        pageUrl ? [pageUrl] : [],
-        1,
-        uaeTime,
-        userAgent || null,
-        referer || null,
-        'direct',
-      ])
-      visitorRecord = result.rows[0]
-      } catch (dbError) {
-        console.error('❌ Error creating visitor record:', dbError)
-        // Continue without database - will still send Slack notification
-        visitorRecord = {
-          pages_visited: pageUrl ? [pageUrl] : [],
-          visit_count: 1,
-          session_duration: 0,
+      } else {
+        // NEW VISITOR - Create new record
+        console.log('📊 Creating NEW visitor record for session:', sessionId)
+        try {
+          const result = await db.query(`
+            INSERT INTO visitors (
+              session_id, ip_address,
+              country, country_code, city, region, latitude, longitude, timezone,
+              device_type, browser, os, screen_resolution,
+              pages_visited, visit_count, uae_time,
+              user_agent, referer, entry_point,
+              session_start, session_duration, total_session_time,
+              first_visit, last_visit
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, NOW(), 0, 0, NOW(), NOW())
+            RETURNING *
+          `, [
+            sessionId,
+            ipAddress,
+            location?.country || null,
+            location?.countryCode || null,
+            location?.city || null,
+            location?.region || null,
+            location?.latitude || null,
+            location?.longitude || null,
+            location?.timezone || null,
+            device.type,
+            device.browser,
+            device.os,
+            device.screenResolution,
+            pageUrl ? [pageUrl] : [],
+            1,
+            uaeTime,
+            userAgent || null,
+            referer || null,
+            'direct',
+          ])
+          visitorRecord = result.rows[0]
+        } catch (dbError) {
+          console.error('❌ Error creating visitor record:', dbError)
+          // Continue without database - will still send Slack notification
         }
       }
     } else {
       // Database not available - create mock record for Slack notification
       console.log('⚠️ Database not available - creating mock visitor record for Slack notification')
-      visitorRecord = {
-        pages_visited: pageUrl ? [pageUrl] : [],
-        visit_count: 1,
-        session_duration: 0,
-      }
     }
 
     // Format session duration for display
