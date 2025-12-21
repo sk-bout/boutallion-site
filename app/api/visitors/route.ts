@@ -165,18 +165,12 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Determine if this is truly a new visitor
-    // NEW = no session exists OR IP never seen before OR last visit was > 24 hours ago
-    const isTrulyNewVisitor = existingVisitor.rows.length === 0 || 
-      allVisitsByIP.rows.length === 0 ||
-      (allVisitsByIP.rows.length > 0 && (() => {
-        const lastVisit = new Date(allVisitsByIP.rows[0].last_visit)
-        const hoursSinceLastVisit = (now.getTime() - lastVisit.getTime()) / (1000 * 60 * 60)
-        return hoursSinceLastVisit > 24 // Treat as new if more than 24 hours since last visit
-      })())
+    // SIMPLIFIED: A new visitor is someone with a NEW SESSION ID (first time we see this session)
+    // This ensures EVERY new visit gets notified, regardless of IP history
+    const isTrulyNewVisitor = existingVisitor.rows.length === 0
 
-    // For existing visitors in same session (not truly new), update and only notify if unusual
-    if (existingVisitor.rows.length > 0 && !isTrulyNewVisitor) {
+    // For existing visitors in same session (same session ID), update and only notify if unusual
+    if (existingVisitor.rows.length > 0) {
       // Update existing visitor (same session, recent visit)
       const visitor = existingVisitor.rows[0]
       const pagesVisited = visitor.pages_visited || []
@@ -372,12 +366,24 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // ALWAYS send notification for new visitors OR unusual patterns/daily visitors
-    // This ensures every new visitor gets notified
+    // SIMPLIFIED LOGIC: ALWAYS notify for new visitors (new session)
+    // Also notify for unusual patterns or daily visitors
     const shouldNotify = isTrulyNewVisitor || isUnusualPattern || isDailyVisitor
     
+    // Log notification decision
+    console.log('📱 ========================================')
+    console.log('📱 NOTIFICATION DECISION')
+    console.log('📱 ========================================')
+    console.log('📱 Is New Visitor (new session):', isTrulyNewVisitor)
+    console.log('📱 Is Daily Visitor:', isDailyVisitor)
+    console.log('📱 Is Unusual Pattern:', isUnusualPattern)
+    console.log('📱 Should Notify:', shouldNotify)
+    console.log('📱 Session ID:', sessionId)
+    console.log('📱 IP Address:', ipAddress)
+    
     if (!shouldNotify) {
-      // Normal returning visitor, no notification needed
+      // Normal returning visitor (same session, no unusual patterns), no notification needed
+      console.log('📱 Skipping notification - normal returning visitor')
       return NextResponse.json({
         success: true,
         visitor: visitorRecord,
