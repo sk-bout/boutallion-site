@@ -5,7 +5,6 @@ import { Canvas } from '@react-three/fiber'
 import { PerspectiveCamera } from '@react-three/drei'
 import LuxuryWebGLEffects from '@/components/LuxuryWebGLEffects'
 import { getTranslations, Locale } from '@/lib/i18n'
-import LanguageSwitcher from '@/components/LanguageSwitcher'
 import PermanentLanguageSwitcher from '@/components/PermanentLanguageSwitcher'
 import Copyright from '@/components/Copyright'
 import { hiddenBrandMentions } from '@/lib/backlinks-seo'
@@ -238,7 +237,6 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
   return (
     <div className="min-h-screen min-h-[100dvh] flex items-center justify-center relative overflow-hidden bg-boutallion-green safe-area-inset">
       <PermanentLanguageSwitcher />
-      <LanguageSwitcher locale={params.locale || 'en'} />
       <Copyright />
       
       {/* Background with darker teal color */}
