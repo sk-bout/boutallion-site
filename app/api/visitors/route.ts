@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getDbPool } from '@/lib/db'
+import { getDbPool, initDatabase } from '@/lib/db'
 import { getAccurateLocation, getDeviceInfo, getUAETime } from '@/lib/visitor-tracking'
 import { sendVisitorNotification } from '@/lib/slack'
 
@@ -42,6 +42,28 @@ export async function POST(request: NextRequest) {
     console.log('📊 UAE Time:', uaeTime)
 
     const db = getDbPool()
+    if (!db) {
+      console.error('❌ Database pool is null - DATABASE_URL may not be loaded')
+      throw new Error('Database pool not initialized - DATABASE_URL may be missing')
+    }
+
+    // Check if visitors table exists, if not, initialize
+    try {
+      const tableCheck = await db.query(`
+        SELECT EXISTS (
+          SELECT FROM pg_tables
+          WHERE schemaname = 'public' AND tablename = 'visitors'
+        );
+      `)
+      if (!tableCheck.rows[0].exists) {
+        console.warn('⚠️ Visitors table does not exist. Attempting to initialize database...')
+        await initDatabase()
+        console.log('✅ Database tables initialized during visitor tracking attempt.')
+      }
+    } catch (initError) {
+      console.error('❌ Error checking/initializing database:', initError)
+      // Continue anyway - might work if table exists
+    }
 
     // Get IP label if exists
     let ipLabel: string | null = null
@@ -196,9 +218,13 @@ export async function POST(request: NextRequest) {
 
       // Send Slack notification for new visitors
       console.log('📱 Attempting to send Slack notification for new visitor...')
+      console.log('📱 IP Address:', ipAddress)
+      console.log('📱 IP Label:', ipLabel || 'None')
+      console.log('📱 Location:', location ? `${location.city}, ${location.country}` : 'Unknown')
       try {
         const notificationResult = await sendVisitorNotification({
           ipAddress,
+          ipLabel: ipLabel || undefined, // Include label if available
           location: {
             country: location?.country,
             city: location?.city,
@@ -220,9 +246,13 @@ export async function POST(request: NextRequest) {
           isNewVisitor: true,
         })
         console.log('📱 Slack notification result:', notificationResult ? '✅ Sent' : '❌ Failed')
+        if (!notificationResult) {
+          console.warn('⚠️ Slack notification returned false - check SLACK_WEBHOOK_URL environment variable')
+        }
       } catch (error) {
         console.error('❌ Slack notification error:', error)
         console.error('❌ Error details:', error instanceof Error ? error.message : String(error))
+        console.error('❌ Error stack:', error instanceof Error ? error.stack : 'No stack trace')
       }
 
       return NextResponse.json({
