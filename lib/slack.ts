@@ -274,6 +274,8 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
       try {
         console.log(`📱 Attempting to send Slack notification (attempt ${attempt}/${maxRetries})...`)
         console.log(`📱 Webhook URL: ${webhookUrl.substring(0, 50)}...`)
+        console.log(`📱 Message blocks count: ${slackMessage.blocks.length}`)
+        console.log(`📱 Message text: ${slackMessage.text}`)
         
         const controller = new AbortController()
         timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
@@ -311,6 +313,7 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
         
         // Log the full error for debugging
         console.error('❌ Full error response:', responseText)
+        console.error('❌ Message sent (first 500 chars):', JSON.stringify(slackMessage).substring(0, 500))
         
         // Don't retry on 4xx errors (client errors - bad webhook URL, etc.)
         if (response.status >= 400 && response.status < 500) {

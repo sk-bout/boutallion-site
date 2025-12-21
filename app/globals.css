@@ -303,23 +303,13 @@ body, html {
   color: #d4c5a0;
   animation: float3d 8s ease-in-out infinite;
   text-shadow: 
-    /* Highlight (top-left) - lighter, simulating light hitting raised surface */
-    -1px -1px 0 rgba(255, 255, 255, 0.4),
-    -2px -2px 0 rgba(240, 235, 220, 0.5),
-    -3px -3px 0 rgba(240, 235, 220, 0.4),
-    /* Shadow (bottom-right) - darker, simulating depth */
-    1px 1px 0 rgba(150, 140, 120, 0.5),
-    2px 2px 0 rgba(120, 110, 95, 0.6),
-    3px 3px 0 rgba(100, 95, 85, 0.7),
-    4px 4px 6px rgba(0, 0, 0, 0.4),
-    5px 5px 10px rgba(0, 0, 0, 0.3),
-    /* Subtle lightning effect shadows */
-    0 0 15px rgba(255, 255, 255, 0.15),
-    0 0 30px rgba(255, 255, 255, 0.1),
-    0 0 45px rgba(255, 255, 255, 0.05);
-  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.25));
+    /* Subtle highlight (top-left) */
+    -1px -1px 0 rgba(255, 255, 255, 0.2),
+    /* Subtle shadow (bottom-right) */
+    1px 1px 2px rgba(0, 0, 0, 0.2);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
   perspective: 1000px;
-  transform: perspective(1000px) rotateX(5deg);
+  transform: perspective(1000px) rotateX(2deg);
   transition: transform 0.3s ease;
   position: relative;
 }
@@ -329,22 +319,12 @@ body, html {
   .text-3d {
     color: #e8dcc0; /* Lighter gold for better contrast on mobile */
     text-shadow: 
-      /* Stronger shadows for mobile readability */
-      -1px -1px 0 rgba(255, 255, 255, 0.5),
-      -2px -2px 0 rgba(240, 235, 220, 0.6),
-      -3px -3px 0 rgba(240, 235, 220, 0.5),
-      /* Deeper shadows for contrast */
-      1px 1px 0 rgba(100, 90, 80, 0.7),
-      2px 2px 0 rgba(80, 70, 60, 0.8),
-      3px 3px 0 rgba(60, 55, 50, 0.9),
-      4px 4px 8px rgba(0, 0, 0, 0.6),
-      5px 5px 12px rgba(0, 0, 0, 0.5),
-      /* Enhanced glow for visibility */
-      0 0 20px rgba(255, 255, 255, 0.2),
-      0 0 40px rgba(255, 255, 255, 0.15),
-      0 0 60px rgba(255, 255, 255, 0.1);
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
-    transform: perspective(1000px) rotateX(2deg); /* Less rotation on mobile */
+      /* Subtle highlight */
+      -1px -1px 0 rgba(255, 255, 255, 0.25),
+      /* Subtle shadow */
+      1px 1px 2px rgba(0, 0, 0, 0.25);
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2));
+    transform: perspective(1000px) rotateX(1deg); /* Less rotation on mobile */
   }
 }
 
