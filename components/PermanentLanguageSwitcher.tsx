@@ -80,11 +80,14 @@ export default function PermanentLanguageSwitcher() {
         {/* Dropdown Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="px-3 py-2 text-xs sm:text-sm bg-transparent border border-white/30 text-white/80 font-sans hover:text-gold-DEFAULT hover:border-gold-DEFAULT/50 transition-colors duration-200 font-light whitespace-nowrap flex items-center justify-center gap-1.5"
+          className="px-3 py-2 text-xs sm:text-sm bg-transparent border border-white/40 text-white/90 font-sans hover:text-gold-DEFAULT hover:border-gold-DEFAULT/60 transition-colors duration-200 font-light whitespace-nowrap flex items-center justify-center gap-1.5"
           aria-label="Select language"
           aria-expanded={isOpen}
           aria-haspopup="true"
           dir="ltr"
+          style={{
+            minWidth: 'fit-content',
+          }}
         >
           <span className="text-left" dir={isRTL ? 'rtl' : 'ltr'}>{currentLanguage.nativeLabel}</span>
           <svg
