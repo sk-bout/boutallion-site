@@ -43,6 +43,21 @@ export async function POST(request: NextRequest) {
 
     const db = getDbPool()
 
+    // Get IP label if exists
+    let ipLabel: string | null = null
+    try {
+      const labelResult = await db.query(
+        'SELECT label FROM ip_labels WHERE ip_address = $1',
+        [ipAddress]
+      )
+      if (labelResult.rows.length > 0) {
+        ipLabel = labelResult.rows[0].label
+        console.log('📊 IP Label found:', ipLabel)
+      }
+    } catch (error) {
+      // Silent fail - labels are optional
+    }
+
     // Check if visitor exists
     const existingVisitor = await db.query(
       'SELECT * FROM visitors WHERE session_id = $1',
@@ -109,6 +124,7 @@ export async function POST(request: NextRequest) {
         try {
           const notificationResult = await sendVisitorNotification({
             ipAddress,
+            ipLabel, // Include label if available
             location: {
               country: location?.country,
               city: location?.city,

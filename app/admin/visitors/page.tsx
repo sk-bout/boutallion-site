@@ -27,14 +27,59 @@ interface Visitor {
   referer?: string
 }
 
+interface IPLabel {
+  id: number
+  ip_address: string
+  label: string
+  notes?: string
+}
+
 export default function VisitorsAdminPage() {
   const [visitors, setVisitors] = useState<Visitor[]>([])
   const [loading, setLoading] = useState(true)
   const [total, setTotal] = useState(0)
+  const [labels, setLabels] = useState<Record<string, string>>({})
+  const [editingIP, setEditingIP] = useState<string | null>(null)
+  const [newLabel, setNewLabel] = useState('')
 
   useEffect(() => {
     fetchVisitors()
+    fetchLabels()
   }, [])
+
+  const fetchLabels = async () => {
+    try {
+      const response = await fetch('/api/ip-labels')
+      const data = await response.json()
+      if (data.success) {
+        const labelsMap: Record<string, string> = {}
+        data.labels.forEach((label: IPLabel) => {
+          labelsMap[label.ip_address] = label.label
+        })
+        setLabels(labelsMap)
+      }
+    } catch (error) {
+      console.error('Error fetching labels:', error)
+    }
+  }
+
+  const handleSetLabel = async (ipAddress: string, label: string) => {
+    try {
+      const response = await fetch('/api/ip-labels', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ipAddress, label }),
+      })
+      const data = await response.json()
+      if (data.success) {
+        setLabels(prev => ({ ...prev, [ipAddress]: label }))
+        setEditingIP(null)
+        setNewLabel('')
+      }
+    } catch (error) {
+      console.error('Error setting label:', error)
+    }
+  }
 
   const fetchVisitors = async () => {
     try {
@@ -111,7 +156,57 @@ export default function VisitorsAdminPage() {
               <tbody>
                 {visitors.map((visitor) => (
                   <tr key={visitor.id} className="border-t border-white/10">
-                    <td className="p-4 font-mono text-sm">{visitor.ip_address}</td>
+                    <td className="p-4">
+                      <div className="font-mono text-sm">{visitor.ip_address}</div>
+                      {labels[visitor.ip_address] && (
+                        <div className="text-xs text-blue-400 mt-1">🏷️ {labels[visitor.ip_address]}</div>
+                      )}
+                      {editingIP === visitor.ip_address ? (
+                        <div className="mt-2 flex gap-2">
+                          <input
+                            type="text"
+                            value={newLabel}
+                            onChange={(e) => setNewLabel(e.target.value)}
+                            placeholder="Enter label"
+                            className="px-2 py-1 text-sm bg-white/10 text-white rounded border border-white/20"
+                            autoFocus
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                handleSetLabel(visitor.ip_address, newLabel)
+                              } else if (e.key === 'Escape') {
+                                setEditingIP(null)
+                                setNewLabel('')
+                              }
+                            }}
+                          />
+                          <button
+                            onClick={() => handleSetLabel(visitor.ip_address, newLabel)}
+                            className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={() => {
+                              setEditingIP(null)
+                              setNewLabel('')
+                            }}
+                            className="px-3 py-1 text-xs bg-white/10 text-white rounded hover:bg-white/20"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            setEditingIP(visitor.ip_address)
+                            setNewLabel(labels[visitor.ip_address] || '')
+                          }}
+                          className="mt-1 text-xs text-white/60 hover:text-white underline"
+                        >
+                          {labels[visitor.ip_address] ? 'Edit label' : 'Add label'}
+                        </button>
+                      )}
+                    </td>
                     <td className="p-4">
                       {visitor.city && visitor.country ? (
                         <div>

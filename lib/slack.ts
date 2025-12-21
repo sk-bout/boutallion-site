@@ -32,6 +32,7 @@ export interface SlackNotificationData {
  */
 export interface VisitorNotificationData {
   ipAddress: string
+  ipLabel?: string | null
   location?: {
     country?: string
     city?: string
@@ -86,14 +87,15 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
       : 'N/A'
 
     // Create Slack message
+    const visitorName = data.ipLabel ? `*${data.ipLabel}*` : 'Visitor'
     const slackMessage: any = {
-      text: `${data.isNewVisitor ? '🆕' : '👤'} ${data.isNewVisitor ? 'New Visitor' : 'Returning Visitor'}: ${data.ipAddress}`,
+      text: `${data.isNewVisitor ? '🆕' : '👤'} ${data.isNewVisitor ? 'New' : 'Returning'} ${visitorName}: ${data.ipAddress}`,
       blocks: [
         {
           type: 'header',
           text: {
             type: 'plain_text',
-            text: `${data.isNewVisitor ? '🆕 New' : '👤 Returning'} Visitor on Site`,
+            text: `${data.isNewVisitor ? '🆕 New' : '👤 Returning'} ${data.ipLabel || 'Visitor'} on Site`,
             emoji: true,
           },
         },
@@ -102,7 +104,7 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
           fields: [
             {
               type: 'mrkdwn',
-              text: `*IP Address:*\n\`${data.ipAddress}\``,
+              text: `*IP Address:*\n\`${data.ipAddress}\`${data.ipLabel ? `\n*Label:* ${data.ipLabel}` : ''}`,
             },
             {
               type: 'mrkdwn',

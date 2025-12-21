@@ -183,6 +183,23 @@ export async function initDatabase(): Promise<void> {
       CREATE INDEX IF NOT EXISTS idx_visitors_last_visit ON visitors(last_visit)
     `)
 
+    // Create ip_labels table for labeling IP addresses
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS ip_labels (
+        id SERIAL PRIMARY KEY,
+        ip_address VARCHAR(45) UNIQUE NOT NULL,
+        label VARCHAR(100) NOT NULL,
+        notes TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `)
+
+    // Create index on IP address for fast lookups
+    await db.query(`
+      CREATE INDEX IF NOT EXISTS idx_ip_labels_ip_address ON ip_labels(ip_address)
+    `)
+
     // Create tracking_events table for all tracking events
     await db.query(`
       CREATE TABLE IF NOT EXISTS tracking_events (
