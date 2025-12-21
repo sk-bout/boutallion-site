@@ -76,58 +76,57 @@ export default function PermanentLanguageSwitcher() {
         boxSizing: 'border-box',
       }}
     >
-      <div className="relative pointer-events-auto flex justify-end" dir="ltr">
+      <div className="relative pointer-events-auto" dir="ltr">
         {/* Dropdown Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm bg-white/10 backdrop-blur-md border border-white/20 text-gold-DEFAULT font-sans tracking-[0.1em] sm:tracking-[0.15em] uppercase hover:bg-white/15 hover:border-gold-DEFAULT/40 transition-all duration-300 font-medium shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 whitespace-nowrap flex items-center gap-2 w-[140px] sm:w-[160px] justify-between"
+          className="px-4 py-2.5 sm:px-4 sm:py-2.5 text-xs sm:text-sm bg-white/10 backdrop-blur-md border border-white/20 text-gold-DEFAULT font-sans tracking-wide hover:bg-white/15 hover:border-gold-DEFAULT/50 transition-all duration-200 font-normal shadow-sm hover:shadow-md whitespace-nowrap flex items-center justify-between gap-2 min-w-[120px] sm:min-w-[140px] rounded-sm"
           aria-label="Select language"
           aria-expanded={isOpen}
           aria-haspopup="true"
           dir="ltr"
         >
-          <span className="text-left" dir={isRTL ? 'rtl' : 'ltr'}>{currentLanguage.nativeLabel}</span>
+          <span className="text-left truncate" dir={isRTL ? 'rtl' : 'ltr'}>{currentLanguage.nativeLabel}</span>
           <svg
-            className={`w-3 h-3 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+            className={`w-3 h-3 transition-transform duration-200 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
             fill="none"
             stroke="currentColor"
+            strokeWidth={2}
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
 
         {/* Dropdown Menu */}
         {isOpen && (
           <div 
-            className="absolute top-full right-0 mt-2 w-[140px] sm:w-[160px] bg-boutallion-green/95 backdrop-blur-xl border border-white/20 shadow-2xl shadow-black/50 overflow-hidden z-50 rounded-sm"
+            className="absolute top-full right-0 mt-1.5 min-w-[120px] sm:min-w-[140px] bg-boutallion-green/98 backdrop-blur-xl border border-white/20 shadow-lg shadow-black/40 overflow-hidden z-50 rounded-sm"
             style={{
-              animation: 'fadeIn 300ms ease-out',
+              animation: 'fadeIn 200ms ease-out',
             }}
             dir="ltr"
           >
-            {LANGUAGES.map((lang, index) => {
+            {LANGUAGES.map((lang) => {
               const isLangRTL = lang.code === 'ar'
+              const isActive = currentLocale === lang.code
               return (
                 <button
                   key={lang.code}
                   onClick={() => switchLanguage(lang.code)}
-                  className={`w-full px-4 py-3 sm:px-5 sm:py-3.5 text-left text-xs sm:text-sm font-sans tracking-[0.1em] sm:tracking-[0.15em] uppercase transition-all duration-300 border-b border-white/5 last:border-b-0 ${
-                    currentLocale === lang.code
-                      ? 'bg-white/10 text-gold-DEFAULT border-l-2 border-gold-DEFAULT/60 shadow-inner'
-                      : 'text-white/70 hover:bg-white/8 hover:text-gold-DEFAULT/90 hover:border-l-2 hover:border-gold-DEFAULT/30'
+                  className={`w-full px-4 py-2.5 sm:px-4 sm:py-2.5 text-left text-xs sm:text-sm font-sans tracking-wide transition-all duration-200 border-b border-white/5 last:border-b-0 ${
+                    isActive
+                      ? 'bg-white/10 text-gold-DEFAULT'
+                      : 'text-white/70 hover:bg-white/8 hover:text-gold-DEFAULT/90'
                   }`}
                   aria-label={`Switch to ${lang.label}`}
-                  style={{
-                    animationDelay: `${index * 30}ms`,
-                  }}
                   dir="ltr"
                 >
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="flex-1 text-left" dir={isLangRTL ? 'rtl' : 'ltr'}>{lang.nativeLabel}</span>
-                    {currentLocale === lang.code && (
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="flex-1 text-left truncate" dir={isLangRTL ? 'rtl' : 'ltr'}>{lang.nativeLabel}</span>
+                    {isActive && (
                       <svg 
-                        className="w-3.5 h-3.5 text-gold-DEFAULT flex-shrink-0" 
+                        className="w-3 h-3 text-gold-DEFAULT flex-shrink-0" 
                         fill="currentColor" 
                         viewBox="0 0 20 20"
                       >
