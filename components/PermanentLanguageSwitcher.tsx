@@ -79,22 +79,34 @@ export default function PermanentLanguageSwitcher() {
 
         {/* Dropdown Menu */}
         {isOpen && (
-          <div className="absolute top-full right-0 mt-2 min-w-[140px] sm:min-w-[160px] bg-black/90 backdrop-blur-md border border-white/20 shadow-xl shadow-black/40 overflow-hidden z-50">
-            {LANGUAGES.map((lang) => (
+          <div 
+            className="absolute top-full right-0 mt-2 min-w-[140px] sm:min-w-[160px] bg-boutallion-green/95 backdrop-blur-xl border border-white/20 shadow-2xl shadow-black/50 overflow-hidden z-50 rounded-sm"
+            style={{
+              animation: 'fadeIn 300ms ease-out',
+            }}
+          >
+            {LANGUAGES.map((lang, index) => (
               <button
                 key={lang.code}
                 onClick={() => switchLanguage(lang.code)}
-                className={`w-full px-4 py-3 text-left text-xs sm:text-sm font-sans tracking-[0.1em] uppercase transition-all duration-300 ${
+                className={`w-full px-4 py-3 sm:px-5 sm:py-3.5 text-left text-xs sm:text-sm font-sans tracking-[0.1em] sm:tracking-[0.15em] uppercase transition-all duration-300 border-b border-white/5 last:border-b-0 ${
                   currentLocale === lang.code
-                    ? 'bg-white/15 text-gold-DEFAULT border-l-2 border-gold-DEFAULT/60'
-                    : 'text-white/80 hover:bg-white/10 hover:text-gold-DEFAULT'
+                    ? 'bg-white/10 text-gold-DEFAULT border-l-2 border-gold-DEFAULT/60 shadow-inner'
+                    : 'text-white/70 hover:bg-white/8 hover:text-gold-DEFAULT/90 hover:border-l-2 hover:border-gold-DEFAULT/30'
                 }`}
                 aria-label={`Switch to ${lang.label}`}
+                style={{
+                  animationDelay: `${index * 30}ms`,
+                }}
               >
-                <div className="flex items-center justify-between">
-                  <span>{lang.nativeLabel}</span>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="flex-1">{lang.nativeLabel}</span>
                   {currentLocale === lang.code && (
-                    <svg className="w-3 h-3 text-gold-DEFAULT" fill="currentColor" viewBox="0 0 20 20">
+                    <svg 
+                      className="w-3.5 h-3.5 text-gold-DEFAULT flex-shrink-0" 
+                      fill="currentColor" 
+                      viewBox="0 0 20 20"
+                    >
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   )}
