@@ -159,6 +159,9 @@ export async function initDatabase(): Promise<void> {
         visit_count INTEGER DEFAULT 1,
         first_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         last_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        session_start TIMESTAMP, -- When current session started
+        session_duration INTEGER DEFAULT 0, -- Duration in seconds
+        total_session_time INTEGER DEFAULT 0, -- Total time across all sessions in seconds
         uae_time VARCHAR(50), -- Local time in UAE
         
         -- Additional data
@@ -171,6 +174,19 @@ export async function initDatabase(): Promise<void> {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `)
+
+    // Add new columns if they don't exist (for existing databases)
+    try {
+      await db.query(`
+        ALTER TABLE visitors 
+        ADD COLUMN IF NOT EXISTS session_start TIMESTAMP,
+        ADD COLUMN IF NOT EXISTS session_duration INTEGER DEFAULT 0,
+        ADD COLUMN IF NOT EXISTS total_session_time INTEGER DEFAULT 0
+      `)
+    } catch (error) {
+      // Columns might already exist, ignore error
+      console.log('Note: Some columns may already exist in visitors table')
+    }
 
     // Create indexes for visitors table
     await db.query(`

@@ -18,7 +18,34 @@ const inter = Inter({
   display: 'swap',
 })
 
-export const metadata: Metadata = defaultMetadata
+export const metadata: Metadata = {
+  ...defaultMetadata,
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'),
+  // Ensure OG tags are explicitly set for root page
+  openGraph: {
+    ...defaultMetadata.openGraph,
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com',
+    title: defaultMetadata.title?.default || defaultMetadata.title || 'Boutallion',
+    description: defaultMetadata.description || '',
+    images: [
+      {
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'Boutallion - World\'s Most Exclusive Abaya Brand',
+        type: 'image/png',
+      },
+    ],
+  },
+  // Add explicit other tags for WhatsApp/Facebook
+  other: {
+    ...defaultMetadata.other,
+    'og:url': process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com',
+    'og:title': defaultMetadata.title?.default || defaultMetadata.title || 'Boutallion',
+    'og:description': defaultMetadata.description || '',
+    'og:image:secure_url': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'}/og-image.png`,
+  },
+}
 
 export default function RootLayout({
   children,

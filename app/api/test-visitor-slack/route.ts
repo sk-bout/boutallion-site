@@ -17,14 +17,25 @@ export async function GET(request: NextRequest) {
 
   // Check environment variables
   results.checks.slackWebhookUrl = {
-    exists: !!process.env.SLACK_WEBHOOK_URL,
-    preview: process.env.SLACK_WEBHOOK_URL 
-      ? process.env.SLACK_WEBHOOK_URL.substring(0, 30) + '...' 
-      : 'NOT SET',
+    visitorWebhook: {
+      exists: !!process.env.SLACK_VISITOR_WEBHOOK_URL,
+      preview: process.env.SLACK_VISITOR_WEBHOOK_URL 
+        ? process.env.SLACK_VISITOR_WEBHOOK_URL.substring(0, 30) + '...' 
+        : 'NOT SET',
+    },
+    mainWebhook: {
+      exists: !!process.env.SLACK_WEBHOOK_URL,
+      preview: process.env.SLACK_WEBHOOK_URL 
+        ? process.env.SLACK_WEBHOOK_URL.substring(0, 30) + '...' 
+        : 'NOT SET',
+    },
+    usingWebhook: process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL || 'NONE',
   }
 
   // Test sending a notification
-  if (process.env.SLACK_WEBHOOK_URL) {
+  const webhookUrl = process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL
+  
+  if (webhookUrl) {
     try {
       console.log('🧪 Testing Slack visitor notification...')
       const testResult = await sendVisitorNotification({
@@ -61,14 +72,14 @@ export async function GET(request: NextRequest) {
     }
   } else {
     results.test.notificationSent = false
-    results.test.message = '❌ SLACK_WEBHOOK_URL not set - cannot test'
-    results.errors.push('SLACK_WEBHOOK_URL environment variable is not set')
+    results.test.message = '❌ SLACK_VISITOR_WEBHOOK_URL and SLACK_WEBHOOK_URL not set - cannot test'
+    results.errors.push('SLACK_VISITOR_WEBHOOK_URL or SLACK_WEBHOOK_URL environment variable must be set')
   }
 
   // Overall status
   results.status = results.errors.length === 0 && results.test.notificationSent ? 'OK' : 'ERRORS FOUND'
   results.summary = {
-    slackConfigured: !!process.env.SLACK_WEBHOOK_URL,
+    slackConfigured: !!(process.env.SLACK_VISITOR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL),
     testPassed: results.test.notificationSent === true,
     ready: results.errors.length === 0 && !!process.env.SLACK_WEBHOOK_URL && results.test.notificationSent === true,
   }

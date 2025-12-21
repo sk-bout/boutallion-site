@@ -235,7 +235,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
   }), [])
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-boutallion-green">
+    <div className="min-h-screen min-h-[100dvh] flex items-center justify-center relative overflow-hidden bg-boutallion-green safe-area-inset">
       <LanguageSwitcher locale={params.locale || 'en'} />
       <Copyright />
       
@@ -292,10 +292,10 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       </div>
 
       {/* Main content */}
-      <main className="relative z-10 text-center px-6 py-12 max-w-4xl mx-auto animate-fade-in flex flex-col items-center justify-center">
+      <main className="relative z-10 text-center px-4 sm:px-6 py-8 sm:py-12 max-w-4xl mx-auto animate-fade-in flex flex-col items-center justify-center min-h-[100vh] min-h-[100dvh] safe-area-inset">
         {/* BOUTALLION text in Portrait font with 3D effect */}
         <h1 
-          className="relative z-10 font-portrait text-5xl sm:text-6xl md:text-8xl lg:text-9xl tracking-[0.2em] sm:tracking-[0.25em] text-gold-light sm:text-gold-DEFAULT mb-12 md:mb-16 text-3d"
+          className="relative z-10 font-portrait text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.25em] text-gold-light sm:text-gold-DEFAULT mb-8 sm:mb-12 md:mb-16 text-3d break-words hyphens-none leading-tight"
           style={{
             textRendering: 'optimizeLegibility',
             WebkitFontSmoothing: 'antialiased',
@@ -305,7 +305,11 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
             textSizeAdjust: '100%',
             willChange: 'transform',
             fontWeight: 'normal',
-            letterSpacing: '0.2em',
+            wordBreak: 'normal',
+            overflowWrap: 'normal',
+            maxWidth: '100%',
+            paddingLeft: '0.5rem',
+            paddingRight: '0.5rem',
           }}
         >
           BOUTALLION
@@ -313,14 +317,14 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         
 
         {/* By Invitation Only text */}
-        <p className="font-refined text-base sm:text-lg md:text-xl text-white/70 mb-12 md:mb-16 tracking-[0.15em] uppercase">
+        <p className="font-refined text-sm sm:text-base md:text-lg lg:text-xl text-white/70 mb-8 sm:mb-12 md:mb-16 tracking-[0.1em] sm:tracking-[0.15em] uppercase px-4 break-words">
           {t['by-invitation-only']}
         </p>
 
         {/* Subscription form */}
-        <div className="max-w-md mx-auto flex flex-col items-center">
+        <div className="max-w-md mx-auto flex flex-col items-center w-full px-4">
           {isSubmitted ? (
-            <div className="text-gold-light text-lg font-refined animate-fade-in text-center">
+            <div className="text-gold-light text-base sm:text-lg md:text-xl lg:text-2xl font-refined animate-fade-in text-center px-4 break-words leading-relaxed">
               {t['thank-you']}
             </div>
           ) : (
@@ -356,7 +360,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                 <button
                   type="submit"
                   disabled={isSubmitting || !!emailError || !email}
-                  className="px-12 py-3 min-w-[300px] bg-white/10 backdrop-blur-md border border-white/20 text-gold-DEFAULT font-sans text-xs tracking-[0.2em] uppercase hover:bg-white/15 hover:border-gold-DEFAULT/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 whitespace-nowrap"
+                  className="px-8 sm:px-12 py-3 w-full sm:w-auto sm:min-w-[300px] bg-white/10 backdrop-blur-md border border-white/20 text-gold-DEFAULT font-sans text-xs tracking-[0.2em] uppercase hover:bg-white/15 hover:border-gold-DEFAULT/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 whitespace-nowrap"
                 >
                   {isSubmitting ? t['submitting'] : t['register-your-interest']}
                 </button>
@@ -367,7 +371,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
           {/* Contact button */}
           <a
             href="mailto:info@boutallion.com"
-            className="mt-8 text-white/60 hover:text-gold-DEFAULT transition-colors duration-300 font-sans text-xs tracking-[0.15em] uppercase"
+            className="mt-6 sm:mt-8 text-white/60 hover:text-gold-DEFAULT transition-colors duration-300 font-sans text-xs tracking-[0.15em] uppercase px-4"
           >
             {t['contact']}
           </a>

@@ -334,9 +334,26 @@ export async function POST(request: NextRequest) {
       console.log('✅ Subscription saved to database successfully!')
       console.log('✅ Database record:', JSON.stringify(dbResult.rows[0], null, 2))
       console.log('✅ Database save completed in:', Date.now() - startTime, 'ms')
+      
+      // Verify the record was actually saved
+      try {
+        const verifyResult = await db.query(
+          'SELECT id, email, created_at FROM subscriptions WHERE email = $1',
+          [email.trim().toLowerCase()]
+        )
+        if (verifyResult.rows.length > 0) {
+          console.log('✅ Verified: Subscription exists in database:', verifyResult.rows[0])
+        } else {
+          console.error('⚠️ WARNING: Subscription query returned no results after insert!')
+        }
+      } catch (verifyError) {
+        console.error('⚠️ Could not verify subscription save:', verifyError)
+      }
     } catch (dbError) {
       // Log detailed error for debugging
-      console.error('❌ Database save failed!')
+      console.error('❌ ========================================')
+      console.error('❌ DATABASE SAVE FAILED!')
+      console.error('❌ ========================================')
       console.error('❌ Error message:', dbError instanceof Error ? dbError.message : String(dbError))
       console.error('❌ Error code:', (dbError as any)?.code)
       console.error('❌ Error stack:', dbError instanceof Error ? dbError.stack : 'No stack trace')
@@ -346,6 +363,7 @@ export async function POST(request: NextRequest) {
         length: process.env.DATABASE_URL?.length || 0,
         startsWith: process.env.DATABASE_URL?.substring(0, 20) || 'N/A',
         isSupabase: process.env.DATABASE_URL?.includes('supabase.co'),
+        hasSSL: process.env.DATABASE_URL?.includes('sslmode'),
       })
       
       // Try to get more details about the error
@@ -356,12 +374,15 @@ export async function POST(request: NextRequest) {
           code: (dbError as any).code,
           detail: (dbError as any).detail,
           hint: (dbError as any).hint,
+          position: (dbError as any).position,
         })
       }
       
       // Still continue - don't fail subscription if database save fails
       // But log it prominently so we can see it
       console.error('⚠️⚠️⚠️ SUBSCRIPTION SAVED TO MAILERLITE BUT NOT TO DATABASE ⚠️⚠️⚠️')
+      console.error('⚠️⚠️⚠️ CHECK DATABASE_URL IN VERCEL ENVIRONMENT VARIABLES ⚠️⚠️⚠️')
+      console.error('⚠️⚠️⚠️ CHECK SUPABASE CONNECTION STRING FORMAT ⚠️⚠️⚠️')
     }
     
     // Log subscription tracking
