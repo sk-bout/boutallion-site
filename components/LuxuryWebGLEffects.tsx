@@ -1177,6 +1177,25 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           child.position.x = maxX
         }
         
+        // Desktop: Position B logo in bottom right corner (fixed, no floating)
+        if (!isMobile && !isTablet) {
+          // Desktop: Fixed position in bottom right corner
+          const rightMargin = 0.5 // Distance from right edge
+          const bottomMargin = 0.5 // Distance from bottom edge
+          child.position.x = viewportHalfWidth - logoHalfWidth - rightMargin
+          child.position.y = -viewportHalfHeight + logoHalfHeight + bottomMargin
+          startYRefs.current[0] = -viewportHalfHeight + logoHalfHeight + bottomMargin
+          
+          // Keep it fixed horizontally on desktop (no drift)
+          child.position.z = b.position[2]
+          
+          // Skip the rest of the floating animation logic on desktop
+          child.rotation.y = 0
+          child.rotation.x = 0
+          return
+        }
+        
+        // Mobile/Tablet: Keep existing floating behavior
         // Keep B logo away from BOUTALLION text area (y between -1.5 and 1.5)
         if (child.position.y > -1.5 && child.position.y < 1.5) {
           // Push away from text - prefer below
