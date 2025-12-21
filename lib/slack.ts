@@ -281,20 +281,24 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
           timeoutId = null
         }
         
+        const responseText = await response.text()
+        
         if (response.ok) {
-          const responseText = await response.text()
           console.log('✅ Slack visitor notification sent successfully')
           console.log('✅ Response:', responseText || 'OK')
           return true
         }
         
-        // If not OK, try to get error message
-        const errorText = await response.text()
+        // If not OK, log detailed error
         console.error(`❌ Slack notification failed (attempt ${attempt}/${maxRetries}):`, {
           status: response.status,
           statusText: response.statusText,
-          error: errorText.substring(0, 200),
+          error: responseText.substring(0, 500),
+          webhookPreview: webhookUrl.substring(0, 50) + '...',
         })
+        
+        // Log the full error for debugging
+        console.error('❌ Full error response:', responseText)
         
         // Don't retry on 4xx errors (client errors - bad webhook URL, etc.)
         if (response.status >= 400 && response.status < 500) {
@@ -343,11 +347,14 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
     console.error('❌ ========================================')
     console.error('❌ Last error:', lastError?.message || 'Unknown error')
     console.error('❌ Webhook URL:', webhookUrl ? `${webhookUrl.substring(0, 50)}...` : 'NOT SET')
+    console.error('❌ Webhook URL format check:', webhookUrl?.startsWith('https://hooks.slack.com/services/') ? '✅ Correct format' : '❌ Wrong format')
     console.error('❌ Check:')
-    console.error('   1. SLACK_VISITOR_WEBHOOK_URL is set in Vercel')
-    console.error('   2. Webhook URL is correct and active')
-    console.error('   3. Bot is added to the channel')
-    console.error('   4. Network connectivity from Vercel to Slack')
+    console.error('   1. SLACK_COMINGSOON_WEBHOOK is set in Vercel (preferred)')
+    console.error('   2. Or SLACK_VISITOR_WEBHOOK_URL is set')
+    console.error('   3. Webhook URL is correct and active in Slack')
+    console.error('   4. Webhook is for #comingsoon-visitors channel')
+    console.error('   5. Bot has permission to post to the channel')
+    console.error('   6. Network connectivity from Vercel to Slack')
     return false
   } catch (error) {
     console.error('❌ Unexpected error in sendVisitorNotification:', error)

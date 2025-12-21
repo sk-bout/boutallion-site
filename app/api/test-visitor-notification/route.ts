@@ -43,7 +43,14 @@ export async function GET(request: NextRequest) {
   // Test sending a notification
   if (webhookUrl) {
     try {
-      console.log('🧪 Testing visitor Slack notification...')
+      console.log('🧪 ========================================')
+      console.log('🧪 TESTING VISITOR SLACK NOTIFICATION')
+      console.log('🧪 ========================================')
+      console.log('🧪 Webhook URL:', webhookUrl.substring(0, 50) + '...')
+      console.log('🧪 Using webhook:', webhookUrl === process.env.SLACK_COMINGSOON_WEBHOOK ? 'SLACK_COMINGSOON_WEBHOOK' : 
+                                         webhookUrl === process.env.SLACK_VISITOR_WEBHOOK_URL ? 'SLACK_VISITOR_WEBHOOK_URL' : 
+                                         'SLACK_WEBHOOK_URL (fallback)')
+      
       const testResult = await sendVisitorNotification({
         ipAddress: '127.0.0.1',
         ipLabel: 'Test User',
@@ -77,6 +84,17 @@ export async function GET(request: NextRequest) {
       results.test.message = testResult 
         ? '✅ Test notification sent successfully to Slack! Check your #comingsoon-visitors channel.' 
         : '❌ Test notification failed - check Slack webhook URL and Vercel logs'
+      
+      // If failed, check Vercel logs for detailed error messages
+      if (!testResult) {
+        results.test.troubleshooting = [
+          '1. Check Vercel Dashboard → Your Project → Logs for detailed error messages',
+          '2. Verify webhook URL is correct: ' + (webhookUrl ? webhookUrl.substring(0, 50) + '...' : 'NOT SET'),
+          '3. Ensure webhook is active in Slack (Slack App Settings → Incoming Webhooks)',
+          '4. Verify bot has permission to post to #comingsoon-visitors channel',
+          '5. Check if webhook URL matches the channel (should be for #comingsoon-visitors)',
+        ]
+      }
     } catch (error) {
       results.test.notificationSent = false
       results.test.error = error instanceof Error ? error.message : String(error)
