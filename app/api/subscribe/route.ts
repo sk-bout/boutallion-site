@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getLocationFromIP, getLocationSummary } from '@/lib/geolocation'
 import { getDbPool } from '@/lib/db'
+import { sendSlackNotification } from '@/lib/slack'
 
 // Force dynamic rendering - don't run during build
 export const dynamic = 'force-dynamic'
