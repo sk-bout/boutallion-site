@@ -101,3 +101,4 @@ Your favicon is correctly set up:
 
 The only issue is Google's cache. Follow Method 1 (Google Search Console) for the fastest update.
 
+

@@ -30,6 +30,12 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       setEmail(trimmedEmail)
     }
     
+    // Check for @ symbol first - most basic requirement
+    if (!trimmedEmail.includes('@')) {
+      setEmailError('Please enter a valid email address')
+      return false
+    }
+    
     // Check length
     if (trimmedEmail.length > 254) {
       setEmailError('Email address is too long (max 254 characters)')
@@ -41,18 +47,18 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       return false
     }
     
+    // Split email into local and domain parts - check this early
+    const parts = trimmedEmail.split('@')
+    if (parts.length !== 2) {
+      setEmailError('Please enter a valid email address')
+      return false
+    }
+    
     // RFC 5322 compliant email regex (more comprehensive)
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
     
     if (!emailRegex.test(trimmedEmail)) {
       setEmailError('Please enter a valid email address')
-      return false
-    }
-    
-    // Split email into local and domain parts
-    const parts = trimmedEmail.split('@')
-    if (parts.length !== 2) {
-      setEmailError('Invalid email format')
       return false
     }
     

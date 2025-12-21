@@ -7,3 +7,4 @@ export const translations = {
   'contact': '联系',
 }
 
+
