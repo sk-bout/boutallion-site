@@ -307,13 +307,15 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
             willChange: 'transform',
             fontWeight: 'normal',
             fontStyle: 'normal',
+            fontVariant: 'normal',
+            fontStretch: 'normal',
             wordBreak: 'break-word',
             overflowWrap: 'break-word',
             maxWidth: '100%',
             boxSizing: 'border-box',
             direction: 'ltr',
             unicodeBidi: 'bidi-override',
-          }}
+          } as React.CSSProperties}
           dir="ltr"
         >
           BOUTALLION

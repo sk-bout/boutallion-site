@@ -316,12 +316,20 @@ body, html {
 /* Force Portrait font for BOUTALLION text - always, regardless of language or direction */
 h1.font-portrait,
 h1[class*="font-portrait"],
-.text-3d {
+.text-3d,
+[dir="rtl"] h1.font-portrait,
+[dir="rtl"] h1[class*="font-portrait"],
+[dir="rtl"] .text-3d,
+html[dir="rtl"] h1.font-portrait,
+html[dir="rtl"] h1[class*="font-portrait"],
+html[dir="rtl"] .text-3d {
   font-family: 'Portrait', var(--font-portrait), serif !important;
   font-weight: normal !important;
   font-style: normal !important;
   direction: ltr !important;
   unicode-bidi: bidi-override !important;
+  font-variant: normal !important;
+  font-stretch: normal !important;
 }
 
 /* Enhanced mobile readability */
