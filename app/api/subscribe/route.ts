@@ -309,14 +309,30 @@ export async function POST(request: NextRequest) {
       // Log detailed error for debugging
       console.error('❌ Database save failed!')
       console.error('❌ Error message:', dbError instanceof Error ? dbError.message : String(dbError))
+      console.error('❌ Error code:', (dbError as any)?.code)
       console.error('❌ Error stack:', dbError instanceof Error ? dbError.stack : 'No stack trace')
       console.error('❌ Email attempted:', email)
       console.error('❌ DATABASE_URL check:', {
         exists: !!process.env.DATABASE_URL,
         length: process.env.DATABASE_URL?.length || 0,
         startsWith: process.env.DATABASE_URL?.substring(0, 20) || 'N/A',
+        isSupabase: process.env.DATABASE_URL?.includes('supabase.co'),
       })
+      
+      // Try to get more details about the error
+      if (dbError instanceof Error) {
+        console.error('❌ Full error details:', {
+          name: dbError.name,
+          message: dbError.message,
+          code: (dbError as any).code,
+          detail: (dbError as any).detail,
+          hint: (dbError as any).hint,
+        })
+      }
+      
       // Still continue - don't fail subscription if database save fails
+      // But log it prominently so we can see it
+      console.error('⚠️⚠️⚠️ SUBSCRIPTION SAVED TO MAILERLITE BUT NOT TO DATABASE ⚠️⚠️⚠️')
     }
     
     // Log subscription tracking
