@@ -343,8 +343,8 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6 w-full flex flex-col items-center">
-              <div className="flex flex-col sm:flex-row gap-4 w-full items-stretch sm:items-center justify-center max-w-2xl">
-                <div className="flex-1 flex flex-col min-w-0">
+              <div className="flex flex-col sm:flex-row gap-4 w-full items-stretch sm:items-center justify-center max-w-3xl">
+                <div className="flex-[2] flex flex-col min-w-0">
                   <input
                     type="email"
                     value={email}
