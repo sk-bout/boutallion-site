@@ -80,14 +80,30 @@ export async function POST(request: NextRequest) {
       // Silent fail - labels are optional
     }
 
-    // Check if visitor exists
+    // Check if visitor exists by session ID
     const existingVisitor = await db.query(
       'SELECT * FROM visitors WHERE session_id = $1',
       [sessionId]
     )
 
-    if (existingVisitor.rows.length > 0) {
-      // Update existing visitor
+    // Also check if this IP address has been seen before (to catch new visitors with persistent sessions)
+    const existingVisitorByIP = await db.query(
+      'SELECT * FROM visitors WHERE ip_address = $1 ORDER BY first_visit DESC LIMIT 1',
+      [ipAddress]
+    )
+
+    // Determine if this is truly a new visitor
+    // New if: no session exists OR IP hasn't been seen before OR last visit was more than 24 hours ago
+    const isTrulyNewVisitor = existingVisitor.rows.length === 0 || 
+      existingVisitorByIP.rows.length === 0 ||
+      (existingVisitorByIP.rows.length > 0 && (() => {
+        const lastVisit = new Date(existingVisitorByIP.rows[0].last_visit)
+        const hoursSinceLastVisit = (Date.now() - lastVisit.getTime()) / (1000 * 60 * 60)
+        return hoursSinceLastVisit > 24 // Treat as new if more than 24 hours since last visit
+      })())
+
+    if (existingVisitor.rows.length > 0 && !isTrulyNewVisitor) {
+      // Update existing visitor (same session, recent visit)
       const visitor = existingVisitor.rows[0]
       const pagesVisited = visitor.pages_visited || []
       
@@ -140,48 +156,7 @@ export async function POST(request: NextRequest) {
         sessionId,
       ])
 
-      // Send Slack notification for returning visitors (only on first return visit to avoid spam)
-      if (newVisitCount === 2) {
-        console.log('📱 ========================================')
-        console.log('📱 ATTEMPTING TO SEND SLACK NOTIFICATION FOR RETURNING VISITOR')
-        console.log('📱 ========================================')
-        console.log('📱 IP Address:', ipAddress)
-        console.log('📱 Visit Count:', newVisitCount)
-        console.log('📱 SLACK_WEBHOOK_URL exists:', !!process.env.SLACK_WEBHOOK_URL)
-        try {
-          const notificationResult = await sendVisitorNotification({
-            ipAddress,
-            ipLabel: ipLabel || undefined, // Include label if available
-            location: {
-              country: location?.country,
-              city: location?.city,
-              region: location?.region,
-              latitude: location?.latitude,
-              longitude: location?.longitude,
-            },
-            device: {
-              type: device.type,
-              browser: device.browser,
-              os: device.os,
-            },
-            userAgent,
-            referer,
-            timestamp: new Date().toISOString(),
-            uaeTime,
-            pagesVisited: pagesVisited.length,
-            visitCount: newVisitCount,
-            isNewVisitor: false,
-          })
-          console.log('📱 SLACK NOTIFICATION RESULT:', notificationResult ? '✅ SENT SUCCESSFULLY' : '❌ FAILED')
-          if (!notificationResult) {
-            console.error('❌ Check SLACK_WEBHOOK_URL environment variable in Vercel')
-          }
-        } catch (error) {
-          console.error('❌ SLACK NOTIFICATION ERROR:', error)
-          console.error('❌ Error details:', error instanceof Error ? error.message : String(error))
-        }
-      }
-
+      // Don't send notification for returning visitors in same session
       return NextResponse.json({
         success: true,
         visitor: {
