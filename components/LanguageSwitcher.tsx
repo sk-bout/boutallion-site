@@ -124,10 +124,27 @@ export default function LanguageSwitcher({ locale }: { locale: Locale }) {
   const t = getTranslations(locale)
 
   return (
-    <div className="fixed top-4 right-4 z-50">
+    <div 
+      className="fixed z-50 pointer-events-none"
+      style={{
+        top: 'max(1rem, calc(env(safe-area-inset-top, 0px) + 1rem))',
+        right: 'max(1rem, calc(env(safe-area-inset-right, 0px) + 1rem))',
+        left: 'auto',
+        bottom: 'auto',
+        maxWidth: 'calc(100vw - 2rem)',
+      }}
+    >
       <button
         onClick={switchToEnglish}
-        className="px-4 py-2 bg-black/30 backdrop-blur-md border border-white/20 text-white/80 hover:text-gold-DEFAULT hover:border-gold-DEFAULT/40 transition-all duration-300 font-sans text-xs tracking-[0.1em] uppercase"
+        className="px-4 py-2.5 sm:px-5 sm:py-3 md:px-6 md:py-3 bg-white/10 backdrop-blur-md border border-white/20 text-white/80 hover:text-gold-DEFAULT hover:border-gold-DEFAULT/40 hover:bg-white/15 transition-all duration-300 font-sans text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.2em] uppercase shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 whitespace-nowrap pointer-events-auto font-medium"
+        style={{
+          minWidth: 'fit-content',
+          maxWidth: 'calc(100vw - 2rem - env(safe-area-inset-right, 0px))',
+          boxSizing: 'border-box',
+          wordWrap: 'normal',
+          overflowWrap: 'normal',
+          textOverflow: 'ellipsis',
+        }}
         aria-label={t['switch-to-english'] || t['continue-in-english'] || 'Switch to English'}
       >
         {t['switch-to-english'] || t['continue-in-english'] || 'English'}
