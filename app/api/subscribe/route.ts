@@ -254,6 +254,35 @@ export async function POST(request: NextRequest) {
         throw new Error('Database pool not initialized - DATABASE_URL may be missing')
       }
       
+      // Test connection first
+      try {
+        await db.query('SELECT 1')
+        console.log('✅ Database connection test: OK')
+      } catch (connError) {
+        console.error('❌ Database connection test failed:', connError)
+        throw new Error(`Database connection failed: ${connError instanceof Error ? connError.message : String(connError)}`)
+      }
+      
+      // Check if table exists
+      try {
+        const tableCheck = await db.query(`
+          SELECT EXISTS (
+            SELECT FROM information_schema.tables 
+            WHERE table_schema = 'public' 
+            AND table_name = 'subscriptions'
+          );
+        `)
+        if (!tableCheck.rows[0].exists) {
+          console.warn('⚠️ Subscriptions table does not exist, initializing...')
+          const { initDatabase } = await import('@/lib/db')
+          await initDatabase()
+          console.log('✅ Database initialized')
+        }
+      } catch (initError) {
+        console.error('⚠️ Could not check/initialize table:', initError)
+        // Continue anyway - might work
+      }
+      
       const location = locationData
       console.log('🔄 Database pool obtained, executing query...')
       console.log('🔄 Email:', email.trim().toLowerCase())
