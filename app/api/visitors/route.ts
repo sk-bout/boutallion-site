@@ -431,6 +431,9 @@ export async function POST(request: NextRequest) {
     console.log('📱 Using webhook:', webhookUrl ? `${webhookUrl.substring(0, 50)}...` : 'NOT SET')
     
     try {
+      console.log('📱 ========================================')
+      console.log('📱 CALLING sendVisitorNotification NOW')
+      console.log('📱 ========================================')
       const notificationResult = await sendVisitorNotification({
         ipAddress,
         ipLabel: ipLabel || undefined,
@@ -463,15 +466,23 @@ export async function POST(request: NextRequest) {
       console.log('📱 SLACK NOTIFICATION RESULT:', notificationResult ? '✅ SENT SUCCESSFULLY' : '❌ FAILED')
       console.log('📱 ========================================')
       if (!notificationResult) {
-        console.error('❌ Slack notification returned false')
+        console.error('❌ ========================================')
+        console.error('❌ SLACK NOTIFICATION RETURNED FALSE')
+        console.error('❌ ========================================')
+        console.error('❌ This means sendVisitorNotification returned false')
+        console.error('❌ Check Vercel function logs for detailed error messages')
         console.error('❌ Check SLACK_COMINGSOON_WEBHOOK_URL, SLACK_COMINGSOON_WEBHOOK, SLACK_VISITOR_WEBHOOK_URL, or SLACK_WEBHOOK_URL environment variable in Vercel')
+        console.error('❌ Test webhook at: https://boutallion.com/api/test-visitor-notification')
+      } else {
+        console.log('✅ Notification sent successfully - check #comingsoon-visitors Slack channel')
       }
     } catch (error) {
       console.error('❌ ========================================')
-      console.error('❌ SLACK NOTIFICATION ERROR')
+      console.error('❌ SLACK NOTIFICATION EXCEPTION')
       console.error('❌ ========================================')
       console.error('❌ Error message:', error instanceof Error ? error.message : String(error))
       console.error('❌ Error stack:', error instanceof Error ? error.stack : 'No stack trace')
+      console.error('❌ Error type:', error instanceof Error ? error.constructor.name : typeof error)
     }
 
     return NextResponse.json({
