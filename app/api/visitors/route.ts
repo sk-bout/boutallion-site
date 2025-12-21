@@ -201,7 +201,7 @@ export async function POST(request: NextRequest) {
 
     // CRITICAL: A new visitor is someone with a NEW SESSION ID (first time we see this session)
     // This ensures EVERY new visit gets notified, regardless of IP history
-    const isTrulyNewVisitor = existingVisitor.rows.length === 0
+    let isTrulyNewVisitor = existingVisitor.rows.length === 0
 
     console.log('📊 ========================================')
     console.log('📊 VISITOR TRACKING DEBUG')
