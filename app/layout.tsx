@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Playfair_Display, Inter } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
-import { defaultMetadata, structuredData, organizationStructuredData } from '@/lib/seo'
+import { defaultMetadata, structuredData, organizationStructuredData, brandTitle, brandDescription } from '@/lib/seo'
 import { pressStructuredData, mediaKitStructuredData } from '@/lib/press-seo'
 import { gccGovernmentStructuredData } from '@/lib/gcc-media-seo'
 
@@ -25,8 +25,8 @@ export const metadata: Metadata = {
   openGraph: {
     ...defaultMetadata.openGraph,
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com',
-    title: defaultMetadata.title?.default || defaultMetadata.title || 'Boutallion',
-    description: defaultMetadata.description || '',
+    title: brandTitle,
+    description: brandDescription,
     images: [
       {
         url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'}/og-image.png`,
@@ -41,8 +41,8 @@ export const metadata: Metadata = {
   other: {
     ...defaultMetadata.other,
     'og:url': process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com',
-    'og:title': defaultMetadata.title?.default || defaultMetadata.title || 'Boutallion',
-    'og:description': defaultMetadata.description || '',
+    'og:title': brandTitle,
+    'og:description': brandDescription,
     'og:image:secure_url': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'}/og-image.png`,
   },
 }
