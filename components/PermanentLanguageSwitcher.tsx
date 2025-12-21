@@ -31,7 +31,7 @@ export default function PermanentLanguageSwitcher() {
     router.push(`/${newLocale}${pathWithoutLocale}`)
   }
 
-  // Close dropdown when clicking outside
+  // Close dropdown when clicking outside or scrolling
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -39,12 +39,20 @@ export default function PermanentLanguageSwitcher() {
       }
     }
 
+    const handleScroll = () => {
+      setIsOpen(false)
+    }
+
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside)
+      window.addEventListener('scroll', handleScroll, true) // Use capture phase to catch all scroll events
+      window.addEventListener('touchmove', handleScroll, true) // For mobile touch scrolling
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
+      window.removeEventListener('scroll', handleScroll, true)
+      window.removeEventListener('touchmove', handleScroll, true)
     }
   }, [isOpen])
 
