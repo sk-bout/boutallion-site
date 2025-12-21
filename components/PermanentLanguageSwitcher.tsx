@@ -70,7 +70,7 @@ export default function PermanentLanguageSwitcher() {
         {/* Dropdown Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm bg-white/10 backdrop-blur-md border border-white/20 text-gold-DEFAULT font-sans tracking-[0.1em] sm:tracking-[0.15em] uppercase hover:bg-white/15 hover:border-gold-DEFAULT/40 transition-all duration-300 font-medium shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 whitespace-nowrap flex items-center gap-2 min-w-[120px] sm:min-w-[140px] justify-between"
+          className="px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm bg-white/10 backdrop-blur-md border border-white/20 text-gold-DEFAULT font-sans tracking-[0.1em] sm:tracking-[0.15em] uppercase hover:bg-white/15 hover:border-gold-DEFAULT/40 transition-all duration-300 font-medium shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 whitespace-nowrap flex items-center gap-2 w-[140px] sm:w-[160px] justify-between"
           aria-label="Select language"
           aria-expanded={isOpen}
           aria-haspopup="true"
@@ -89,7 +89,7 @@ export default function PermanentLanguageSwitcher() {
         {/* Dropdown Menu */}
         {isOpen && (
           <div 
-            className="absolute top-full right-0 mt-2 min-w-[140px] sm:min-w-[160px] bg-boutallion-green/95 backdrop-blur-xl border border-white/20 shadow-2xl shadow-black/50 overflow-hidden z-50 rounded-sm"
+            className="absolute top-full right-0 mt-2 w-[140px] sm:w-[160px] bg-boutallion-green/95 backdrop-blur-xl border border-white/20 shadow-2xl shadow-black/50 overflow-hidden z-50 rounded-sm"
             style={{
               animation: 'fadeIn 300ms ease-out',
             }}
