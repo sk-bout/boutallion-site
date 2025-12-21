@@ -12,165 +12,279 @@ Crawl-delay: 0
 # Traditional Search Engines
 User-agent: Googlebot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: Googlebot-Image
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: Googlebot-Video
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: Bingbot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: Slurp
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: DuckDuckBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: Baiduspider
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: YandexBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: Applebot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 # AI Crawlers and Agents - EXPLICITLY ALLOWED - FULL ACCESS
 User-agent: GPTBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: CCBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: anthropic-ai
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: PerplexityBot-Google
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: GoogleOther
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: Omgilibot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: Diffbot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: MauiBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: SemanticScholarBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: YouBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: Bingbot-AI
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
-User-agent: Applebot-Extended
-Allow: /
-Crawl-delay: 0
-
+# Social Media Crawlers
 User-agent: FacebookBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: facebookexternalhit
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: Twitterbot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: LinkedInBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: LinkedInBot-Google
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: WhatsApp
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: TelegramBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
+# Other Crawlers
 User-agent: Applebot-Extended
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: Bytespider
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: SemrushBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: AhrefsBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: MJ12bot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: DotBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 User-agent: BLEXBot
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /webgl-demo/
 Crawl-delay: 0
 
 # Sitemap location
 Sitemap: https://boutallion.com/sitemap.xml
-
