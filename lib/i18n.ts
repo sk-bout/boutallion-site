@@ -25,13 +25,22 @@ export function getTranslations(locale: Locale) {
 }
 
 export function getLocaleFromPath(pathname: string): Locale {
-  const segments = pathname.split('/').filter(Boolean)
+  // Handle empty pathname or root
+  if (!pathname || pathname === '/') {
+    return 'en'
+  }
+  
+  // Remove leading slash and split
+  const cleanPath = pathname.startsWith('/') ? pathname.slice(1) : pathname
+  const segments = cleanPath.split('/').filter(Boolean)
   const firstSegment = segments[0]
   
-  if (locales.includes(firstSegment as Locale)) {
+  // Check if first segment is a valid locale
+  if (firstSegment && locales.includes(firstSegment as Locale)) {
     return firstSegment as Locale
   }
   
+  // Default to English
   return 'en'
 }
 

@@ -16,9 +16,16 @@ const LANGUAGES: { code: Locale; label: string; nativeLabel: string }[] = [
 export default function PermanentLanguageSwitcher() {
   const pathname = usePathname()
   const router = useRouter()
-  const currentLocale = getLocaleFromPath(pathname)
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  
+  // Get locale from pathname - handle both /ar and /ar/ paths
+  const currentLocale = getLocaleFromPath(pathname)
+  
+  // Debug: Log the pathname and detected locale
+  useEffect(() => {
+    console.log('🌐 Language Switcher - Pathname:', pathname, 'Detected Locale:', currentLocale)
+  }, [pathname, currentLocale])
 
   const currentLanguage = LANGUAGES.find(lang => lang.code === currentLocale) || LANGUAGES[0]
 
