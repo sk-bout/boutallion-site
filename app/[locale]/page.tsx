@@ -24,6 +24,26 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
     tracker.trackPageView()
   }, [])
 
+  // Force Portrait font to be applied - especially important when switching languages
+  useEffect(() => {
+    const logoElement = document.getElementById('boutallion-logo')
+    if (logoElement) {
+      // Force Portrait font via inline style
+      logoElement.style.fontFamily = "'Portrait', var(--font-portrait), serif"
+      logoElement.style.fontWeight = 'normal'
+      logoElement.style.fontStyle = 'normal'
+      logoElement.style.direction = 'ltr'
+      logoElement.style.unicodeBidi = 'bidi-override'
+      
+      // Also ensure the font is loaded
+      if (document.fonts && document.fonts.check) {
+        document.fonts.ready.then(() => {
+          logoElement.style.fontFamily = "'Portrait', var(--font-portrait), serif"
+        })
+      }
+    }
+  }, [params.locale]) // Re-run when locale changes
+
   // Enhanced email validation function with comprehensive checking
   const validateEmail = (emailValue: string): boolean => {
     if (!emailValue) {
