@@ -3,11 +3,16 @@ import { getLocationFromIP, getLocationSummary } from '@/lib/geolocation'
 import { getDbPool } from '@/lib/db'
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now()
+  console.log('📧 Subscription API called at:', new Date().toISOString())
+  
   try {
     const { email } = await request.json()
+    console.log('📧 Email received:', email)
 
     // Validate email
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      console.error('❌ Invalid email format:', email)
       return NextResponse.json(
         { error: 'Invalid email address' },
         { status: 400 }
@@ -191,17 +196,27 @@ export async function POST(request: NextRequest) {
     // (We want to track all subscription attempts)
     console.log('🔄 Attempting to save to database...')
     console.log('🔄 DATABASE_URL exists:', !!process.env.DATABASE_URL)
+    console.log('🔄 DATABASE_URL preview:', process.env.DATABASE_URL ? process.env.DATABASE_URL.substring(0, 50) + '...' : 'MISSING')
+    console.log('🔄 Environment check:', {
+      hasMailerliteApiKey: !!process.env.MAILERLITE_API_KEY,
+      hasMailerliteGroupId: !!process.env.MAILERLITE_GROUP_ID,
+      hasDatabaseUrl: !!process.env.DATABASE_URL,
+      nodeEnv: process.env.NODE_ENV,
+    })
+    
     try {
       const db = getDbPool()
       if (!db) {
         console.error('❌ Database pool is null - DATABASE_URL may not be loaded')
+        console.error('❌ DATABASE_URL value:', process.env.DATABASE_URL ? 'SET' : 'NOT SET')
         throw new Error('Database pool not initialized - DATABASE_URL may be missing')
       }
       
       const location = locationData
       console.log('🔄 Database pool obtained, executing query...')
       console.log('🔄 Email:', email.trim().toLowerCase())
-      console.log('🔄 Location data:', location ? 'Present' : 'Missing')
+      console.log('🔄 Location data:', location ? JSON.stringify(location, null, 2) : 'Missing')
+      console.log('🔄 IP Address:', ipAddress)
       
       const dbResult = await db.query(`
         INSERT INTO subscriptions (
@@ -247,12 +262,18 @@ export async function POST(request: NextRequest) {
       
       console.log('✅ Subscription saved to database successfully!')
       console.log('✅ Database record:', JSON.stringify(dbResult.rows[0], null, 2))
+      console.log('✅ Database save completed in:', Date.now() - startTime, 'ms')
     } catch (dbError) {
       // Log detailed error for debugging
       console.error('❌ Database save failed!')
       console.error('❌ Error message:', dbError instanceof Error ? dbError.message : String(dbError))
       console.error('❌ Error stack:', dbError instanceof Error ? dbError.stack : 'No stack trace')
       console.error('❌ Email attempted:', email)
+      console.error('❌ DATABASE_URL check:', {
+        exists: !!process.env.DATABASE_URL,
+        length: process.env.DATABASE_URL?.length || 0,
+        startsWith: process.env.DATABASE_URL?.substring(0, 20) || 'N/A',
+      })
       // Still continue - don't fail subscription if database save fails
     }
     
