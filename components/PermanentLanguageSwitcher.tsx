@@ -50,15 +50,14 @@ export default function PermanentLanguageSwitcher() {
   return (
     <div 
       ref={dropdownRef}
-      className="fixed top-0 right-0 z-50 p-4 sm:p-6 pointer-events-none"
+      className="fixed top-0 right-0 z-50 p-3 sm:p-4 md:p-6 pointer-events-none"
       style={{
-        paddingTop: `max(1rem, env(safe-area-inset-top))`,
-        paddingRight: `max(1rem, env(safe-area-inset-right))`,
-        maxWidth: `calc(100vw - 2rem - env(safe-area-inset-right, 0px))`,
+        paddingTop: `max(0.75rem, env(safe-area-inset-top))`,
+        paddingRight: `max(0.75rem, env(safe-area-inset-right))`,
         boxSizing: 'border-box',
       }}
     >
-      <div className="relative pointer-events-auto">
+      <div className="relative pointer-events-auto flex justify-end">
         {/* Dropdown Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -80,7 +79,7 @@ export default function PermanentLanguageSwitcher() {
 
         {/* Dropdown Menu */}
         {isOpen && (
-          <div className="absolute top-full right-0 mt-2 min-w-[140px] sm:min-w-[160px] bg-black/90 backdrop-blur-md border border-white/20 shadow-xl shadow-black/40 overflow-hidden">
+          <div className="absolute top-full right-0 mt-2 min-w-[140px] sm:min-w-[160px] bg-black/90 backdrop-blur-md border border-white/20 shadow-xl shadow-black/40 overflow-hidden z-50">
             {LANGUAGES.map((lang) => (
               <button
                 key={lang.code}
