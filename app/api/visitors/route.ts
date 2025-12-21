@@ -221,7 +221,7 @@ export async function POST(request: NextRequest) {
       // This is an existing visitor in the same session with no unusual patterns
       // Update but don't notify (to avoid spam)
       try {
-        const visitor = existingVisitor.rows[0]
+        const visitor = existingVisitor.rows[0] as any
         const pagesVisited = visitor.pages_visited || []
         
         // Add new page if not already in list
