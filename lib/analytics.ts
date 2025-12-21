@@ -401,6 +401,24 @@ class AnalyticsTracker {
       pageTitle: typeof document !== 'undefined' ? document.title : '',
     })
     await this.sendTrackingData(data)
+    
+    // Also track visitor info with enhanced details
+    try {
+      await fetch('/api/visitors', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sessionId: this.sessionId,
+          pageUrl: typeof window !== 'undefined' ? window.location.href : '',
+          userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
+          referer: typeof document !== 'undefined' ? document.referrer : '',
+        }),
+      })
+    } catch (error) {
+      // Silent fail - don't block page view tracking
+    }
   }
 
   public async trackSubscription(email: string, additionalData?: Record<string, any>): Promise<void> {

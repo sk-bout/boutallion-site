@@ -335,6 +335,42 @@ export async function POST(request: NextRequest) {
     
     console.log(`📍 Subscription: ${email} | Location: ${locationSummary.location} | IP: ${ipAddress} | Country: ${locationSummary.country || 'Unknown'} | City: ${locationSummary.city || 'Unknown'}`)
     
+    // Get device info for Slack notification
+    const getDeviceType = (ua: string): string => {
+      if (/Mobile|Android|iPhone|iPad/i.test(ua)) return 'mobile'
+      if (/Tablet|iPad/i.test(ua)) return 'tablet'
+      return 'desktop'
+    }
+    
+    const getBrowser = (ua: string): string => {
+      if (ua.includes('Chrome') && !ua.includes('Edg')) return 'Chrome'
+      if (ua.includes('Firefox')) return 'Firefox'
+      if (ua.includes('Safari') && !ua.includes('Chrome')) return 'Safari'
+      if (ua.includes('Edg')) return 'Edge'
+      return 'Unknown'
+    }
+    
+    const getOS = (ua: string): string => {
+      if (ua.includes('Windows')) return 'Windows'
+      if (ua.includes('Mac OS X')) return 'macOS'
+      if (ua.includes('Linux')) return 'Linux'
+      if (ua.includes('Android')) return 'Android'
+      if (ua.includes('iOS') || ua.includes('iPhone') || ua.includes('iPad')) return 'iOS'
+      return 'Unknown'
+    }
+    
+    // Get UAE time
+    const uaeTime = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Dubai',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    }).format(new Date())
+    
     // Send Slack notification (non-blocking)
     try {
       await sendSlackNotification({
@@ -352,6 +388,13 @@ export async function POST(request: NextRequest) {
         referer,
         timestamp: new Date().toISOString(),
         mailerliteSuccess,
+        device: {
+          type: getDeviceType(userAgent || ''),
+          browser: getBrowser(userAgent || ''),
+          os: getOS(userAgent || ''),
+        },
+        uaeTime,
+        pagesVisited: 1, // Will be updated by visitor tracking
       })
     } catch (slackError) {
       console.error('⚠️ Slack notification error (non-critical):', slackError)
