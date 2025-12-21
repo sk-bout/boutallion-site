@@ -97,8 +97,9 @@ export async function POST(request: NextRequest) {
 
       // Send Slack notification for returning visitors (only on first return visit to avoid spam)
       if (newVisitCount === 2) {
+        console.log('📱 Attempting to send Slack notification for returning visitor...')
         try {
-          await sendVisitorNotification({
+          const notificationResult = await sendVisitorNotification({
             ipAddress,
             location: {
               country: location?.country,
@@ -120,8 +121,10 @@ export async function POST(request: NextRequest) {
             visitCount: newVisitCount,
             isNewVisitor: false,
           })
+          console.log('📱 Slack notification result:', notificationResult ? '✅ Sent' : '❌ Failed')
         } catch (error) {
-          // Silent fail
+          console.error('❌ Slack notification error:', error)
+          console.error('❌ Error details:', error instanceof Error ? error.message : String(error))
         }
       }
 
@@ -168,8 +171,9 @@ export async function POST(request: NextRequest) {
       ])
 
       // Send Slack notification for new visitors
+      console.log('📱 Attempting to send Slack notification for new visitor...')
       try {
-        await sendVisitorNotification({
+        const notificationResult = await sendVisitorNotification({
           ipAddress,
           location: {
             country: location?.country,
@@ -191,8 +195,10 @@ export async function POST(request: NextRequest) {
           visitCount: 1,
           isNewVisitor: true,
         })
+        console.log('📱 Slack notification result:', notificationResult ? '✅ Sent' : '❌ Failed')
       } catch (error) {
-        // Silent fail
+        console.error('❌ Slack notification error:', error)
+        console.error('❌ Error details:', error instanceof Error ? error.message : String(error))
       }
 
       return NextResponse.json({

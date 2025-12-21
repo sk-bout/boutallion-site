@@ -60,8 +60,15 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
   const webhookUrl = process.env.SLACK_WEBHOOK_URL
 
   if (!webhookUrl) {
+    console.log('📱 Slack webhook not configured, skipping visitor notification')
     return false
   }
+  
+  console.log('📱 Sending visitor notification to Slack...', {
+    ipAddress: data.ipAddress,
+    isNewVisitor: data.isNewVisitor,
+    hasLocation: !!data.location,
+  })
 
   try {
     // Format location string
