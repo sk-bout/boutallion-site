@@ -3,6 +3,10 @@ import type { TrackingData } from '@/lib/analytics'
 import { getDbPool } from '@/lib/db'
 import { getLocationFromIP } from '@/lib/geolocation'
 
+// Force dynamic rendering - don't run during build
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 /**
  * Server-side tracking endpoint
  * Captures IP address, location, and logs all tracking events to PostgreSQL

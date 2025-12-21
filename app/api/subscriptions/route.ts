@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getDbPool } from '@/lib/db'
 
+// Force dynamic rendering - don't run during build
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 /**
  * API endpoint to retrieve subscription data with locations
  * GET: List all subscriptions with filters

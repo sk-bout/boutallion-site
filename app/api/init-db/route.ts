@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { initDatabase } from '@/lib/db'
 
+// Force dynamic rendering - don't run during build
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 /**
  * Initialize database schema
  * Call this endpoint once to set up tables

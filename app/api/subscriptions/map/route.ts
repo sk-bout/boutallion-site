@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getDbPool } from '@/lib/db'
 
+// Force dynamic rendering - don't run during build
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 /**
  * Get subscriptions with location data for map display
  * Returns only subscriptions with valid latitude/longitude
