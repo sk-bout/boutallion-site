@@ -160,7 +160,7 @@ export const gccLocalBusinessStructuredData = [
   // Abu Dhabi
   {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    '@type': 'ClothingStore',
     '@id': `${siteUrl}#local-business-abu-dhabi`,
     name: 'Boutallion - Luxury Abaya Brand Abu Dhabi',
     alternateName: ['بوتاليون أبوظبي', 'Boutallion Abu Dhabi'],
@@ -183,12 +183,11 @@ export const gccLocalBusinessStructuredData = [
       },
     },
     priceRange: '$$$$',
-    '@type': 'ClothingStore',
   },
   // Dubai
   {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    '@type': 'ClothingStore',
     '@id': `${siteUrl}#local-business-dubai`,
     name: 'Boutallion - Luxury Abaya Brand Dubai',
     alternateName: ['بوتاليون دبي', 'Boutallion Dubai'],
@@ -211,12 +210,11 @@ export const gccLocalBusinessStructuredData = [
       },
     },
     priceRange: '$$$$',
-    '@type': 'ClothingStore',
   },
   // Doha, Qatar
   {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    '@type': 'ClothingStore',
     '@id': `${siteUrl}#local-business-doha`,
     name: 'Boutallion - Luxury Abaya Brand Doha',
     alternateName: ['بوتاليون الدوحة', 'Boutallion Doha'],
@@ -239,12 +237,11 @@ export const gccLocalBusinessStructuredData = [
       },
     },
     priceRange: '$$$$',
-    '@type': 'ClothingStore',
   },
   // Riyadh, Saudi Arabia
   {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    '@type': 'ClothingStore',
     '@id': `${siteUrl}#local-business-riyadh`,
     name: 'Boutallion - Luxury Abaya Brand Riyadh',
     alternateName: ['بوتاليون الرياض', 'Boutallion Riyadh'],
@@ -267,12 +264,11 @@ export const gccLocalBusinessStructuredData = [
       },
     },
     priceRange: '$$$$',
-    '@type': 'ClothingStore',
   },
   // Jeddah, Saudi Arabia
   {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    '@type': 'ClothingStore',
     '@id': `${siteUrl}#local-business-jeddah`,
     name: 'Boutallion - Luxury Abaya Brand Jeddah',
     alternateName: ['بوتاليون جدة', 'Boutallion Jeddah'],
@@ -295,7 +291,6 @@ export const gccLocalBusinessStructuredData = [
       },
     },
     priceRange: '$$$$',
-    '@type': 'ClothingStore',
   },
 ]
 
