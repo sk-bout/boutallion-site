@@ -23,11 +23,12 @@ export default function PermanentLanguageSwitcher() {
   const currentLanguage = LANGUAGES.find(lang => lang.code === currentLocale) || LANGUAGES[0]
 
   const switchLanguage = (newLocale: Locale) => {
+    // Close dropdown immediately
+    setIsOpen(false)
     // Remove current locale from path
     const pathWithoutLocale = pathname.replace(/^\/(en|ar|it|fr|nl|zh|ru)/, '') || '/'
     // Add new locale
     router.push(`/${newLocale}${pathWithoutLocale}`)
-    setIsOpen(false)
   }
 
   // Close dropdown when clicking outside
