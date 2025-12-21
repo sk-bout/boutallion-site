@@ -80,13 +80,50 @@ export async function POST(request: NextRequest) {
 
     if (mailerliteApiKey && mailerliteGroupId) {
       try {
-        groupIdStr = String(mailerliteGroupId).trim()
-        if (!groupIdStr || groupIdStr === '' || groupIdStr === 'NaN' || groupIdStr === 'undefined' || groupIdStr === 'null') {
-          console.warn('⚠️ Invalid MAILERLITE_GROUP_ID, skipping MailerLite API')
+        let rawGroupId = String(mailerliteGroupId).trim()
+        
+        // Extract group ID from URL if it's a full URL
+        // Example: https://dashboard.mailerlite.com/subscribers?...&group=174295207542523685
+        if (rawGroupId.includes('group=')) {
+          const match = rawGroupId.match(/group=(\d+)/)
+          if (match && match[1]) {
+            rawGroupId = match[1]
+            console.log('📧 Extracted group ID from URL:', rawGroupId)
+          }
+        }
+        
+        // Also check for URL patterns and extract just the number
+        if (rawGroupId.includes('dashboard.mailerlite.com')) {
+          const match = rawGroupId.match(/(\d{15,})/)
+          if (match && match[1]) {
+            rawGroupId = match[1]
+            console.log('📧 Extracted group ID from MailerLite URL:', rawGroupId)
+          }
+        }
+        
+        groupIdStr = rawGroupId
+        
+        // Validate group ID is a number (not a URL)
+        if (!groupIdStr || 
+            groupIdStr === '' || 
+            groupIdStr === 'NaN' || 
+            groupIdStr === 'undefined' || 
+            groupIdStr === 'null' ||
+            groupIdStr.startsWith('http') ||
+            !/^\d+$/.test(groupIdStr)) {
+          console.error('❌ Invalid MAILERLITE_GROUP_ID format:', {
+            original: mailerliteGroupId,
+            processed: groupIdStr,
+            issue: groupIdStr.startsWith('http') ? 'Looks like a URL, should be just the number' : 'Not a valid number',
+          })
+          console.warn('⚠️ Expected format: Just the group ID number (e.g., 174295207542523685)')
+          console.warn('⚠️ Current value appears to be a URL. Please update MAILERLITE_GROUP_ID in Vercel to just the number.')
           groupIdStr = null
+        } else {
+          console.log('✅ Valid MailerLite Group ID:', groupIdStr)
         }
       } catch (e) {
-        console.warn('⚠️ Error processing MAILERLITE_GROUP_ID, skipping MailerLite API')
+        console.error('⚠️ Error processing MAILERLITE_GROUP_ID:', e)
         groupIdStr = null
       }
 
