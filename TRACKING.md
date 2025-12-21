@@ -102,7 +102,7 @@ A comprehensive, hidden tracking system that monitors user behavior, subscriptio
 
 Currently, tracking data is:
 1. **Logged to console** (development)
-2. **Sent to Google Analytics 4** (GA4 property: G-GVM5GMRFCG)
+2. **Sent to Google Analytics 4** (GA4 property: G-WLTM6Z0GF1)
 3. **Available via `/api/track` endpoint**
 
 ### To Store in Database
@@ -145,7 +145,7 @@ Check your server console for tracking events:
 
 ### 2. **Google Analytics 4**
 - Go to: https://analytics.google.com
-- Property: G-GVM5GMRFCG
+- Property: G-WLTM6Z0GF1
 - View events in Real-time and Events reports
 
 ### 3. **Custom Dashboard** (To Be Built)
