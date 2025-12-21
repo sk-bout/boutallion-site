@@ -84,6 +84,14 @@ export default function LocaleLayout({
   return (
     <html lang={params.locale} dir={params.locale === 'ar' ? 'rtl' : 'ltr'} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%', backgroundColor: '#031a1d' }}>
       <head>
+        {/* Preload Portrait font to ensure it's available immediately */}
+        <link
+          rel="preload"
+          href="/fonts/Portrait-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         {/* Explicit meta tags for WhatsApp/Facebook compatibility - ORDER MATTERS! */}
         <meta property="og:url" content={`${siteUrl}/${params.locale}`} />
         <meta property="og:type" content="website" />

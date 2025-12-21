@@ -340,8 +340,18 @@ html[dir="rtl"] body .text-3d {
 }
 
 /* Additional rule to ensure Portrait font is used even when switching languages */
-h1.text-3d.font-portrait {
+h1.text-3d.font-portrait,
+#boutallion-logo,
+h1[data-font="portrait"],
+h1#boutallion-logo.font-portrait,
+h1#boutallion-logo.text-3d,
+html[dir="rtl"] #boutallion-logo,
+html[dir="rtl"] h1[data-font="portrait"] {
   font-family: 'Portrait' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  direction: ltr !important;
+  unicode-bidi: bidi-override !important;
 }
 
 /* Enhanced mobile readability */
