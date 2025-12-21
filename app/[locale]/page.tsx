@@ -294,10 +294,10 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       </div>
 
       {/* Main content */}
-      <main className="relative z-10 text-center px-4 sm:px-6 py-8 sm:py-12 max-w-4xl mx-auto animate-fade-in flex flex-col items-center justify-center min-h-[100vh] min-h-[100dvh] safe-area-inset">
+      <main className="relative z-10 text-center px-4 sm:px-6 py-8 sm:py-12 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-center min-h-[100vh] min-h-[100dvh] safe-area-inset">
         {/* BOUTALLION text in Portrait font with 3D effect */}
         <h1 
-          className="relative z-10 font-portrait text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.25em] text-gold-light sm:text-gold-DEFAULT mb-8 sm:mb-12 md:mb-16 text-3d break-words hyphens-none leading-tight"
+          className="relative z-10 font-portrait text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-[10rem] tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.2em] lg:tracking-[0.15em] xl:tracking-[0.12em] 2xl:tracking-[0.1em] text-gold-light sm:text-gold-DEFAULT mb-8 sm:mb-12 md:mb-16 text-3d break-words hyphens-none leading-tight w-full px-4 sm:px-6 md:px-8"
           style={{
             textRendering: 'optimizeLegibility',
             WebkitFontSmoothing: 'antialiased',
@@ -307,11 +307,10 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
             textSizeAdjust: '100%',
             willChange: 'transform',
             fontWeight: 'normal',
-            wordBreak: 'normal',
-            overflowWrap: 'normal',
+            wordBreak: 'break-word',
+            overflowWrap: 'break-word',
             maxWidth: '100%',
-            paddingLeft: '0.5rem',
-            paddingRight: '0.5rem',
+            boxSizing: 'border-box',
           }}
         >
           BOUTALLION

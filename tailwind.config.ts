@@ -16,6 +16,9 @@ const config: Config = {
         'xl': '1280px',
         '2xl': '1536px',
       },
+      fontSize: {
+        '10rem': '10rem',
+      },
       colors: {
         gold: {
           DEFAULT: '#d4c5a0',
