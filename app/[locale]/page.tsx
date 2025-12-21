@@ -297,6 +297,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         <h1 
           className="relative z-10 font-portrait text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-7xl 2xl:text-7xl tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.2em] lg:tracking-[0.15em] xl:tracking-[0.12em] 2xl:tracking-[0.1em] text-gold-light sm:text-gold-DEFAULT mb-8 sm:mb-12 md:mb-16 text-3d break-words hyphens-none leading-tight w-full px-4 sm:px-6 md:px-8"
           style={{
+            fontFamily: 'var(--font-portrait), Portrait, serif',
             textRendering: 'optimizeLegibility',
             WebkitFontSmoothing: 'antialiased',
             MozOsxFontSmoothing: 'grayscale',
