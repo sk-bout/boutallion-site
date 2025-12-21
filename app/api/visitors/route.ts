@@ -322,7 +322,7 @@ export async function POST(request: NextRequest) {
       if (existingVisitor.rows.length > 0 && !isTrulyNewVisitor) {
         // Update existing visitor for unusual patterns/daily visitors
         try {
-          const visitor = existingVisitor.rows[0]
+          const visitor = existingVisitor.rows[0] as any
           const pagesVisited = visitor.pages_visited || []
           if (pageUrl && !pagesVisited.includes(pageUrl)) {
             pagesVisited.push(pageUrl)
