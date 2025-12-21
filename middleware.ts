@@ -24,16 +24,24 @@ const getLocaleFromIP = (ip: string | null, headers: Headers): string => {
 }
 
 export function middleware(request: NextRequest) {
-  const { pathname, hostname } = request.nextUrl
+  const { pathname, hostname, protocol } = request.nextUrl
   const url = request.nextUrl.clone()
   const userAgent = request.headers.get('user-agent') || ''
+  
+  // Force HTTPS redirect (critical for Facebook/WhatsApp OG tags)
+  if (protocol === 'http:') {
+    url.protocol = 'https:'
+    return NextResponse.redirect(url, 301)
+  }
   
   // Allow all bots and crawlers to bypass locale redirects
   const isBot = /bot|crawler|spider|crawling|GPTBot|ChatGPT|CCBot|anthropic|Claude|Perplexity|Google-Extended|Bingbot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Telegram|Applebot|Bytespider|SemrushBot|AhrefsBot|MJ12bot|DotBot|BLEXBot|Omgilibot|Diffbot|MauiBot|SemanticScholarBot|YouBot/i.test(userAgent)
   
-  // Redirect www to non-www (SSL certificate is for boutallion.com, not www.boutallion.com)
+  // Redirect www to non-www with HTTPS (301 permanent redirect for SEO)
   if (hostname.startsWith('www.')) {
     url.hostname = hostname.replace('www.', '')
+    url.protocol = 'https:' // Ensure HTTPS
+    // Use 301 (permanent) instead of 307 (temporary) for better SEO and Facebook compatibility
     return NextResponse.redirect(url, 301)
   }
   
@@ -65,7 +73,12 @@ export function middleware(request: NextRequest) {
   }
   
   // Root path - redirect to detected locale
+  // BUT: Allow bots to access root directly for OG tags
   if (pathname === '/') {
+    if (isBot) {
+      // Bots can access root - it will serve metadata via Next.js
+      return NextResponse.next()
+    }
     const locale = getLocaleFromIP(
       request.ip || request.headers.get('x-forwarded-for'),
       request.headers

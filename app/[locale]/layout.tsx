@@ -31,22 +31,26 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   ...defaultMetadata,
+  metadataBase: new URL(siteUrl), // Ensure all relative URLs resolve to HTTPS
   other: {
     ...Object.fromEntries(
       Object.entries(defaultMetadata.other || {}).filter(([_, value]) => value !== undefined)
     ),
     'referrer': 'strict-origin-when-cross-origin',
-    // Explicit meta tags for WhatsApp compatibility
+    // Explicit meta tags for WhatsApp compatibility - use absolute HTTPS URLs
+    'og:url': siteUrl, // Force HTTPS URL
     'og:image:width': '1200',
     'og:image:height': '630',
     'og:image:type': 'image/png',
+    'og:image:secure_url': `${siteUrl}/og-image.png`, // Explicit HTTPS URL
   },
-  // Ensure Open Graph image uses absolute URL for WhatsApp compatibility
+  // Ensure Open Graph image uses absolute HTTPS URL for WhatsApp compatibility
   openGraph: {
     ...defaultMetadata.openGraph,
+    url: siteUrl, // Force HTTPS
     images: [
       {
-        url: `${siteUrl}/og-image.png`,
+        url: `${siteUrl}/og-image.png`, // Absolute HTTPS URL
         width: 1200,
         height: 630,
         alt: 'Boutallion - World\'s Most Exclusive Abaya Brand',
@@ -54,12 +58,12 @@ export const metadata: Metadata = {
       },
     ],
   },
-  // Ensure Twitter image uses absolute URL
+  // Ensure Twitter image uses absolute HTTPS URL
   twitter: {
     ...defaultMetadata.twitter,
     images: [
       {
-        url: `${siteUrl}/og-image.png`,
+        url: `${siteUrl}/og-image.png`, // Absolute HTTPS URL
         alt: 'Boutallion - World\'s Most Exclusive Abaya Brand',
       },
     ],
@@ -80,19 +84,20 @@ export default function LocaleLayout({
   return (
     <html lang={params.locale} dir={params.locale === 'ar' ? 'rtl' : 'ltr'} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%', backgroundColor: '#031a1d' }}>
       <head>
-        {/* Explicit meta tags for WhatsApp compatibility */}
+        {/* Explicit meta tags for WhatsApp/Facebook compatibility - ORDER MATTERS! */}
+        <meta property="og:url" content={siteUrl} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Boutallion" />
         <meta property="og:title" content={brandTitle} />
         <meta property="og:description" content={brandDescription} />
+        <meta property="og:locale" content={params.locale === 'ar' ? 'ar_SA' : 'en_US'} />
         <meta property="og:image" content={`${siteUrl}/og-image.png`} />
         <meta property="og:image:url" content={`${siteUrl}/og-image.png`} />
         <meta property="og:image:secure_url" content={`${siteUrl}/og-image.png`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:type" content="image/png" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={siteUrl} />
-        <meta property="og:site_name" content="Boutallion" />
-        <meta property="og:locale" content={params.locale === 'ar' ? 'ar_SA' : 'en_US'} />
+        <meta property="og:image:alt" content="Boutallion - World's Most Exclusive Abaya Brand" />
         {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={brandTitle} />
