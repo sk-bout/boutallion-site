@@ -12,10 +12,13 @@ export const runtime = 'nodejs'
  * POST /api/visitors
  */
 export async function POST(request: NextRequest) {
+  console.log('📊 Visitor API called')
   try {
     const { sessionId, pageUrl, userAgent, referer } = await request.json()
+    console.log('📊 Visitor data received:', { sessionId, pageUrl, hasUserAgent: !!userAgent })
 
     if (!sessionId) {
+      console.error('❌ Session ID missing in visitor API call')
       return NextResponse.json({ error: 'Session ID required' }, { status: 400 })
     }
 
@@ -23,15 +26,20 @@ export async function POST(request: NextRequest) {
     const forwarded = request.headers.get('x-forwarded-for')
     const realIp = request.headers.get('x-real-ip')
     const ipAddress = forwarded?.split(',')[0] || realIp || request.ip || 'unknown'
+    console.log('📊 IP Address:', ipAddress)
 
     // Get location data
+    console.log('📊 Fetching location data...')
     const location = await getAccurateLocation(ipAddress)
+    console.log('📊 Location data:', location ? `${location.city}, ${location.country}` : 'Not found')
 
     // Get device info
     const device = getDeviceInfo(userAgent || '')
+    console.log('📊 Device info:', device)
 
     // Get UAE time
     const uaeTime = getUAETime()
+    console.log('📊 UAE Time:', uaeTime)
 
     const db = getDbPool()
 
