@@ -79,7 +79,7 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
       : 'N/A'
 
     // Create Slack message
-    const slackMessage = {
+    const slackMessage: any = {
       text: `${data.isNewVisitor ? '🆕' : '👤'} ${data.isNewVisitor ? 'New Visitor' : 'Returning Visitor'}: ${data.ipAddress}`,
       blocks: [
         {
@@ -138,7 +138,7 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
         text: {
           type: 'mrkdwn',
           text: `📍 <${mapUrl}|View on Google Maps>`,
-        },
+        } as { type: 'mrkdwn'; text: string },
       })
     }
 
@@ -149,7 +149,7 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
         text: {
           type: 'mrkdwn',
           text: `*Referer:* ${data.referer}`,
-        },
+        } as { type: 'mrkdwn'; text: string },
       })
     }
 
@@ -208,7 +208,7 @@ export async function sendSlackNotification(data: SlackNotificationData): Promis
       : 'N/A'
 
     // Create Slack message with rich formatting
-    const slackMessage = {
+    const slackMessage: any = {
       text: `🎉 New Subscription: ${data.email}`,
       blocks: [
         {
@@ -275,7 +275,7 @@ export async function sendSlackNotification(data: SlackNotificationData): Promis
         text: {
           type: 'mrkdwn',
           text: `📍 <${mapUrl}|View on Google Maps>`,
-        },
+        } as { type: 'mrkdwn'; text: string },
       })
     }
 
@@ -286,7 +286,7 @@ export async function sendSlackNotification(data: SlackNotificationData): Promis
         text: {
           type: 'mrkdwn',
           text: '*Additional Details:*',
-        },
+        } as { type: 'mrkdwn'; text: string },
       })
 
       const details: string[] = []
@@ -303,7 +303,7 @@ export async function sendSlackNotification(data: SlackNotificationData): Promis
           text: {
             type: 'mrkdwn',
             text: details.join('\n'),
-          },
+          } as { type: 'mrkdwn'; text: string },
         })
       }
     }
