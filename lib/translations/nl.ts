@@ -7,6 +7,8 @@ export const translations = {
   'thank-you-part1': 'Bedankt voor uw interesse.',
   'thank-you-part2': 'We nemen binnenkort contact met u op.',
   'contact': 'Contact',
+  'switch-to-english': 'English',
+  'continue-in-english': 'English',
 }
 
 

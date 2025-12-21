@@ -18,15 +18,23 @@ const GCC_COUNTRIES = [
 // GCC country codes
 const GCC_COUNTRY_CODES = ['AE', 'SA', 'KW', 'QA', 'BH', 'OM']
 
+// Netherlands
+const NETHERLANDS_COUNTRIES = ['Netherlands', 'Holland', 'The Netherlands']
+const NETHERLANDS_COUNTRY_CODES = ['NL']
+
+// Italy
+const ITALY_COUNTRIES = ['Italy', 'Italia']
+const ITALY_COUNTRY_CODES = ['IT']
+
 export default function LanguageSwitcher({ locale }: { locale: Locale }) {
   const pathname = usePathname()
   const router = useRouter()
   const [showSwitcher, setShowSwitcher] = useState(false)
-  const [isGCCVisitor, setIsGCCVisitor] = useState<boolean | null>(null) // null = checking, true/false = result
+  const [shouldShowSwitcher, setShouldShowSwitcher] = useState<boolean | null>(null) // null = checking, true/false = result
 
-  // Check if visitor is from GCC country
+  // Check if visitor is from a country that should see language switcher
   useEffect(() => {
-    const checkGCCCountry = async () => {
+    const checkVisitorCountry = async () => {
       try {
         // Get visitor info from the tracking API
         const sessionId = sessionStorage.getItem('sessionId') || `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
@@ -52,41 +60,58 @@ export default function LanguageSwitcher({ locale }: { locale: Locale }) {
           const country = data.visitor?.country || data.country
           const countryCode = data.visitor?.country_code || data.countryCode
 
-          // Check if country is GCC
-          const isGCC = country && (
-            GCC_COUNTRIES.some(gcc => country.toLowerCase().includes(gcc.toLowerCase())) ||
-            GCC_COUNTRY_CODES.includes(countryCode?.toUpperCase())
-          )
+          // Check if country matches the current locale
+          let shouldShow = false
 
-          setIsGCCVisitor(isGCC || false)
+          if (locale === 'ar') {
+            // For Arabic: show if GCC country
+            shouldShow = country && (
+              GCC_COUNTRIES.some(gcc => country.toLowerCase().includes(gcc.toLowerCase())) ||
+              GCC_COUNTRY_CODES.includes(countryCode?.toUpperCase())
+            )
+          } else if (locale === 'nl') {
+            // For Dutch: show if Netherlands
+            shouldShow = country && (
+              NETHERLANDS_COUNTRIES.some(nl => country.toLowerCase().includes(nl.toLowerCase())) ||
+              NETHERLANDS_COUNTRY_CODES.includes(countryCode?.toUpperCase())
+            )
+          } else if (locale === 'it') {
+            // For Italian: show if Italy
+            shouldShow = country && (
+              ITALY_COUNTRIES.some(it => country.toLowerCase().includes(it.toLowerCase())) ||
+              ITALY_COUNTRY_CODES.includes(countryCode?.toUpperCase())
+            )
+          }
+
+          setShouldShowSwitcher(shouldShow || false)
         } else {
-          setIsGCCVisitor(false)
+          setShouldShowSwitcher(false)
         }
       } catch (error) {
-        console.error('Error checking GCC country:', error)
-        setIsGCCVisitor(false)
+        console.error('Error checking visitor country:', error)
+        setShouldShowSwitcher(false)
       }
     }
 
-    // Only check if locale is Arabic
-    if (locale === 'ar') {
-      checkGCCCountry()
+    // Check if locale needs country detection (ar, nl, it)
+    if (locale === 'ar' || locale === 'nl' || locale === 'it') {
+      checkVisitorCountry()
     } else {
-      setIsGCCVisitor(false)
+      setShouldShowSwitcher(false)
     }
   }, [locale])
 
   useEffect(() => {
-    // Show switcher only if:
-    // 1. Locale is Arabic (ar)
-    // 2. Visitor is from GCC country (or still checking)
+    // Show switcher if:
+    // 1. Locale is ar, nl, or it
+    // 2. Visitor is from matching country (or still checking)
     // 3. Not already in English
-    if (locale === 'ar' && (isGCCVisitor === true || isGCCVisitor === null)) {
+    if ((locale === 'ar' || locale === 'nl' || locale === 'it') && (shouldShowSwitcher === true || shouldShowSwitcher === null)) {
       setShowSwitcher(true)
     } else {
       setShowSwitcher(false)
     }
-  }, [locale, isGCCVisitor])
+  }, [locale, shouldShowSwitcher])
 
   const switchToEnglish = () => {
     const pathWithoutLocale = pathname.replace(/^\/(ar|it|fr|nl|zh|ru|en)/, '') || '/'
@@ -103,9 +128,9 @@ export default function LanguageSwitcher({ locale }: { locale: Locale }) {
       <button
         onClick={switchToEnglish}
         className="px-4 py-2 bg-black/30 backdrop-blur-md border border-white/20 text-white/80 hover:text-gold-DEFAULT hover:border-gold-DEFAULT/40 transition-all duration-300 font-sans text-xs tracking-[0.1em] uppercase"
-        aria-label={locale === 'ar' ? t['switch-to-english'] || 'English' : 'Continue in English'}
+        aria-label={t['switch-to-english'] || t['continue-in-english'] || 'Switch to English'}
       >
-        {locale === 'ar' ? (t['switch-to-english'] || 'English') : (t['continue-in-english'] || 'Continue in English')}
+        {t['switch-to-english'] || t['continue-in-english'] || 'English'}
       </button>
     </div>
   )
