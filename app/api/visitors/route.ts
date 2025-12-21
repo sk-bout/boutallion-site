@@ -443,6 +443,9 @@ export async function POST(request: NextRequest) {
       console.log('📱 ========================================')
       console.log('📱 CALLING sendVisitorNotification NOW')
       console.log('📱 ========================================')
+      console.log('📱 FORCING NOTIFICATION - This should ALWAYS send for new visitors!')
+      console.log('📱 Visitor Record:', JSON.stringify(visitorRecord, null, 2))
+      
       const notificationResult = await sendVisitorNotification({
         ipAddress,
         ipLabel: ipLabel || undefined,
