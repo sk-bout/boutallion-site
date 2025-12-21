@@ -25,6 +25,7 @@ interface Visitor {
   last_visit: string
   user_agent?: string
   referer?: string
+  ip_label?: string
 }
 
 interface IPLabel {
@@ -89,6 +90,14 @@ export default function VisitorsAdminPage() {
       if (data.success) {
         setVisitors(data.visitors || [])
         setTotal(data.total || 0)
+        // Update labels from visitor data
+        const labelsMap: Record<string, string> = {}
+        data.visitors.forEach((visitor: Visitor) => {
+          if (visitor.ip_label) {
+            labelsMap[visitor.ip_address] = visitor.ip_label
+          }
+        })
+        setLabels(labelsMap)
       }
       setLoading(false)
     } catch (error) {
@@ -158,8 +167,10 @@ export default function VisitorsAdminPage() {
                   <tr key={visitor.id} className="border-t border-white/10">
                     <td className="p-4">
                       <div className="font-mono text-sm">{visitor.ip_address}</div>
-                      {labels[visitor.ip_address] && (
-                        <div className="text-xs text-blue-400 mt-1">🏷️ {labels[visitor.ip_address]}</div>
+                      {(labels[visitor.ip_address] || visitor.ip_label) && (
+                        <div className="text-xs text-blue-400 mt-1 font-semibold">
+                          🏷️ {labels[visitor.ip_address] || visitor.ip_label}
+                        </div>
                       )}
                       {editingIP === visitor.ip_address ? (
                         <div className="mt-2 flex gap-2">

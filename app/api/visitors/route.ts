@@ -253,14 +253,16 @@ export async function GET(request: NextRequest) {
 
     const result = await db.query(`
       SELECT 
-        id, session_id, ip_address,
-        country, country_code, city, region, latitude, longitude, timezone,
-        device_type, browser, os, screen_resolution,
-        pages_visited, visit_count, uae_time,
-        first_visit, last_visit,
-        user_agent, referer
-      FROM visitors
-      ORDER BY last_visit DESC
+        v.id, v.session_id, v.ip_address,
+        v.country, v.country_code, v.city, v.region, v.latitude, v.longitude, v.timezone,
+        v.device_type, v.browser, v.os, v.screen_resolution,
+        v.pages_visited, v.visit_count, v.uae_time,
+        v.first_visit, v.last_visit,
+        v.user_agent, v.referer,
+        l.label as ip_label
+      FROM visitors v
+      LEFT JOIN ip_labels l ON v.ip_address = l.ip_address
+      ORDER BY v.last_visit DESC
       LIMIT $1 OFFSET $2
     `, [limit, offset])
 
