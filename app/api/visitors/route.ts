@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
     // Detect daily visitors (visits on consecutive days)
     if (allVisitsByIP.rows.length > 0) {
       const recentVisits = allVisitsByIP.rows.slice(0, 7) // Check last 7 visits
-      const visitDates = recentVisits.map(v => {
+      const visitDates = recentVisits.map((v: any) => {
         const visitDate = new Date(v.first_visit)
         return visitDate.toDateString()
       })
@@ -158,13 +158,13 @@ export async function POST(request: NextRequest) {
       }
 
       // Check for unusual patterns
-      const totalVisits = allVisitsByIP.rows.reduce((sum, v) => sum + (v.visit_count || 1), 0)
+      const totalVisits = allVisitsByIP.rows.reduce((sum: number, v: any) => sum + (v.visit_count || 1), 0)
       const avgTimeBetweenVisits = allVisitsByIP.rows.length > 1 ? 
-        (now.getTime() - new Date(allVisitsByIP.rows[allVisitsByIP.rows.length - 1].first_visit).getTime()) / allVisitsByIP.rows.length / (1000 * 60 * 60) : 0
+        (now.getTime() - new Date((allVisitsByIP.rows[allVisitsByIP.rows.length - 1] as any).first_visit).getTime()) / allVisitsByIP.rows.length / (1000 * 60 * 60) : 0
       
       // Unusual patterns:
       // 1. Very frequent visits (more than 10 visits in a day)
-      const todayVisits = recentVisits.filter(v => {
+      const todayVisits = recentVisits.filter((v: any) => {
         const visitDate = new Date(v.first_visit)
         return visitDate.toDateString() === now.toDateString()
       }).length
@@ -175,14 +175,14 @@ export async function POST(request: NextRequest) {
       }
 
       // 2. Very long sessions (more than 2 hours)
-      const longestSession = Math.max(...allVisitsByIP.rows.map(v => v.session_duration || 0))
+      const longestSession = Math.max(...allVisitsByIP.rows.map((v: any) => v.session_duration || 0))
       if (longestSession > 7200) { // 2 hours
         isUnusualPattern = true
         patternAlerts.push(`⏱️ Long Session: ${Math.floor(longestSession / 60)} minutes`)
       }
 
       // 3. Very short sessions repeatedly (bot-like behavior)
-      const shortSessions = allVisitsByIP.rows.filter(v => (v.session_duration || 0) < 10).length
+      const shortSessions = allVisitsByIP.rows.filter((v: any) => (v.session_duration || 0) < 10).length
       if (shortSessions > 5 && totalVisits > 10) {
         isUnusualPattern = true
         patternAlerts.push(`🤖 Suspicious Pattern: ${shortSessions} very short sessions`)
@@ -190,7 +190,7 @@ export async function POST(request: NextRequest) {
 
       // 4. Multiple visits from same IP in short time
       if (recentVisits.length > 0) {
-        const lastVisit = new Date(recentVisits[0].last_visit)
+        const lastVisit = new Date((recentVisits[0] as any).last_visit)
         const hoursSinceLastVisit = (now.getTime() - lastVisit.getTime()) / (1000 * 60 * 60)
         if (hoursSinceLastVisit < 1 && recentVisits.length > 3) {
           isUnusualPattern = true
