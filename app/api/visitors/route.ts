@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
 
     // Calculate session duration if this is a returning visitor
     if (existingVisitor.rows.length > 0) {
-      const visitor = existingVisitor.rows[0]
+      const visitor = existingVisitor.rows[0] as any
       const sessionStart = visitor.session_start ? new Date(visitor.session_start) : new Date(visitor.first_visit)
       sessionDuration = Math.floor((now.getTime() - sessionStart.getTime()) / 1000) // Duration in seconds
     }
