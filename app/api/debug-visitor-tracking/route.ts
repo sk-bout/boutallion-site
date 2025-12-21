@@ -112,7 +112,7 @@ export async function GET(request: NextRequest) {
     diagnostics.recommendations.push('⚠️ DATABASE_URL not set - visitor tracking may not work')
   }
 
-  diagnostics.status = diagnostics.recommendations.some(r => r.startsWith('✅')) ? 'OK' : 'NEEDS_ATTENTION'
+  diagnostics.status = diagnostics.recommendations.some((r: string) => r.startsWith('✅')) ? 'OK' : 'NEEDS_ATTENTION'
 
   return NextResponse.json(diagnostics, {
     status: diagnostics.status === 'OK' ? 200 : 500,
