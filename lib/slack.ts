@@ -60,8 +60,15 @@ export interface VisitorNotificationData {
 export async function sendVisitorNotification(data: VisitorNotificationData): Promise<boolean> {
   const webhookUrl = process.env.SLACK_WEBHOOK_URL
 
+  console.log('📱 ========================================')
+  console.log('📱 sendVisitorNotification called')
+  console.log('📱 ========================================')
+  console.log('📱 SLACK_WEBHOOK_URL exists:', !!webhookUrl)
+  console.log('📱 SLACK_WEBHOOK_URL value:', webhookUrl ? webhookUrl.substring(0, 50) + '...' : 'NOT SET')
+  
   if (!webhookUrl) {
-    console.log('📱 Slack webhook not configured, skipping visitor notification')
+    console.error('❌ Slack webhook not configured, skipping visitor notification')
+    console.error('❌ Please set SLACK_WEBHOOK_URL in Vercel environment variables')
     return false
   }
   
@@ -69,6 +76,7 @@ export async function sendVisitorNotification(data: VisitorNotificationData): Pr
     ipAddress: data.ipAddress,
     isNewVisitor: data.isNewVisitor,
     hasLocation: !!data.location,
+    ipLabel: data.ipLabel,
   })
 
   try {

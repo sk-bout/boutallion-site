@@ -142,11 +142,16 @@ export async function POST(request: NextRequest) {
 
       // Send Slack notification for returning visitors (only on first return visit to avoid spam)
       if (newVisitCount === 2) {
-        console.log('📱 Attempting to send Slack notification for returning visitor...')
+        console.log('📱 ========================================')
+        console.log('📱 ATTEMPTING TO SEND SLACK NOTIFICATION FOR RETURNING VISITOR')
+        console.log('📱 ========================================')
+        console.log('📱 IP Address:', ipAddress)
+        console.log('📱 Visit Count:', newVisitCount)
+        console.log('📱 SLACK_WEBHOOK_URL exists:', !!process.env.SLACK_WEBHOOK_URL)
         try {
           const notificationResult = await sendVisitorNotification({
             ipAddress,
-            ipLabel, // Include label if available
+            ipLabel: ipLabel || undefined, // Include label if available
             location: {
               country: location?.country,
               city: location?.city,
@@ -167,9 +172,12 @@ export async function POST(request: NextRequest) {
             visitCount: newVisitCount,
             isNewVisitor: false,
           })
-          console.log('📱 Slack notification result:', notificationResult ? '✅ Sent' : '❌ Failed')
+          console.log('📱 SLACK NOTIFICATION RESULT:', notificationResult ? '✅ SENT SUCCESSFULLY' : '❌ FAILED')
+          if (!notificationResult) {
+            console.error('❌ Check SLACK_WEBHOOK_URL environment variable in Vercel')
+          }
         } catch (error) {
-          console.error('❌ Slack notification error:', error)
+          console.error('❌ SLACK NOTIFICATION ERROR:', error)
           console.error('❌ Error details:', error instanceof Error ? error.message : String(error))
         }
       }
@@ -217,10 +225,16 @@ export async function POST(request: NextRequest) {
       ])
 
       // Send Slack notification for new visitors
-      console.log('📱 Attempting to send Slack notification for new visitor...')
+      console.log('📱 ========================================')
+      console.log('📱 ATTEMPTING TO SEND SLACK NOTIFICATION FOR NEW VISITOR')
+      console.log('📱 ========================================')
       console.log('📱 IP Address:', ipAddress)
       console.log('📱 IP Label:', ipLabel || 'None')
       console.log('📱 Location:', location ? `${location.city}, ${location.country}` : 'Unknown')
+      console.log('📱 Device:', `${device.type} - ${device.browser} - ${device.os}`)
+      console.log('📱 SLACK_WEBHOOK_URL exists:', !!process.env.SLACK_WEBHOOK_URL)
+      console.log('📱 SLACK_WEBHOOK_URL preview:', process.env.SLACK_WEBHOOK_URL ? process.env.SLACK_WEBHOOK_URL.substring(0, 30) + '...' : 'NOT SET')
+      
       try {
         const notificationResult = await sendVisitorNotification({
           ipAddress,
@@ -245,14 +259,21 @@ export async function POST(request: NextRequest) {
           visitCount: 1,
           isNewVisitor: true,
         })
-        console.log('📱 Slack notification result:', notificationResult ? '✅ Sent' : '❌ Failed')
+        console.log('📱 ========================================')
+        console.log('📱 SLACK NOTIFICATION RESULT:', notificationResult ? '✅ SENT SUCCESSFULLY' : '❌ FAILED')
+        console.log('📱 ========================================')
         if (!notificationResult) {
-          console.warn('⚠️ Slack notification returned false - check SLACK_WEBHOOK_URL environment variable')
+          console.error('❌ Slack notification returned false')
+          console.error('❌ Check SLACK_WEBHOOK_URL environment variable in Vercel')
+          console.error('❌ Make sure it is set for Production, Preview, and Development environments')
         }
       } catch (error) {
-        console.error('❌ Slack notification error:', error)
-        console.error('❌ Error details:', error instanceof Error ? error.message : String(error))
+        console.error('❌ ========================================')
+        console.error('❌ SLACK NOTIFICATION ERROR')
+        console.error('❌ ========================================')
+        console.error('❌ Error message:', error instanceof Error ? error.message : String(error))
         console.error('❌ Error stack:', error instanceof Error ? error.stack : 'No stack trace')
+        console.error('❌ Error type:', error instanceof Error ? error.constructor.name : typeof error)
       }
 
       return NextResponse.json({
