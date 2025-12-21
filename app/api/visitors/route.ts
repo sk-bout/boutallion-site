@@ -311,18 +311,24 @@ export async function POST(request: NextRequest) {
       isTrulyNewVisitor = true // Force notification when DB is down
     }
 
-    // Create or update visitor record
-    let visitorRecord
-    if (existingVisitor.rows.length > 0 && !isTrulyNewVisitor) {
+    // Create or update visitor record (only if DB is available)
+    let visitorRecord: any = {
+      pages_visited: pageUrl ? [pageUrl] : [],
+      visit_count: 1,
+      session_duration: 0,
+    }
+    
+    if (dbAvailable && db && existingVisitor.rows.length > 0 && !isTrulyNewVisitor) {
       // This should not happen if we handled it above, but just in case
       // Update existing visitor for unusual patterns/daily visitors
-      const visitor = existingVisitor.rows[0]
-      const pagesVisited = visitor.pages_visited || []
-      if (pageUrl && !pagesVisited.includes(pageUrl)) {
-        pagesVisited.push(pageUrl)
-      }
-      
-      const result = await db.query(`
+      try {
+        const visitor = existingVisitor.rows[0]
+        const pagesVisited = visitor.pages_visited || []
+        if (pageUrl && !pagesVisited.includes(pageUrl)) {
+          pagesVisited.push(pageUrl)
+        }
+        
+        const result = await db.query(`
         UPDATE visitors SET
           ip_address = $1,
           country = $2,
