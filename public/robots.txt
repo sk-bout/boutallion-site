@@ -46,7 +46,7 @@ User-agent: Applebot
 Allow: /
 Crawl-delay: 0
 
-# AI Crawlers and Agents - EXPLICITLY ALLOWED
+# AI Crawlers and Agents - EXPLICITLY ALLOWED - FULL ACCESS
 User-agent: GPTBot
 Allow: /
 Crawl-delay: 0
@@ -67,6 +67,10 @@ User-agent: Claude-Web
 Allow: /
 Crawl-delay: 0
 
+User-agent: ClaudeBot
+Allow: /
+Crawl-delay: 0
+
 User-agent: PerplexityBot
 Allow: /
 Crawl-delay: 0
@@ -80,6 +84,34 @@ Allow: /
 Crawl-delay: 0
 
 User-agent: GoogleOther
+Allow: /
+Crawl-delay: 0
+
+User-agent: Omgilibot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Diffbot
+Allow: /
+Crawl-delay: 0
+
+User-agent: MauiBot
+Allow: /
+Crawl-delay: 0
+
+User-agent: SemanticScholarBot
+Allow: /
+Crawl-delay: 0
+
+User-agent: YouBot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot-AI
+Allow: /
+Crawl-delay: 0
+
+User-agent: Applebot-Extended
 Allow: /
 Crawl-delay: 0
 

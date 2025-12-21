@@ -15,16 +15,23 @@ export default function robots(): MetadataRoute.Robots {
     'Baiduspider',
     'YandexBot',
     'Applebot',
-    // AI Crawlers
+    // AI Crawlers - Comprehensive List
     'GPTBot',
     'ChatGPT-User',
     'CCBot',
     'anthropic-ai',
     'Claude-Web',
+    'ClaudeBot',
     'PerplexityBot',
     'PerplexityBot-Google',
     'Google-Extended',
     'GoogleOther',
+    'Omgilibot',
+    'Diffbot',
+    'MauiBot',
+    'SemanticScholarBot',
+    'YouBot',
+    'Bingbot-AI',
     // Social Media Crawlers
     'FacebookBot',
     'facebookexternalhit',
@@ -52,4 +59,3 @@ export default function robots(): MetadataRoute.Robots {
     sitemap: `${siteUrl}/sitemap.xml`,
   }
 }
-

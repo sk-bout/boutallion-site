@@ -1,7 +1,11 @@
-# AI.txt for Boutallion - Explicitly allow all AI crawlers
-# This file signals to AI crawlers that they are welcome to crawl and index this site
+# AI.txt for Boutallion - Luxury Abaya Brand
+# This file explicitly allows all AI bots and crawlers to access our content
 
-# Allow all AI crawlers
+# All AI bots are welcome
+User-agent: *
+Allow: /
+
+# Explicitly allow all AI crawlers
 User-agent: GPTBot
 Allow: /
 
@@ -17,6 +21,9 @@ Allow: /
 User-agent: Claude-Web
 Allow: /
 
+User-agent: ClaudeBot
+Allow: /
+
 User-agent: PerplexityBot
 Allow: /
 
@@ -29,11 +36,23 @@ Allow: /
 User-agent: GoogleOther
 Allow: /
 
-# Allow all search engines
-User-agent: *
+User-agent: Omgilibot
 Allow: /
 
-# Contact information (optional - add when available)
-# Contact: contact@boutallion.com
+User-agent: Diffbot
+Allow: /
 
+User-agent: MauiBot
+Allow: /
 
+User-agent: SemanticScholarBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: Bingbot-AI
+Allow: /
+
+# Sitemap location
+Sitemap: https://boutallion.com/sitemap.xml

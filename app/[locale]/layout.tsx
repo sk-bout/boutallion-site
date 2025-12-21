@@ -6,6 +6,10 @@ import { defaultMetadata, structuredData, organizationStructuredData } from '@/l
 import { pressStructuredData, mediaKitStructuredData } from '@/lib/press-seo'
 import { gccGovernmentStructuredData } from '@/lib/gcc-media-seo'
 import { brandMentionsStructuredData } from '@/lib/backlinks-seo'
+import { gccLocalBusinessStructuredData, faqStructuredData } from '@/lib/gcc-seo'
+import { competitorBrandStructuredData, classicAbayaStructuredData } from '@/lib/ai-optimization'
+import { competitorComparisonStructuredData } from '@/lib/competitor-seo'
+import { royalAudienceStructuredData } from '@/lib/royal-seo'
 import { Locale, locales } from '@/lib/i18n'
 import ContentProtection from '@/components/ContentProtection'
 import AnalyticsTracker from '@/components/AnalyticsTracker'
@@ -123,6 +127,57 @@ export default function LocaleLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(brandMentionsStructuredData),
+          }}
+        />
+        {/* Structured Data - GCC Local Business (Abu Dhabi, Dubai, Doha, Riyadh, Jeddah) */}
+        {gccLocalBusinessStructuredData.map((business, index) => (
+          <Script
+            key={`gcc-local-business-${index}`}
+            id={`structured-data-gcc-local-business-${index}`}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(business),
+            }}
+          />
+        ))}
+        {/* Structured Data - FAQ Page */}
+        <Script
+          id="structured-data-faq"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqStructuredData),
+          }}
+        />
+        {/* Structured Data - Competitor Brand Searches (AI Optimization) */}
+        <Script
+          id="structured-data-competitor-brands"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(competitorBrandStructuredData),
+          }}
+        />
+        {/* Structured Data - Classic Abaya (AI Optimization) */}
+        <Script
+          id="structured-data-classic-abaya"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(classicAbayaStructuredData),
+          }}
+        />
+        {/* Structured Data - Competitor Comparison (Selhaya, Mauzan) */}
+        <Script
+          id="structured-data-competitor-comparison"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(competitorComparisonStructuredData),
+          }}
+        />
+        {/* Structured Data - Royal Audience Targeting */}
+        <Script
+          id="structured-data-royal-audience"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(royalAudienceStructuredData),
           }}
         />
         {/* Google Analytics */}

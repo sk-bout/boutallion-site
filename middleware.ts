@@ -26,6 +26,10 @@ const getLocaleFromIP = (ip: string | null, headers: Headers): string => {
 export function middleware(request: NextRequest) {
   const { pathname, hostname } = request.nextUrl
   const url = request.nextUrl.clone()
+  const userAgent = request.headers.get('user-agent') || ''
+  
+  // Allow all bots and crawlers to bypass locale redirects
+  const isBot = /bot|crawler|spider|crawling|GPTBot|ChatGPT|CCBot|anthropic|Claude|Perplexity|Google-Extended|Bingbot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Telegram|Applebot|Bytespider|SemrushBot|AhrefsBot|MJ12bot|DotBot|BLEXBot|Omgilibot|Diffbot|MauiBot|SemanticScholarBot|YouBot/i.test(userAgent)
   
   // Redirect www to non-www (SSL certificate is for boutallion.com, not www.boutallion.com)
   if (hostname.startsWith('www.')) {
@@ -33,14 +37,21 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 301)
   }
   
-  // Skip API routes, static files, Next.js internals, and verification files
+  // Skip API routes, static files, Next.js internals, verification files, and robots.txt/sitemap
   if (
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon.ico') ||
     pathname.includes('googled6388a4c0fa66801.html') ||
+    pathname === '/robots.txt' ||
+    pathname === '/sitemap.xml' ||
     pathname.includes('.')
   ) {
+    return NextResponse.next()
+  }
+  
+  // Allow bots to access pages directly without locale redirect
+  if (isBot) {
     return NextResponse.next()
   }
   
