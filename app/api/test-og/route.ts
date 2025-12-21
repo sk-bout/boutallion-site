@@ -12,12 +12,17 @@ export async function GET(request: NextRequest) {
   // Import the actual metadata values
   const { defaultMetadata } = await import('@/lib/seo')
   
+  // Extract title - handle both string and object types
+  const pageTitle = typeof defaultMetadata.title === 'string' 
+    ? defaultMetadata.title 
+    : (defaultMetadata.title && 'default' in defaultMetadata.title)
+      ? defaultMetadata.title.default
+      : 'Not set'
+  
   const results = {
     timestamp: new Date().toISOString(),
     siteUrl,
-    title: typeof defaultMetadata.title === 'string' 
-      ? defaultMetadata.title 
-      : defaultMetadata.title?.default || 'Not set',
+    title: pageTitle,
     description: defaultMetadata.description || 'Not set',
     ogImage: {
       url: `${siteUrl}/og-image.png`,
@@ -28,10 +33,8 @@ export async function GET(request: NextRequest) {
       openGraph: {
         url: siteUrl,
         type: 'website',
-        title: typeof defaultMetadata.openGraph?.title === 'string'
-          ? defaultMetadata.openGraph.title
-          : defaultMetadata.openGraph?.title || 'Not set',
-        description: defaultMetadata.openGraph?.description || 'Not set',
+        title: defaultMetadata.openGraph?.title || pageTitle,
+        description: defaultMetadata.openGraph?.description || defaultMetadata.description || 'Not set',
         image: `${siteUrl}/og-image.png`,
         imageWidth: 1200,
         imageHeight: 630,
@@ -39,10 +42,8 @@ export async function GET(request: NextRequest) {
       },
       twitter: {
         card: 'summary_large_image',
-        title: typeof defaultMetadata.twitter?.title === 'string'
-          ? defaultMetadata.twitter.title
-          : defaultMetadata.twitter?.title || 'Not set',
-        description: defaultMetadata.twitter?.description || 'Not set',
+        title: defaultMetadata.twitter?.title || pageTitle,
+        description: defaultMetadata.twitter?.description || defaultMetadata.description || 'Not set',
         image: `${siteUrl}/og-image.png`,
       },
     },
