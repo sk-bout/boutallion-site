@@ -1,7 +1,7 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
-import { Locale, getLocaleFromPath } from '@/lib/i18n'
+import { usePathname, useRouter, useParams } from 'next/navigation'
+import { Locale, getLocaleFromPath, locales } from '@/lib/i18n'
 import { useState, useRef, useEffect } from 'react'
 
 const LANGUAGES: { code: Locale; label: string; nativeLabel: string }[] = [
@@ -16,16 +16,16 @@ const LANGUAGES: { code: Locale; label: string; nativeLabel: string }[] = [
 export default function PermanentLanguageSwitcher() {
   const pathname = usePathname()
   const router = useRouter()
+  const params = useParams()
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   
-  // Get locale from pathname - handle both /ar and /ar/ paths
-  const currentLocale = getLocaleFromPath(pathname)
-  
-  // Debug: Log the pathname and detected locale
-  useEffect(() => {
-    console.log('🌐 Language Switcher - Pathname:', pathname, 'Detected Locale:', currentLocale)
-  }, [pathname, currentLocale])
+  // Get locale from params first (most reliable), then fallback to pathname parsing
+  const localeFromParams = params?.locale as Locale | undefined
+  const localeFromPath = getLocaleFromPath(pathname)
+  const currentLocale = (localeFromParams && locales.includes(localeFromParams)) 
+    ? localeFromParams 
+    : localeFromPath
 
   const currentLanguage = LANGUAGES.find(lang => lang.code === currentLocale) || LANGUAGES[0]
 
