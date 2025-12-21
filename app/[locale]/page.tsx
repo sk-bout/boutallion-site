@@ -374,7 +374,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                 <button
                   type="submit"
                   disabled={isSubmitting || !!emailError || !email}
-                  className="w-full px-5 py-3 bg-white/10 backdrop-blur-md border border-white/20 text-gold-DEFAULT font-sans text-xs tracking-[0.2em] uppercase hover:bg-white/15 hover:border-gold-DEFAULT/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 whitespace-nowrap"
+                  className="w-full px-5 py-3 bg-white/20 backdrop-blur-md border border-white/30 text-gold-DEFAULT font-sans text-xs tracking-[0.2em] uppercase hover:bg-white/25 hover:border-gold-DEFAULT/50 active:bg-white/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-lg shadow-black/30 hover:shadow-xl hover:shadow-black/40 whitespace-nowrap"
                 >
                   {isSubmitting ? t['submitting'] : t['register-your-interest']}
                 </button>
