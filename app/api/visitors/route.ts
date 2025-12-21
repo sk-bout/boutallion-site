@@ -41,59 +41,93 @@ export async function POST(request: NextRequest) {
     const uaeTime = getUAETime()
     console.log('📊 UAE Time:', uaeTime)
 
-    const db = getDbPool()
-    if (!db) {
-      console.error('❌ Database pool is null - DATABASE_URL may not be loaded')
-      throw new Error('Database pool not initialized - DATABASE_URL may be missing')
-    }
-
-    // Check if visitors table exists, if not, initialize
+    // Try to get database connection, but don't fail if it's unavailable
+    let db: any = null
+    let dbAvailable = false
     try {
-      const tableCheck = await db.query(`
-        SELECT EXISTS (
-          SELECT FROM pg_tables
-          WHERE schemaname = 'public' AND tablename = 'visitors'
-        );
-      `)
-      if (!tableCheck.rows[0].exists) {
-        console.warn('⚠️ Visitors table does not exist. Attempting to initialize database...')
-        await initDatabase()
-        console.log('✅ Database tables initialized during visitor tracking attempt.')
+      db = getDbPool()
+      if (db) {
+        // Test connection
+        await db.query('SELECT 1')
+        dbAvailable = true
+        console.log('✅ Database connection available')
       }
-    } catch (initError) {
-      console.error('❌ Error checking/initializing database:', initError)
-      // Continue anyway - might work if table exists
+    } catch (dbError: any) {
+      console.error('❌ Database connection failed:', dbError?.message || dbError)
+      console.error('⚠️ Continuing without database - will still send Slack notifications')
+      dbAvailable = false
+      // Don't throw - continue to send Slack notification even without database
     }
 
-    // Get IP label if exists
+    // Check if visitors table exists, if not, initialize (only if DB is available)
+    if (dbAvailable && db) {
+      try {
+        const tableCheck = await db.query(`
+          SELECT EXISTS (
+            SELECT FROM pg_tables
+            WHERE schemaname = 'public' AND tablename = 'visitors'
+          );
+        `)
+        if (!tableCheck.rows[0].exists) {
+          console.warn('⚠️ Visitors table does not exist. Attempting to initialize database...')
+          try {
+            await initDatabase()
+            console.log('✅ Database tables initialized during visitor tracking attempt.')
+          } catch (initError) {
+            console.error('❌ Error initializing database:', initError)
+            dbAvailable = false
+          }
+        }
+      } catch (initError) {
+        console.error('❌ Error checking/initializing database:', initError)
+        dbAvailable = false
+      }
+    }
+
+    // Get IP label if exists (only if DB is available)
     let ipLabel: string | null = null
-    try {
-      const labelResult = await db.query(
-        'SELECT label FROM ip_labels WHERE ip_address = $1',
-        [ipAddress]
-      )
-      if (labelResult.rows.length > 0) {
-        ipLabel = labelResult.rows[0].label
-        console.log('📊 IP Label found:', ipLabel)
+    if (dbAvailable && db) {
+      try {
+        const labelResult = await db.query(
+          'SELECT label FROM ip_labels WHERE ip_address = $1',
+          [ipAddress]
+        )
+        if (labelResult.rows.length > 0) {
+          ipLabel = labelResult.rows[0].label
+          console.log('📊 IP Label found:', ipLabel)
+        }
+      } catch (error) {
+        // Silent fail - labels are optional
       }
-    } catch (error) {
-      // Silent fail - labels are optional
     }
 
-    // Check if visitor exists by session ID
-    const existingVisitor = await db.query(
-      'SELECT * FROM visitors WHERE session_id = $1',
-      [sessionId]
-    )
+    // Check if visitor exists by session ID (only if DB is available)
+    let existingVisitor = { rows: [] }
+    let allVisitsByIP = { rows: [] }
+    
+    if (dbAvailable && db) {
+      try {
+        existingVisitor = await db.query(
+          'SELECT * FROM visitors WHERE session_id = $1',
+          [sessionId]
+        )
 
-    // Check all visits by this IP address to detect patterns
-    const allVisitsByIP = await db.query(
-      `SELECT first_visit, last_visit, visit_count, session_start, session_duration, total_session_time
-       FROM visitors 
-       WHERE ip_address = $1 
-       ORDER BY first_visit DESC`,
-      [ipAddress]
-    )
+        // Check all visits by this IP address to detect patterns
+        allVisitsByIP = await db.query(
+          `SELECT first_visit, last_visit, visit_count, session_start, session_duration, total_session_time
+           FROM visitors 
+           WHERE ip_address = $1 
+           ORDER BY first_visit DESC`,
+          [ipAddress]
+        )
+      } catch (error) {
+        console.error('❌ Error querying database:', error)
+        dbAvailable = false
+        // Continue without database - will still send Slack notification
+      }
+    } else {
+      console.log('⚠️ Database not available - treating as new visitor for Slack notification')
+    }
 
     const now = new Date()
     let sessionDuration = 0
@@ -182,88 +216,100 @@ export async function POST(request: NextRequest) {
 
     // CRITICAL: Only skip notification for existing visitors in SAME session with NO unusual patterns
     // ALWAYS notify for new visitors (new session ID) - this is the key fix!
-    if (existingVisitor.rows.length > 0 && !isUnusualPattern && !isDailyVisitor) {
+    // BUT: If database is not available, ALWAYS send notification (treat as new visitor)
+    if (dbAvailable && existingVisitor.rows.length > 0 && !isUnusualPattern && !isDailyVisitor) {
       // This is an existing visitor in the same session with no unusual patterns
       // Update but don't notify (to avoid spam)
-      const visitor = existingVisitor.rows[0]
-      const pagesVisited = visitor.pages_visited || []
-      
-      // Add new page if not already in list
-      if (pageUrl && !pagesVisited.includes(pageUrl)) {
-        pagesVisited.push(pageUrl)
-      }
+      try {
+        const visitor = existingVisitor.rows[0]
+        const pagesVisited = visitor.pages_visited || []
+        
+        // Add new page if not already in list
+        if (pageUrl && !pagesVisited.includes(pageUrl)) {
+          pagesVisited.push(pageUrl)
+        }
 
-      const newVisitCount = visitor.visit_count + 1
-      const sessionStart = visitor.session_start ? new Date(visitor.session_start) : new Date(visitor.first_visit)
-      const currentSessionDuration = Math.floor((now.getTime() - sessionStart.getTime()) / 1000)
-      const totalTime = (visitor.total_session_time || 0) + currentSessionDuration
-      
-      await db.query(`
-        UPDATE visitors SET
-          ip_address = $1,
-          country = $2,
-          country_code = $3,
-          city = $4,
-          region = $5,
-          latitude = $6,
-          longitude = $7,
-          timezone = $8,
-          device_type = $9,
-          browser = $10,
-          os = $11,
-          screen_resolution = $12,
-          pages_visited = $13,
-          visit_count = visit_count + 1,
-          last_visit = NOW(),
-          session_duration = $14,
-          total_session_time = $15,
-          uae_time = $16,
-          user_agent = $17,
-          referer = $18,
-          updated_at = NOW()
-        WHERE session_id = $19
-      `, [
-        ipAddress,
-        location?.country || null,
-        location?.countryCode || null,
-        location?.city || null,
-        location?.region || null,
-        location?.latitude || null,
-        location?.longitude || null,
-        location?.timezone || null,
-        device.type,
-        device.browser,
-        device.os,
-        device.screenResolution,
-        pagesVisited,
-        currentSessionDuration,
-        totalTime,
-        uaeTime,
-        userAgent || null,
-        referer || null,
-        sessionId,
-      ])
-
-      console.log('📊 Skipping notification - existing visitor in same session (not unusual, not daily)')
-      console.log('📊 This visitor will NOT trigger a notification')
-      return NextResponse.json({
-        success: true,
-        visitor: {
-          ...visitor,
+        const newVisitCount = visitor.visit_count + 1
+        const sessionStart = visitor.session_start ? new Date(visitor.session_start) : new Date(visitor.first_visit)
+        const currentSessionDuration = Math.floor((now.getTime() - sessionStart.getTime()) / 1000)
+        const totalTime = (visitor.total_session_time || 0) + currentSessionDuration
+        
+        await db.query(`
+          UPDATE visitors SET
+            ip_address = $1,
+            country = $2,
+            country_code = $3,
+            city = $4,
+            region = $5,
+            latitude = $6,
+            longitude = $7,
+            timezone = $8,
+            device_type = $9,
+            browser = $10,
+            os = $11,
+            screen_resolution = $12,
+            pages_visited = $13,
+            visit_count = visit_count + 1,
+            last_visit = NOW(),
+            session_duration = $14,
+            total_session_time = $15,
+            uae_time = $16,
+            user_agent = $17,
+            referer = $18,
+            updated_at = NOW()
+          WHERE session_id = $19
+        `, [
+          ipAddress,
+          location?.country || null,
+          location?.countryCode || null,
+          location?.city || null,
+          location?.region || null,
+          location?.latitude || null,
+          location?.longitude || null,
+          location?.timezone || null,
+          device.type,
+          device.browser,
+          device.os,
+          device.screenResolution,
           pagesVisited,
-          visitCount: newVisitCount,
-          sessionDuration: currentSessionDuration,
-        },
-        country: location?.country,
-        countryCode: location?.countryCode,
-      })
+          currentSessionDuration,
+          totalTime,
+          uaeTime,
+          userAgent || null,
+          referer || null,
+          sessionId,
+        ])
+
+        console.log('📊 Skipping notification - existing visitor in same session (not unusual, not daily)')
+        console.log('📊 This visitor will NOT trigger a notification')
+        return NextResponse.json({
+          success: true,
+          visitor: {
+            ...visitor,
+            pagesVisited,
+            visitCount: newVisitCount,
+            sessionDuration: currentSessionDuration,
+          },
+          country: location?.country,
+          countryCode: location?.countryCode,
+        })
+      } catch (dbError) {
+        console.error('❌ Error updating visitor in database:', dbError)
+        // If database update fails, continue to send Slack notification
+        console.log('⚠️ Database update failed - will still send Slack notification')
+      }
     }
     
     // If we reach here, it's either:
     // 1. A NEW visitor (isTrulyNewVisitor = true) - ALWAYS notify
     // 2. An existing visitor with unusual patterns - notify
     // 3. An existing visitor who is a daily visitor - notify
+    // 4. Database is not available - ALWAYS notify (treat as new visitor)
     console.log('📊 ✅ PROCEEDING TO NOTIFICATION - New visitor or unusual pattern detected')
+    if (!dbAvailable) {
+      console.log('📊 ⚠️ Database not available - treating as new visitor and sending notification')
+      isTrulyNewVisitor = true // Force notification when DB is down
+    }
 
     // Create or update visitor record
     let visitorRecord
@@ -360,6 +406,23 @@ export async function POST(request: NextRequest) {
         'direct',
       ])
       visitorRecord = result.rows[0]
+      } catch (dbError) {
+        console.error('❌ Error creating visitor record:', dbError)
+        // Continue without database - will still send Slack notification
+        visitorRecord = {
+          pages_visited: pageUrl ? [pageUrl] : [],
+          visit_count: 1,
+          session_duration: 0,
+        }
+      }
+    } else {
+      // Database not available - create mock record for Slack notification
+      console.log('⚠️ Database not available - creating mock visitor record for Slack notification')
+      visitorRecord = {
+        pages_visited: pageUrl ? [pageUrl] : [],
+        visit_count: 1,
+        session_duration: 0,
+      }
     }
 
     // Format session duration for display
