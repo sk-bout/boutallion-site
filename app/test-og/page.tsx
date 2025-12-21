@@ -60,7 +60,7 @@ export default function TestOGPage() {
             <br />
             Right-click this page → View Page Source
             <br />
-            <small>Look for &lt;meta property="og:image"&gt; tags</small>
+            <small>Look for &lt;meta property=&quot;og:image&quot;&gt; tags</small>
           </li>
           <li style={{ marginTop: '15px' }}>
             <strong>Test in WhatsApp:</strong>
@@ -100,7 +100,7 @@ export default function TestOGPage() {
       </div>
 
       <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#1a3a3d', borderRadius: '8px', border: '1px solid #2a5a5d' }}>
-        <h3>⚠️ If OG Image Still Doesn't Show:</h3>
+        <h3>⚠️ If OG Image Still Doesn&apos;t Show:</h3>
         <ul style={{ lineHeight: '1.8', fontSize: '14px' }}>
           <li>Wait 5-10 minutes after deployment for CDN to update</li>
           <li>Try sharing with a URL parameter: <code>{siteUrl}?v=2</code></li>
