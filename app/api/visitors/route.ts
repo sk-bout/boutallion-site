@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getDbPool } from '@/lib/db'
 import { getAccurateLocation, getDeviceInfo, getUAETime } from '@/lib/visitor-tracking'
+import { sendVisitorNotification } from '@/lib/slack'
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic'
@@ -50,6 +51,8 @@ export async function POST(request: NextRequest) {
         pagesVisited.push(pageUrl)
       }
 
+      const newVisitCount = visitor.visit_count + 1
+      
       await db.query(`
         UPDATE visitors SET
           ip_address = $1,
@@ -92,12 +95,42 @@ export async function POST(request: NextRequest) {
         sessionId,
       ])
 
+      // Send Slack notification for returning visitors (only on first return visit to avoid spam)
+      if (newVisitCount === 2) {
+        try {
+          await sendVisitorNotification({
+            ipAddress,
+            location: {
+              country: location?.country,
+              city: location?.city,
+              region: location?.region,
+              latitude: location?.latitude,
+              longitude: location?.longitude,
+            },
+            device: {
+              type: device.type,
+              browser: device.browser,
+              os: device.os,
+            },
+            userAgent,
+            referer,
+            timestamp: new Date().toISOString(),
+            uaeTime,
+            pagesVisited: pagesVisited.length,
+            visitCount: newVisitCount,
+            isNewVisitor: false,
+          })
+        } catch (error) {
+          // Silent fail
+        }
+      }
+
       return NextResponse.json({
         success: true,
         visitor: {
           ...visitor,
           pagesVisited,
-          visitCount: visitor.visit_count + 1,
+          visitCount: newVisitCount,
         },
       })
     } else {
@@ -133,6 +166,34 @@ export async function POST(request: NextRequest) {
         referer || null,
         'direct',
       ])
+
+      // Send Slack notification for new visitors
+      try {
+        await sendVisitorNotification({
+          ipAddress,
+          location: {
+            country: location?.country,
+            city: location?.city,
+            region: location?.region,
+            latitude: location?.latitude,
+            longitude: location?.longitude,
+          },
+          device: {
+            type: device.type,
+            browser: device.browser,
+            os: device.os,
+          },
+          userAgent,
+          referer,
+          timestamp: new Date().toISOString(),
+          uaeTime,
+          pagesVisited: pageUrl ? 1 : 0,
+          visitCount: 1,
+          isNewVisitor: true,
+        })
+      } catch (error) {
+        // Silent fail
+      }
 
       return NextResponse.json({
         success: true,

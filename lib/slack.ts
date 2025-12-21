@@ -28,6 +28,160 @@ export interface SlackNotificationData {
 }
 
 /**
+ * Send visitor notification to Slack (for all visitors, not just subscribers)
+ */
+export interface VisitorNotificationData {
+  ipAddress: string
+  location?: {
+    country?: string
+    city?: string
+    region?: string
+    latitude?: number
+    longitude?: number
+  }
+  device?: {
+    type?: string
+    browser?: string
+    os?: string
+  }
+  userAgent?: string
+  referer?: string
+  timestamp: string
+  uaeTime?: string
+  pagesVisited?: number
+  visitCount?: number
+  isNewVisitor?: boolean
+}
+
+/**
+ * Send visitor notification to Slack
+ */
+export async function sendVisitorNotification(data: VisitorNotificationData): Promise<boolean> {
+  const webhookUrl = process.env.SLACK_WEBHOOK_URL
+
+  if (!webhookUrl) {
+    return false
+  }
+
+  try {
+    // Format location string
+    const locationParts: string[] = []
+    if (data.location?.city) locationParts.push(data.location.city)
+    if (data.location?.region) locationParts.push(data.location.region)
+    if (data.location?.country) locationParts.push(data.location.country)
+    const locationString = locationParts.length > 0 
+      ? locationParts.join(', ') 
+      : 'Unknown'
+
+    // Format coordinates
+    const coordinates = data.location?.latitude && data.location?.longitude
+      ? `${data.location.latitude}, ${data.location.longitude}`
+      : 'N/A'
+
+    // Create Slack message
+    const slackMessage = {
+      text: `${data.isNewVisitor ? '🆕' : '👤'} ${data.isNewVisitor ? 'New Visitor' : 'Returning Visitor'}: ${data.ipAddress}`,
+      blocks: [
+        {
+          type: 'header',
+          text: {
+            type: 'plain_text',
+            text: `${data.isNewVisitor ? '🆕 New' : '👤 Returning'} Visitor on Site`,
+            emoji: true,
+          },
+        },
+        {
+          type: 'section',
+          fields: [
+            {
+              type: 'mrkdwn',
+              text: `*IP Address:*\n\`${data.ipAddress}\``,
+            },
+            {
+              type: 'mrkdwn',
+              text: `*Location:*\n${locationString}`,
+            },
+            {
+              type: 'mrkdwn',
+              text: `*Coordinates:*\n${coordinates}`,
+            },
+            {
+              type: 'mrkdwn',
+              text: `*UAE Time:*\n${data.uaeTime || 'N/A'}`,
+            },
+            {
+              type: 'mrkdwn',
+              text: `*Device:*\n${data.device?.type || 'Unknown'} • ${data.device?.browser || 'Unknown'}`,
+            },
+            {
+              type: 'mrkdwn',
+              text: `*OS:*\n${data.device?.os || 'Unknown'}`,
+            },
+            {
+              type: 'mrkdwn',
+              text: `*Visit Count:*\n${data.visitCount || 1}`,
+            },
+            {
+              type: 'mrkdwn',
+              text: `*Pages Visited:*\n${data.pagesVisited || 1}`,
+            },
+          ],
+        },
+      ],
+    }
+
+    // Add location map link if coordinates available
+    if (data.location?.latitude && data.location?.longitude) {
+      const mapUrl = `https://www.google.com/maps?q=${data.location.latitude},${data.location.longitude}`
+      slackMessage.blocks.push({
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `📍 <${mapUrl}|View on Google Maps>`,
+        },
+      })
+    }
+
+    // Add referer if available
+    if (data.referer) {
+      slackMessage.blocks.push({
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `*Referer:* ${data.referer}`,
+        },
+      })
+    }
+
+    // Add divider
+    slackMessage.blocks.push({
+      type: 'divider',
+    })
+
+    // Send to Slack
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(slackMessage),
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('❌ Slack visitor notification failed:', response.status, errorText)
+      return false
+    }
+
+    console.log('✅ Slack visitor notification sent successfully')
+    return true
+  } catch (error) {
+    console.error('❌ Error sending Slack visitor notification:', error)
+    return false
+  }
+}
+
+/**
  * Send subscription notification to Slack
  */
 export async function sendSlackNotification(data: SlackNotificationData): Promise<boolean> {
