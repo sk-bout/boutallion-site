@@ -177,10 +177,12 @@ export async function POST(request: NextRequest) {
     console.log('📊 Is Truly New Visitor (new session):', isTrulyNewVisitor)
     console.log('📊 IP Address:', ipAddress)
     console.log('📊 Location:', location ? `${location.city}, ${location.country}` : 'Unknown')
+    console.log('📊 Is Daily Visitor:', isDailyVisitor)
+    console.log('📊 Is Unusual Pattern:', isUnusualPattern)
 
-    // For existing visitors in same session (same session ID), update but DON'T notify
-    // Only notify for NEW sessions or unusual patterns
-    if (existingVisitor.rows.length > 0 && !isUnusualPattern && !isDailyVisitor) {
+    // CRITICAL: ALWAYS notify for new visitors (new session ID)
+    // For existing visitors in same session, only notify if unusual patterns
+    if (existingVisitor.rows.length > 0 && !isUnusualPattern && !isDailyVisitor && !isTrulyNewVisitor) {
       // Update existing visitor (same session, recent visit)
       const visitor = existingVisitor.rows[0]
       const pagesVisited = visitor.pages_visited || []
