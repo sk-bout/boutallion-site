@@ -3,7 +3,7 @@
 import { useRef, useMemo, useState, memo, useEffect, MutableRefObject } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
-import { Mesh, Group, Vector3 } from 'three'
+import { Mesh, Group, Vector3, VideoTexture, DoubleSide } from 'three'
 
 const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
   const crystalsGroupRef = useRef<Group>(null)
@@ -1875,6 +1875,172 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     )
   }
 
+  // Video Bubble Component
+  const VideoBubble = memo(({ videoPath, position, type, index }: { 
+    videoPath: string
+    position: [number, number, number]
+    type: 'sphere' | 'disk'
+    index: number
+  }) => {
+    const meshRef = useRef<Mesh>(null)
+    const videoRef = useRef<HTMLVideoElement | null>(null)
+    const textureRef = useRef<VideoTexture | null>(null)
+    const [textureReady, setTextureReady] = useState(false)
+    const { camera } = useThree()
+    const initialPosition = useMemo(() => new Vector3(...position), [position])
+    
+    const geometry = useMemo(() => {
+      if (type === 'sphere') {
+        return new THREE.SphereGeometry(0.15, 16, 16)
+      } else {
+        return new THREE.CircleGeometry(0.2, 32)
+      }
+    }, [type])
+
+    useEffect(() => {
+      const video = document.createElement('video')
+      video.src = videoPath
+      video.loop = true
+      video.muted = true
+      video.playsInline = true
+      video.crossOrigin = 'anonymous'
+      video.preload = 'auto'
+      
+      const handleLoadedData = () => {
+        try {
+          const texture = new VideoTexture(video)
+          texture.minFilter = THREE.LinearFilter
+          texture.magFilter = THREE.LinearFilter
+          texture.flipY = false
+          textureRef.current = texture
+          setTextureReady(true)
+        } catch (error) {
+          console.error('Error creating video texture:', error)
+        }
+      }
+      
+      video.addEventListener('loadeddata', handleLoadedData)
+      video.addEventListener('canplay', () => {
+        video.play().catch(console.error)
+      })
+      
+      video.load()
+      videoRef.current = video
+      
+      return () => {
+        video.pause()
+        video.removeEventListener('loadeddata', handleLoadedData)
+        if (textureRef.current) {
+          textureRef.current.dispose()
+        }
+        video.remove()
+      }
+    }, [videoPath])
+
+    const material = useMemo(() => {
+      const mat = new THREE.MeshStandardMaterial({
+        transparent: true,
+        opacity: 0.7,
+        side: DoubleSide,
+        metalness: 0.3,
+        roughness: 0.1,
+        emissive: '#d4c5a0',
+        emissiveIntensity: 0.1,
+        color: '#ffffff',
+      })
+      
+      if (textureRef.current) {
+        mat.map = textureRef.current
+      }
+      
+      return mat
+    }, [])
+
+    useEffect(() => {
+      if (textureRef.current && material) {
+        material.map = textureRef.current
+        material.needsUpdate = true
+      }
+    }, [textureReady, material])
+
+    useFrame((state) => {
+      if (!meshRef.current) return
+      
+      const time = state.clock.elapsedTime
+      const offset = index * 0.7
+      
+      meshRef.current.position.x = initialPosition.x + Math.sin(time * 0.15 + offset) * 0.8
+      meshRef.current.position.y = initialPosition.y + Math.cos(time * 0.12 + offset * 1.3) * 0.6
+      meshRef.current.position.z = initialPosition.z + Math.sin(time * 0.18 + offset * 0.8) * 0.5
+      
+      if (type === 'sphere') {
+        meshRef.current.rotation.y = time * 0.1 + offset
+        meshRef.current.rotation.x = 0
+        meshRef.current.rotation.z = 0
+      } else {
+        const direction = new Vector3()
+        direction.subVectors(camera.position, meshRef.current.position).normalize()
+        const angle = Math.atan2(direction.x, direction.z)
+        meshRef.current.rotation.y = angle
+        meshRef.current.rotation.x = 0
+        meshRef.current.rotation.z = time * 0.05 + offset
+      }
+      
+      const pulse = 1 + Math.sin(time * 0.3 + offset) * 0.05
+      const maxPulse = type === 'sphere' ? 1.3 : 1.4
+      const clampedPulse = Math.min(pulse, maxPulse)
+      meshRef.current.scale.setScalar(clampedPulse)
+    })
+
+    return (
+      <mesh
+        ref={meshRef}
+        geometry={geometry}
+        material={material}
+        position={position}
+      />
+    )
+  })
+
+  // Video Bubbles - Soap bubble style with videos
+  const VideoBubbles = () => {
+    const VIDEO_PATHS = ['/videos/video1.mp4', '/videos/video2.mp4', '/videos/video3.mp4', '/videos/video4.mp4']
+    
+    const bubblesData = useMemo(() => {
+      return VIDEO_PATHS.map((videoPath, index) => {
+        const angle = (index / VIDEO_PATHS.length) * Math.PI * 2
+        const radius = 1.2 + (index % 3) * 0.3
+        const height = (index - 1.5) * 0.5
+        const depth = 3.0
+        
+        return {
+          videoPath,
+          position: [
+            Math.cos(angle) * radius,
+            height,
+            depth
+          ] as [number, number, number],
+          type: index % 2 === 0 ? 'sphere' as const : 'disk' as const,
+          index
+        }
+      })
+    }, [])
+
+    return (
+      <>
+        {bubblesData.map((bubble, i) => (
+          <VideoBubble
+            key={i}
+            videoPath={bubble.videoPath}
+            position={bubble.position}
+            type={bubble.type}
+            index={bubble.index}
+          />
+        ))}
+      </>
+    )
+  }
+
   return (
     <>
       <GoldDustParticles />
@@ -1888,6 +2054,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       <FloatingLeavesNew />
       <FloatingLeavesLeaf1 />
       <FloatingLeavesLeaf />
+      <VideoBubbles />
     </>
   )
 })
