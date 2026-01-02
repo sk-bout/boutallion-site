@@ -1876,12 +1876,12 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
   }
 
   // Video Bubble Component
-  const VideoBubble = memo(({ videoPath, position, type, index }: { 
+  const VideoBubble = memo(function VideoBubble({ videoPath, position, type, index }: { 
     videoPath: string
     position: [number, number, number]
     type: 'sphere' | 'disk'
     index: number
-  }) => {
+  }) {
     const meshRef = useRef<Mesh>(null)
     const videoRef = useRef<HTMLVideoElement | null>(null)
     const textureRef = useRef<VideoTexture | null>(null)
@@ -2003,9 +2003,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
   })
 
   // Video Bubbles - Soap bubble style with videos
+  const VIDEO_PATHS = ['/videos/video1.mp4', '/videos/video2.mp4', '/videos/video3.mp4', '/videos/video4.mp4']
+  
   const VideoBubbles = () => {
-    const VIDEO_PATHS = ['/videos/video1.mp4', '/videos/video2.mp4', '/videos/video3.mp4', '/videos/video4.mp4']
-    
     const bubblesData = useMemo(() => {
       return VIDEO_PATHS.map((videoPath, index) => {
         const angle = (index / VIDEO_PATHS.length) * Math.PI * 2
@@ -2024,6 +2024,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           index
         }
       })
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

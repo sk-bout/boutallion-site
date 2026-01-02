@@ -35,7 +35,8 @@ export function middleware(request: NextRequest) {
   }
   
   // Allow all bots and crawlers to bypass locale redirects
-  const isBot = /bot|crawler|spider|crawling|GPTBot|ChatGPT|CCBot|anthropic|Claude|Perplexity|Google-Extended|Bingbot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Telegram|Applebot|Bytespider|SemrushBot|AhrefsBot|MJ12bot|DotBot|BLEXBot|Omgilibot|Diffbot|MauiBot|SemanticScholarBot|YouBot/i.test(userAgent)
+  // Comprehensive bot detection - explicitly allow all known bots
+  const isBot = /bot|crawler|spider|crawling|indexer|scraper|fetcher|GPTBot|ChatGPT|CCBot|anthropic|Claude|Perplexity|Google-Extended|GoogleOther|Bingbot|Bingbot-AI|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Telegram|Applebot|Bytespider|SemrushBot|AhrefsBot|MJ12bot|DotBot|BLEXBot|Omgilibot|Diffbot|MauiBot|SemanticScholarBot|YouBot|Googlebot|Googlebot-Image|Googlebot-Video|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot-Extended|BLEXBot/i.test(userAgent)
   
   // Redirect www to non-www with HTTPS (301 permanent redirect for SEO)
   if (hostname.startsWith('www.')) {
@@ -59,8 +60,12 @@ export function middleware(request: NextRequest) {
   }
   
   // Allow bots to access pages directly without locale redirect
+  // Bots should have full access to all content for SEO purposes
   if (isBot) {
-    return NextResponse.next()
+    const response = NextResponse.next()
+    // Add headers to help bots understand they're welcome
+    response.headers.set('X-Robots-Tag', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1')
+    return response
   }
   
   // Check if pathname already has a locale
