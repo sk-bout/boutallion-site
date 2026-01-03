@@ -1399,7 +1399,10 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const goldenAngle = Math.PI * (3 - Math.sqrt(5)) // Golden angle for even distribution
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
-        const radius = 35 + Math.random() * 30 // Much wider spread - leaves more spread out
+        // On mobile, use much larger radius and spread to cover entire page
+        const radius = isMobile 
+          ? 50 + Math.random() * 40 // Much larger radius on mobile (50-90)
+          : 35 + Math.random() * 30 // Desktop: original spread
         // Maximum size constraint - increased to allow larger leaves sometimes
         const MAX_LEAF_SCALE = 2.2
         const sizeVariation = Math.min(1.4 + Math.random() * 1.8, MAX_LEAF_SCALE) // Larger range, sometimes bigger
@@ -1407,8 +1410,8 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         // On desktop, avoid center area where BOUTALLION is (y between -1.5 and 1.5)
         let yPos: number
         if (isMobile) {
-          // Mobile: Full vertical spread from -7 to 3 (well above BOUTALLION)
-          yPos = -7 + Math.random() * 10 // Spread from -7 to 3
+          // Mobile: Full vertical spread across entire page (-10 to 5 for full coverage)
+          yPos = -10 + Math.random() * 15 // Spread from -10 to 5
         } else {
           // Desktop: Original logic
           yPos = -7 + Math.random() * 16
@@ -1417,11 +1420,15 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           }
         }
         
+        // On mobile, spread leaves much wider horizontally and in depth
+        const horizontalSpread = isMobile ? 40 : 25 // Much wider on mobile
+        const depthSpread = isMobile ? 40 : 25 // Much wider on mobile
+        
         return {
           position: [
-            Math.cos(angle) * radius + (Math.random() - 0.5) * 25, // Much wider horizontal spread
+            Math.cos(angle) * radius + (Math.random() - 0.5) * horizontalSpread, // Much wider horizontal spread on mobile
             yPos,
-            Math.sin(angle) * radius + (Math.random() - 0.5) * 25 // Much wider depth spread
+            Math.sin(angle) * radius + (Math.random() - 0.5) * depthSpread // Much wider depth spread on mobile
           ] as [number, number, number],
           startY: yPos,
           floatSpeed: 0.0004 + Math.random() * 0.0003, // Smooth galaxy-like floating speed
@@ -1637,25 +1644,33 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const goldenAngle = Math.PI * (3 - Math.sqrt(5))
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
-        const radius = 30 + Math.random() * 25 // Much wider spread - leaves more spread out
+        // On mobile, use much larger radius and spread to cover entire page
+        const radius = isMobile 
+          ? 50 + Math.random() * 40 // Much larger radius on mobile (50-90)
+          : 30 + Math.random() * 25 // Desktop: original spread
         const sizeVariation = 1.4 + Math.random() * 1.8 // Bigger sizes - sometimes larger
         // On mobile, distribute leaves across full vertical space including above BOUTALLION
         let yPos: number
         let startY: number
         if (isMobile) {
-          // Mobile: Full vertical spread from -7 to 3 (well above BOUTALLION)
-          yPos = -7 + Math.random() * 10 // Spread from -7 to 3
+          // Mobile: Full vertical spread across entire page (-10 to 5 for full coverage)
+          yPos = -10 + Math.random() * 15 // Spread from -10 to 5
           startY = yPos
         } else {
           // Desktop: Original positioning
           yPos = -10 + Math.random() * 25 // Increased vertical spread
           startY = -7 + Math.random() * 16
         }
+        
+        // On mobile, spread leaves much wider horizontally and in depth
+        const horizontalSpread = isMobile ? 40 : 22 // Much wider on mobile
+        const depthSpread = isMobile ? 40 : 22 // Much wider on mobile
+        
         return {
           position: [
-            Math.cos(angle) * radius + (Math.random() - 0.5) * 22, // Much wider horizontal spread
+            Math.cos(angle) * radius + (Math.random() - 0.5) * horizontalSpread, // Much wider horizontal spread on mobile
             yPos,
-            Math.sin(angle) * radius + (Math.random() - 0.5) * 22 // Much wider depth spread
+            Math.sin(angle) * radius + (Math.random() - 0.5) * depthSpread // Much wider depth spread on mobile
           ] as [number, number, number],
           startY,
           floatSpeed: 0.0004 + Math.random() * 0.0003, // Smooth galaxy-like floating speed
@@ -1848,25 +1863,33 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const goldenAngle = Math.PI * (3 - Math.sqrt(5))
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
-        const radius = 30 + Math.random() * 25 // Much wider spread - leaves more spread out
+        // On mobile, use much larger radius and spread to cover entire page
+        const radius = isMobile 
+          ? 50 + Math.random() * 40 // Much larger radius on mobile (50-90)
+          : 30 + Math.random() * 25 // Desktop: original spread
         const sizeVariation = 1.4 + Math.random() * 1.8 // Bigger sizes - sometimes larger
         // On mobile, distribute leaves across full vertical space including above BOUTALLION
         let yPos: number
         let startY: number
         if (isMobile) {
-          // Mobile: Full vertical spread from -7 to 3 (well above BOUTALLION)
-          yPos = -7 + Math.random() * 10 // Spread from -7 to 3
+          // Mobile: Full vertical spread across entire page (-10 to 5 for full coverage)
+          yPos = -10 + Math.random() * 15 // Spread from -10 to 5
           startY = yPos
         } else {
           // Desktop: Original positioning
           yPos = -10 + Math.random() * 25 // Increased vertical spread
           startY = -7 + Math.random() * 16
         }
+        
+        // On mobile, spread leaves much wider horizontally and in depth
+        const horizontalSpread = isMobile ? 40 : 22 // Much wider on mobile
+        const depthSpread = isMobile ? 40 : 22 // Much wider on mobile
+        
         return {
           position: [
-            Math.cos(angle) * radius + (Math.random() - 0.5) * 22, // Much wider horizontal spread
+            Math.cos(angle) * radius + (Math.random() - 0.5) * horizontalSpread, // Much wider horizontal spread on mobile
             yPos,
-            Math.sin(angle) * radius + (Math.random() - 0.5) * 22 // Much wider depth spread
+            Math.sin(angle) * radius + (Math.random() - 0.5) * depthSpread // Much wider depth spread on mobile
           ] as [number, number, number],
           startY,
           floatSpeed: 0.0004 + Math.random() * 0.0003, // Smooth galaxy-like floating speed
