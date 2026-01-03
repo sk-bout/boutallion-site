@@ -778,7 +778,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         
         // Vary sizes - some tiny, some small, some bigger
         // Maximum size constraint to prevent leaves from becoming unclear
-        const MAX_LEAF_SCALE = 1.6
+        const MAX_LEAF_SCALE = 2.2
         const sizeCategory = sizeCategories[Math.floor(Math.random() * sizeCategories.length)]
         const sizeVariation = Math.min(sizeCategory + (Math.random() - 0.5) * 0.1, MAX_LEAF_SCALE)
         
@@ -849,7 +849,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         
         // Smooth scaling animation - bigger to smaller and back (very slow)
         // Maximum scale constraint to prevent leaves from becoming unclear
-        const MAX_LEAF_SCALE = 1.6
+        const MAX_LEAF_SCALE = 2.2
         const scalePulse = 1 + Math.sin(time * 0.15 + i * 0.5) * 0.1 // Slow pulse between 0.9 and 1.1
         const finalScale = Math.min(leaf.scale * scalePulse, MAX_LEAF_SCALE)
         child.scale.setScalar(finalScale)
