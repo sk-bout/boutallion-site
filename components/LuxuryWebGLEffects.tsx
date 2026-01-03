@@ -1395,7 +1395,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     const isMobile = viewport.width < 6
     
     const leavesData = useMemo(() => {
-      const count = 5 // Reduced for elegant, less crowded appearance
+      const count = 12 // Increased by 7 for more elegant galaxy-like movement
       const goldenAngle = Math.PI * (3 - Math.sqrt(5)) // Golden angle for even distribution
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
@@ -1424,11 +1424,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             Math.sin(angle) * radius + (Math.random() - 0.5) * 25 // Much wider depth spread
           ] as [number, number, number],
           startY: yPos,
-          floatSpeed: 0.0003 + Math.random() * 0.0002, // Very slow, smooth floating speed
+          floatSpeed: 0.0004 + Math.random() * 0.0003, // Smooth galaxy-like floating speed
           velocity: [
-            (Math.random() - 0.5) * 0.00025, // Very slow, smooth horizontal movement
-            Math.random() * 0.00012 + 0.00008, // Very slow, smooth upward movement
-            (Math.random() - 0.5) * 0.00025 // Very slow, smooth depth movement
+            (Math.random() - 0.5) * 0.0004, // Smooth horizontal movement across page
+            Math.random() * 0.0002 + 0.0001, // Smooth upward movement
+            (Math.random() - 0.5) * 0.0004 // Smooth depth movement
           ] as [number, number, number],
           scale: sizeVariation,
           mirrored: i % 3 === 0, // 33% mirrored, 67% non-mirrored - both colors have non-mirrored leaves
@@ -1457,12 +1457,14 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const leaf = leavesData[i]
         if (!leaf) return
 
-        // Elegant floating movement - smooth and graceful, very slow, subtle floating
+        // Elegant galaxy-like floating movement - smooth, graceful, flowing across the page
         const velocity = leaf.velocity
-        // Very subtle oscillation for gentle floating effect
-        child.position.x += velocity[0] + Math.sin(time * 0.003 + i) * 0.00003 // Very slow, subtle oscillation
-        child.position.y += velocity[1] + Math.cos(time * 0.0025 + i) * 0.00005 // Very slow, subtle oscillation
-        child.position.z += velocity[2] + Math.sin(time * 0.003 + i * 0.7) * 0.00003 // Very slow, subtle oscillation
+        // Galaxy-like orbital motion with multiple frequencies for elegant flow
+        const orbitSpeed = 0.002 + i * 0.0001 // Varying speeds for galaxy effect
+        const orbitRadius = 0.8 + i * 0.1 // Varying orbit sizes
+        child.position.x += velocity[0] + Math.sin(time * orbitSpeed + i) * orbitRadius * 0.0001 // Galaxy-like orbital motion
+        child.position.y += velocity[1] + Math.cos(time * orbitSpeed * 0.8 + i * 1.3) * orbitRadius * 0.00015 // Elegant vertical flow
+        child.position.z += velocity[2] + Math.sin(time * orbitSpeed * 1.2 + i * 0.7) * orbitRadius * 0.0001 // Depth flow
         
         // Smooth constraint to left side to avoid b.png on right (x < 1.5)
         if (child.position.x > 1.5) {
@@ -1631,7 +1633,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     const isMobile = viewport.width < 6
 
     const leavesData = useMemo(() => {
-      const count = 4 // Reduced for elegant, less crowded appearance
+      const count = 11 // Increased by 7 for more elegant galaxy-like movement
       const goldenAngle = Math.PI * (3 - Math.sqrt(5))
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
@@ -1656,11 +1658,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             Math.sin(angle) * radius + (Math.random() - 0.5) * 22 // Much wider depth spread
           ] as [number, number, number],
           startY,
-          floatSpeed: 0.0003 + Math.random() * 0.0002, // Very slow, smooth floating speed
+          floatSpeed: 0.0004 + Math.random() * 0.0003, // Smooth galaxy-like floating speed
           velocity: [
-            (Math.random() - 0.5) * 0.00025, // Very slow, smooth horizontal movement
-            Math.random() * 0.00012 + 0.00008, // Very slow, smooth upward movement
-            (Math.random() - 0.5) * 0.00025 // Very slow, smooth depth movement
+            (Math.random() - 0.5) * 0.0004, // Smooth horizontal movement across page
+            Math.random() * 0.0002 + 0.0001, // Smooth upward movement
+            (Math.random() - 0.5) * 0.0004 // Smooth depth movement
           ] as [number, number, number],
           scale: sizeVariation,
           mirrored: i % 3 === 0, // 33% mirrored, 67% non-mirrored - both colors have non-mirrored leaves
@@ -1689,12 +1691,14 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const leaf = leavesData[i]
         if (!leaf) return
 
-        // Elegant floating movement - smooth and graceful, subtle floating
+        // Elegant galaxy-like floating movement - smooth, graceful, flowing across the page
         const velocity = leaf.velocity
-        // Very subtle oscillation for gentle floating effect
-        child.position.x += velocity[0] + Math.sin(time * 0.003 + i) * 0.00003 // Very slow, subtle oscillation
-        child.position.y += velocity[1] + Math.cos(time * 0.0025 + i) * 0.00005 // Very slow, subtle oscillation
-        child.position.z += velocity[2] + Math.sin(time * 0.003 + i * 0.7) * 0.00003 // Very slow, subtle oscillation
+        // Galaxy-like orbital motion with multiple frequencies for elegant flow
+        const orbitSpeed = 0.002 + i * 0.0001 // Varying speeds for galaxy effect
+        const orbitRadius = 0.8 + i * 0.1 // Varying orbit sizes
+        child.position.x += velocity[0] + Math.sin(time * orbitSpeed + i) * orbitRadius * 0.0001 // Galaxy-like orbital motion
+        child.position.y += velocity[1] + Math.cos(time * orbitSpeed * 0.8 + i * 1.3) * orbitRadius * 0.00015 // Elegant vertical flow
+        child.position.z += velocity[2] + Math.sin(time * orbitSpeed * 1.2 + i * 0.7) * orbitRadius * 0.0001 // Depth flow
         
         // Smooth constraint to left side to avoid b.png on right (x < 1.5)
         if (child.position.x > 1.5) {
@@ -1731,8 +1735,12 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.rotation.y += leaf.rotationSpeed[1]
         child.rotation.z += leaf.rotationSpeed[2]
 
-        // Smooth scale pulse - preserve mirrored scale (bigger variation)
-        const scalePulse = 1 + Math.sin(time * 0.15 + i * 0.5) * 0.25
+        // Smooth galaxy-like scale pulse - elegant breathing effect (bigger and smaller)
+        const MAX_LEAF_SCALE = 2.2
+        const pulseSpeed = 0.08 + i * 0.01 // Varying pulse speeds for galaxy effect
+        const pulseAmplitude = 0.3 + i * 0.02 // Varying pulse sizes
+        const scalePulse = 1 + Math.sin(time * pulseSpeed + i * 0.7) * pulseAmplitude
+        const finalScale = Math.min(leaf.scale * scalePulse, MAX_LEAF_SCALE)
         const aspectRatio = leafTexture.image && leafTexture.image.width && leafTexture.image.height
           ? leafTexture.image.width / leafTexture.image.height
           : 1
@@ -1836,7 +1844,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     const isMobile = viewport.width < 6
 
     const leavesData = useMemo(() => {
-      const count = 4 // Reduced for elegant, less crowded appearance
+      const count = 11 // Increased by 7 for more elegant galaxy-like movement
       const goldenAngle = Math.PI * (3 - Math.sqrt(5))
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
@@ -1861,11 +1869,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             Math.sin(angle) * radius + (Math.random() - 0.5) * 22 // Much wider depth spread
           ] as [number, number, number],
           startY,
-          floatSpeed: 0.0003 + Math.random() * 0.0002, // Very slow, smooth floating speed
+          floatSpeed: 0.0004 + Math.random() * 0.0003, // Smooth galaxy-like floating speed
           velocity: [
-            (Math.random() - 0.5) * 0.00025, // Very slow, smooth horizontal movement
-            Math.random() * 0.00012 + 0.00008, // Very slow, smooth upward movement
-            (Math.random() - 0.5) * 0.00025 // Very slow, smooth depth movement
+            (Math.random() - 0.5) * 0.0004, // Smooth horizontal movement across page
+            Math.random() * 0.0002 + 0.0001, // Smooth upward movement
+            (Math.random() - 0.5) * 0.0004 // Smooth depth movement
           ] as [number, number, number],
           scale: sizeVariation,
           mirrored: i % 3 === 0, // 33% mirrored, 67% non-mirrored - both colors have non-mirrored leaves
