@@ -373,7 +373,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
           ref={logoRef}
           id="boutallion-logo"
           key={`boutallion-logo-${params.locale}`}
-          className="relative z-10 mb-8 sm:mb-12 md:mb-16 w-full px-4 sm:px-6 md:px-8 flex justify-center items-center"
+          className="relative z-10 mb-4 sm:mb-6 md:mb-8 w-full px-4 sm:px-6 md:px-8 flex justify-center items-center"
           style={{
             willChange: 'transform',
             maxWidth: '100%',
@@ -397,7 +397,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         
 
         {/* By Invitation Only text */}
-        <p className={`font-refined text-white/70 mb-8 sm:mb-12 md:mb-16 tracking-[0.1em] sm:tracking-[0.15em] uppercase px-4 break-words ${
+        <p className={`font-refined text-white/70 mb-4 sm:mb-6 md:mb-8 tracking-[0.1em] sm:tracking-[0.15em] uppercase px-4 break-words ${
           params.locale === 'ar' || params.locale === 'ru'
             ? 'text-base sm:text-lg md:text-xl lg:text-2xl'
             : 'text-sm sm:text-base md:text-lg lg:text-xl'

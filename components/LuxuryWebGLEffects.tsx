@@ -1910,9 +1910,12 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const handleLoadedData = () => {
         try {
           const texture = new VideoTexture(video)
-          texture.minFilter = THREE.LinearFilter
+          // Use better filtering for clearer video
+          texture.minFilter = THREE.LinearMipmapLinearFilter
           texture.magFilter = THREE.LinearFilter
           texture.flipY = false
+          texture.generateMipmaps = true
+          texture.anisotropy = 16 // Higher anisotropy for better clarity
           textureRef.current = texture
           setTextureReady(true)
         } catch (error) {
@@ -1970,9 +1973,10 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const time = state.clock.elapsedTime
       const offset = index * 0.7
       
-      meshRef.current.position.x = initialPosition.x + Math.sin(time * 0.15 + offset) * 0.8
-      meshRef.current.position.y = initialPosition.y + Math.cos(time * 0.12 + offset * 1.3) * 0.6
-      meshRef.current.position.z = initialPosition.z + Math.sin(time * 0.18 + offset * 0.8) * 0.5
+      // Smaller movement range to avoid overlap with b.png
+      meshRef.current.position.x = initialPosition.x + Math.sin(time * 0.15 + offset) * 0.4
+      meshRef.current.position.y = initialPosition.y + Math.cos(time * 0.12 + offset * 1.3) * 0.3
+      meshRef.current.position.z = initialPosition.z + Math.sin(time * 0.18 + offset * 0.8) * 0.3
       
       if (type === 'sphere') {
         meshRef.current.rotation.y = time * 0.1 + offset
@@ -2017,22 +2021,25 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
   const VideoBubbles = () => {
     const bubblesData = useMemo(() => {
       return VIDEO_PATHS.map((videoPath, index) => {
-        // Position 2 smaller bubbles on opposite sides
+        // Position 2 smaller bubbles on left side to avoid b.png (which is on right)
+        // Place them more to the left and center to avoid overlap
         const angle = (index / VIDEO_PATHS.length) * Math.PI * 2
-        const radius = 1.5 // Smaller radius for smaller bubbles
-        const height = index === 0 ? -0.8 : 0.8 // One above, one below center
-        const depth = 2.5 // Closer to camera for better visibility
+        const radius = 1.2 // Smaller radius, positioned more to the left
+        const height = index === 0 ? -0.6 : 0.6 // One above, one below center
+        const depth = 2.8 // Slightly further back
+        // Position bubbles on left side (negative x) to avoid b.png on right
+        const xOffset = -1.5 // Shift left to avoid right side where b.png is
         
         return {
           videoPath,
           position: [
-            Math.cos(angle) * radius,
+            Math.cos(angle) * radius + xOffset, // Shift left
             height,
             depth
           ] as [number, number, number],
           type: 'sphere' as const, // Always use sphere for magic ball effect
           index,
-          size: 0.4 // Smaller size for the 2 bubbles
+          size: 0.25 // Much smaller size to avoid overlap
         }
       })
       // eslint-disable-next-line react-hooks/exhaustive-deps
