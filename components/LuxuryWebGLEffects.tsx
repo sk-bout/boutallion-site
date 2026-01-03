@@ -1395,7 +1395,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     const isMobile = viewport.width < 6
     
     const leavesData = useMemo(() => {
-      const count = 12 // Increased by 7 for more elegant galaxy-like movement
+      const count = 12 // Equal count per color for balanced distribution
       const goldenAngle = Math.PI * (3 - Math.sqrt(5)) // Golden angle for even distribution
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
@@ -1432,7 +1432,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             (Math.random() - 0.5) * 0.0004 // Smooth depth movement
           ] as [number, number, number],
           scale: sizeVariation,
-          mirrored: i % 3 === 0, // 33% mirrored, 67% non-mirrored - both colors have non-mirrored leaves
+          mirrored: i % 2 === 0, // 50% mirrored, 50% non-mirrored - equal distribution
           rotationSpeed: [
             (Math.random() - 0.5) * 0.00015, // Slower, more elegant rotation
             (Math.random() - 0.5) * 0.00015,
@@ -1634,7 +1634,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     const isMobile = viewport.width < 6
 
     const leavesData = useMemo(() => {
-      const count = 11 // Increased by 7 for more elegant galaxy-like movement
+      const count = 12 // Equal count per color for balanced distribution
       const goldenAngle = Math.PI * (3 - Math.sqrt(5))
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
@@ -1672,7 +1672,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             (Math.random() - 0.5) * 0.0004 // Smooth depth movement
           ] as [number, number, number],
           scale: sizeVariation,
-          mirrored: i % 3 === 0, // 33% mirrored, 67% non-mirrored - both colors have non-mirrored leaves
+          mirrored: i % 2 === 0, // 50% mirrored, 50% non-mirrored - equal distribution
           rotationSpeed: [
             (Math.random() - 0.5) * 0.00015, // Slower, more elegant rotation
             (Math.random() - 0.5) * 0.00015,
@@ -1851,7 +1851,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     const isMobile = viewport.width < 6
 
     const leavesData = useMemo(() => {
-      const count = 11 // Increased by 7 for more elegant galaxy-like movement
+      const count = 12 // Equal count per color for balanced distribution
       const goldenAngle = Math.PI * (3 - Math.sqrt(5))
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
@@ -1889,7 +1889,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             (Math.random() - 0.5) * 0.0004 // Smooth depth movement
           ] as [number, number, number],
           scale: sizeVariation,
-          mirrored: i % 3 === 0, // 33% mirrored, 67% non-mirrored - both colors have non-mirrored leaves
+          mirrored: i % 2 === 0, // 50% mirrored, 50% non-mirrored - equal distribution
           rotationSpeed: [
             (Math.random() - 0.5) * 0.00015, // Slower, more elegant rotation
             (Math.random() - 0.5) * 0.00015,
