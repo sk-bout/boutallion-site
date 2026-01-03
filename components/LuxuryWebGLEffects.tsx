@@ -2004,10 +2004,15 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           texture.flipY = false
           texture.generateMipmaps = true
           texture.anisotropy = 16 // Maximum anisotropy for best clarity
+          texture.format = THREE.RGBAFormat // Ensure proper color format
           // Ensure video plays at highest quality
           if (videoRef.current) {
             videoRef.current.playbackRate = 1.0
             videoRef.current.currentTime = 0
+            // Set video quality to highest
+            if ('webkitDecodedFrameCount' in videoRef.current) {
+              (videoRef.current as any).webkitDecodedFrameCount = 0
+            }
           }
           textureRef.current = texture
           setTextureReady(true)
@@ -2044,12 +2049,12 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     const material = useMemo(() => {
       const mat = new THREE.MeshStandardMaterial({
         transparent: true,
-        opacity: 0.9, // Higher opacity for clearer video visibility
+        opacity: 0.95, // Higher opacity for maximum video clarity
         side: DoubleSide,
-        metalness: 0.7, // Slightly less metallic to show video better
-        roughness: 0.1, // Slightly more roughness for better video clarity
+        metalness: 0.3, // Much less metallic to show video clearly
+        roughness: 0.05, // Very smooth surface for better video clarity
         emissive: '#d4c5a0',
-        emissiveIntensity: 0.2, // Reduced emissive to let video show through better
+        emissiveIntensity: 0.1, // Minimal emissive to let video show through clearly
         color: '#ffffff',
       })
       
@@ -2107,11 +2112,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const clampedPulse = Math.min(pulse, maxPulse)
       meshRef.current.scale.setScalar(clampedPulse)
       
-      // Add magical glow effect to material
+      // Add magical glow effect to material while maintaining video clarity
       const mat = meshRef.current.material as THREE.MeshStandardMaterial
       if (mat) {
-        mat.emissiveIntensity = 0.3 + Math.sin(time * 0.6 + offset) * 0.15
-        mat.opacity = 0.85 + Math.sin(time * 0.5 + offset) * 0.1
+        mat.emissiveIntensity = 0.1 + Math.sin(time * 0.6 + offset) * 0.05 // Reduced for clarity
+        mat.opacity = 0.95 + Math.sin(time * 0.5 + offset) * 0.03 // Higher base opacity for clarity
       }
     })
 
