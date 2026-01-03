@@ -1262,17 +1262,21 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         } else if (isMobile) {
           // Mobile: Position b.png below the email input field box
           const rightMargin = 0.5 // Distance from right edge
-          // Position it lower on the page, below the form area (around y=-3 to -4)
-          const formAreaY = -2.5 // Approximate Y position of form area
-          const spacingBelowForm = 1.5 // Space below the form
+          // Position it lower on the page, below the form area but still visible
+          const formAreaY = -2.0 // Approximate Y position of form area
+          const spacingBelowForm = 1.0 // Space below the form
           child.position.x = viewportHalfWidth - logoHalfWidth - rightMargin
-          child.position.y = formAreaY - spacingBelowForm - logoHalfHeight
-          startYRefs.current[0] = formAreaY - spacingBelowForm - logoHalfHeight
+          // Ensure Y position is within viewport bounds
+          const targetY = formAreaY - spacingBelowForm - logoHalfHeight
+          const minY = -viewportHalfHeight + logoHalfHeight + 0.3
+          const maxY = viewportHalfHeight - logoHalfHeight - 0.3
+          child.position.y = Math.max(minY, Math.min(maxY, targetY))
+          startYRefs.current[0] = child.position.y
           
-          // Keep it fixed horizontally on desktop (no drift)
+          // Keep it fixed horizontally (no drift)
           child.position.z = b.position[2]
           
-          // Skip the rest of the floating animation logic on desktop
+          // Skip the rest of the floating animation logic on mobile
           child.rotation.y = 0
           child.rotation.x = 0
           return
