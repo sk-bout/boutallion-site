@@ -1395,7 +1395,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const goldenAngle = Math.PI * (3 - Math.sqrt(5)) // Golden angle for even distribution
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
-        const radius = 25 + Math.random() * 20 // Increased spread for universe effect
+        const radius = 35 + Math.random() * 30 // Much wider spread - leaves more spread out
         // Maximum size constraint - increased to allow larger leaves sometimes
         const MAX_LEAF_SCALE = 2.2
         const sizeVariation = Math.min(1.4 + Math.random() * 1.8, MAX_LEAF_SCALE) // Larger range, sometimes bigger
@@ -1415,9 +1415,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         
         return {
           position: [
-            Math.cos(angle) * radius + (Math.random() - 0.5) * 18, // Increased spread for universe effect
+            Math.cos(angle) * radius + (Math.random() - 0.5) * 25, // Much wider horizontal spread
             yPos,
-            Math.sin(angle) * radius + (Math.random() - 0.5) * 18 // Increased depth spread
+            Math.sin(angle) * radius + (Math.random() - 0.5) * 25 // Much wider depth spread
           ] as [number, number, number],
           startY: yPos,
           floatSpeed: 0.0004 + Math.random() * 0.0002, // Very slow, consistent speed
@@ -1631,7 +1631,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const goldenAngle = Math.PI * (3 - Math.sqrt(5))
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
-        const radius = 20 + Math.random() * 18 // Increased spread for universe effect
+        const radius = 30 + Math.random() * 25 // Much wider spread - leaves more spread out
         const sizeVariation = 1.4 + Math.random() * 1.8 // Bigger sizes - sometimes larger
         // On mobile, distribute leaves across full vertical space including above BOUTALLION
         let yPos: number
@@ -1647,9 +1647,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         }
         return {
           position: [
-            Math.cos(angle) * radius + (Math.random() - 0.5) * 15, // Increased spread
+            Math.cos(angle) * radius + (Math.random() - 0.5) * 22, // Much wider horizontal spread
             yPos,
-            Math.sin(angle) * radius + (Math.random() - 0.5) * 15 // Increased depth spread
+            Math.sin(angle) * radius + (Math.random() - 0.5) * 22 // Much wider depth spread
           ] as [number, number, number],
           startY,
           floatSpeed: 0.0008 + Math.random() * 0.0005, // Very slow speed for elegant flow
@@ -1836,7 +1836,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const goldenAngle = Math.PI * (3 - Math.sqrt(5))
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
-        const radius = 20 + Math.random() * 18 // Increased spread for universe effect
+        const radius = 30 + Math.random() * 25 // Much wider spread - leaves more spread out
         const sizeVariation = 1.4 + Math.random() * 1.8 // Bigger sizes - sometimes larger
         // On mobile, distribute leaves across full vertical space including above BOUTALLION
         let yPos: number
@@ -1852,9 +1852,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         }
         return {
           position: [
-            Math.cos(angle) * radius + (Math.random() - 0.5) * 15, // Increased spread
+            Math.cos(angle) * radius + (Math.random() - 0.5) * 22, // Much wider horizontal spread
             yPos,
-            Math.sin(angle) * radius + (Math.random() - 0.5) * 15 // Increased depth spread
+            Math.sin(angle) * radius + (Math.random() - 0.5) * 22 // Much wider depth spread
           ] as [number, number, number],
           startY,
           floatSpeed: 0.0008 + Math.random() * 0.0005, // Very slow speed for elegant flow
