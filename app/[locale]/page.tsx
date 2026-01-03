@@ -375,7 +375,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
           ref={logoRef}
           id="boutallion-logo"
           key={`boutallion-logo-${params.locale}`}
-          className="relative z-10 mb-1 sm:mb-1.5 md:mb-2 w-full px-4 sm:px-6 md:px-8 flex justify-center items-center"
+          className="relative z-10 mb-0.5 sm:mb-0.75 md:mb-1 w-full px-4 sm:px-6 md:px-8 flex justify-center items-center"
           style={{
             willChange: 'transform',
             maxWidth: '100%',
