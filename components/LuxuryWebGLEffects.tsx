@@ -976,11 +976,18 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
 
           const buttonsData = useMemo(() => {
             const count = 20 // Reduced from 35 to 20 (less crowded)
-            const sizeCategories = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2] // Larger sizes so engraving is visible
+            // 75% of buttons should be larger, 25% smaller
+            const largerSizes = [0.9, 1.0, 1.1, 1.2, 1.3, 1.4] // Larger sizes for 3/4 of buttons
+            const smallerSizes = [0.5, 0.6, 0.7, 0.8] // Smaller sizes for 1/4 of buttons
             return Array.from({ length: count }, (_, i) => {
               const angle = (i / count) * Math.PI * 2
               const radius = 22 + Math.random() * 18 // Increased spread for universe effect
-              const sizeVariation = sizeCategories[Math.floor(Math.random() * sizeCategories.length)] + (Math.random() - 0.5) * 0.2
+              // 75% chance to use larger sizes, 25% chance to use smaller sizes
+              const useLarger = Math.random() < 0.75
+              const sizeCategory = useLarger 
+                ? largerSizes[Math.floor(Math.random() * largerSizes.length)]
+                : smallerSizes[Math.floor(Math.random() * smallerSizes.length)]
+              const sizeVariation = sizeCategory + (Math.random() - 0.5) * 0.15
               // Avoid center area where BOUTALLION is (y between -1 and 1)
               let yPos = -10 + Math.random() * 25 // Increased vertical spread
               if (yPos > -1 && yPos < 1) {
