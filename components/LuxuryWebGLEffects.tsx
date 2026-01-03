@@ -1414,7 +1414,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             (Math.random() - 0.5) * 0.0003 // Very slow depth movement
           ] as [number, number, number],
           scale: sizeVariation,
-          mirrored: i % 2 === 0, // 50% mirrored (alternating) - both colors have mirrored variants
+          mirrored: i % 3 === 0, // 33% mirrored, 67% non-mirrored - both colors have non-mirrored leaves
           rotationSpeed: [
             (Math.random() - 0.5) * 0.00015, // Slower, more elegant rotation
             (Math.random() - 0.5) * 0.00015,
@@ -1646,7 +1646,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             (Math.random() - 0.5) * 0.0015
           ] as [number, number, number],
           scale: sizeVariation,
-          mirrored: i % 2 === 0, // 50% mirrored (alternating) - both colors have mirrored variants
+          mirrored: i % 3 === 0, // 33% mirrored, 67% non-mirrored - both colors have non-mirrored leaves
           rotationSpeed: [
             (Math.random() - 0.5) * 0.00015, // Slower, more elegant rotation
             (Math.random() - 0.5) * 0.00015,
@@ -1851,7 +1851,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             (Math.random() - 0.5) * 0.0015
           ] as [number, number, number],
           scale: sizeVariation,
-          mirrored: i % 2 === 0, // 50% mirrored (alternating) - both colors have mirrored variants
+          mirrored: i % 3 === 0, // 33% mirrored, 67% non-mirrored - both colors have non-mirrored leaves
           rotationSpeed: [
             (Math.random() - 0.5) * 0.00015, // Slower, more elegant rotation
             (Math.random() - 0.5) * 0.00015,
