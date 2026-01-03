@@ -7,20 +7,20 @@ export default function SocialIcons() {
   
   return (
     <div 
-      className="fixed top-0 right-0 z-[100] p-3 sm:p-4 md:p-6 pointer-events-none"
+      className="fixed bottom-0 right-0 z-[100] p-3 sm:p-4 md:p-6 pointer-events-none"
       style={{
-        paddingTop: `max(0.75rem, env(safe-area-inset-top))`,
+        paddingBottom: `max(0.75rem, env(safe-area-inset-bottom))`,
         paddingRight: `max(0.75rem, env(safe-area-inset-right))`,
         boxSizing: 'border-box',
       }}
     >
-      <div className="flex flex-col gap-3 sm:gap-4 pointer-events-auto">
+      <div className="flex flex-row gap-3 sm:gap-4 pointer-events-auto">
         {/* Pinterest Icon */}
         <Link
-          href="https://pinterest.com/boutallion"
+          href="https://www.pinterest.com/boutallion/"
           target="_blank"
           rel="noopener noreferrer"
-          className="transition-opacity duration-300 hover:opacity-70"
+          className="transition-opacity duration-300 hover:opacity-70 flex items-center justify-center"
           aria-label="Pinterest"
         >
           <svg
@@ -29,6 +29,7 @@ export default function SocialIcons() {
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="w-5 h-5 sm:w-6 sm:h-6"
             style={{ color: iconColor }}
           >
             <path
@@ -43,7 +44,7 @@ export default function SocialIcons() {
           href="https://x.com/boutallion"
           target="_blank"
           rel="noopener noreferrer"
-          className="transition-opacity duration-300 hover:opacity-70"
+          className="transition-opacity duration-300 hover:opacity-70 flex items-center justify-center"
           aria-label="X (Twitter)"
         >
           <svg
@@ -52,6 +53,7 @@ export default function SocialIcons() {
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="w-5 h-5 sm:w-6 sm:h-6"
             style={{ color: iconColor }}
           >
             <path
