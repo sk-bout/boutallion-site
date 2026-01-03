@@ -2045,7 +2045,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           // Use best filtering for maximum video clarity
           texture.minFilter = THREE.LinearMipmapLinearFilter
           texture.magFilter = THREE.LinearFilter
-          texture.flipY = false
+          texture.flipY = true // Flip Y to fix upside-down video
           texture.generateMipmaps = true
           texture.anisotropy = 16 // Maximum anisotropy for best clarity
           texture.format = THREE.RGBAFormat // Ensure proper color format
