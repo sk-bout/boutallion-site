@@ -1910,12 +1910,17 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const handleLoadedData = () => {
         try {
           const texture = new VideoTexture(video)
-          // Use better filtering for clearer video
+          // Use best filtering for maximum video clarity
           texture.minFilter = THREE.LinearMipmapLinearFilter
           texture.magFilter = THREE.LinearFilter
           texture.flipY = false
           texture.generateMipmaps = true
-          texture.anisotropy = 16 // Higher anisotropy for better clarity
+          texture.anisotropy = 16 // Maximum anisotropy for best clarity
+          // Ensure video plays at highest quality
+          if (videoRef.current) {
+            videoRef.current.playbackRate = 1.0
+            videoRef.current.currentTime = 0
+          }
           textureRef.current = texture
           setTextureReady(true)
         } catch (error) {
@@ -1927,7 +1932,14 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       video.addEventListener('canplay', () => {
         video.play().catch(console.error)
       })
+      video.addEventListener('loadedmetadata', () => {
+        // Ensure video is ready for high quality playback
+        video.play().catch(console.error)
+      })
       
+      // Set video quality settings for maximum clarity
+      video.setAttribute('playsinline', 'true')
+      video.setAttribute('webkit-playsinline', 'true')
       video.load()
       videoRef.current = video
       
@@ -1944,12 +1956,12 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     const material = useMemo(() => {
       const mat = new THREE.MeshStandardMaterial({
         transparent: true,
-        opacity: 0.85, // More visible for magic ball effect
+        opacity: 0.9, // Higher opacity for clearer video visibility
         side: DoubleSide,
-        metalness: 0.8, // More metallic for magical appearance
-        roughness: 0.05, // Very smooth, glass-like
+        metalness: 0.7, // Slightly less metallic to show video better
+        roughness: 0.1, // Slightly more roughness for better video clarity
         emissive: '#d4c5a0',
-        emissiveIntensity: 0.3, // More glow for magic effect
+        emissiveIntensity: 0.2, // Reduced emissive to let video show through better
         color: '#ffffff',
       })
       
