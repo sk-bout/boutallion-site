@@ -1547,11 +1547,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         if (child.position.y > 12) {
           // Very gentle guidance back if too far above (allows floating out and back in)
           child.position.y -= (child.position.y - 12) * 0.005 // Very gentle, allows floating out
-          startYRefs.current[i] = child.position.y
+          startYRefs.current.set(i, child.position.y)
         } else if (child.position.y < -18) {
           // Very gentle guidance back if too far below (allows floating out and back in)
           child.position.y += (-18 - child.position.y) * 0.005 // Very gentle, allows floating out
-          startYRefs.current[i] = child.position.y
+          startYRefs.current.set(i, child.position.y)
         }
         
         // Allow horizontal and depth movement beyond viewport - only gentle guidance if extremely far
@@ -1770,11 +1770,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         if (child.position.y > 12) {
           // Very gentle guidance back if too far above (allows floating out and back in)
           child.position.y -= (child.position.y - 12) * 0.005 // Very gentle, allows floating out
-          startYRefs.current[i] = child.position.y
+          startYRefs.current.set(i, child.position.y)
         } else if (child.position.y < -18) {
           // Very gentle guidance back if too far below (allows floating out and back in)
           child.position.y += (-18 - child.position.y) * 0.005 // Very gentle, allows floating out
-          startYRefs.current[i] = child.position.y
+          startYRefs.current.set(i, child.position.y)
         }
         
         // Allow horizontal and depth movement beyond viewport - only gentle guidance if extremely far
@@ -2006,11 +2006,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         if (child.position.y > 12) {
           // Very gentle guidance back if too far above (allows floating out and back in)
           child.position.y -= (child.position.y - 12) * 0.005 // Very gentle, allows floating out
-          startYRefs.current[i] = child.position.y
+          startYRefs.current.set(i, child.position.y)
         } else if (child.position.y < -18) {
           // Very gentle guidance back if too far below (allows floating out and back in)
           child.position.y += (-18 - child.position.y) * 0.005 // Very gentle, allows floating out
-          startYRefs.current[i] = child.position.y
+          startYRefs.current.set(i, child.position.y)
         }
         
         // Allow horizontal and depth movement beyond viewport - only gentle guidance if extremely far
