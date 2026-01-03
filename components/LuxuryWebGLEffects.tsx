@@ -721,7 +721,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
 
     // Create multiple leaves spread across the page
     const leavesData = useMemo(() => {
-      const count = 30 // More leaves for richer effect
+      const count = 8 // Reduced for elegant, less crowded appearance
       const leaves: Array<{
         position: [number, number, number]
         rotation: [number, number, number]
@@ -1357,7 +1357,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     }, [])
 
     const leavesData = useMemo(() => {
-      const count = 12 // Reduced from 25 to 12
+      const count = 5 // Reduced for elegant, less crowded appearance
       const goldenAngle = Math.PI * (3 - Math.sqrt(5)) // Golden angle for even distribution
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
@@ -1577,7 +1577,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     }, [])
 
     const leavesData = useMemo(() => {
-      const count = 10 // Reduced from 20 to 10
+      const count = 4 // Reduced for elegant, less crowded appearance
       const goldenAngle = Math.PI * (3 - Math.sqrt(5))
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
@@ -1766,7 +1766,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     }, [])
 
     const leavesData = useMemo(() => {
-      const count = 10 // Reduced from 20 to 10
+      const count = 4 // Reduced for elegant, less crowded appearance
       const goldenAngle = Math.PI * (3 - Math.sqrt(5))
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
