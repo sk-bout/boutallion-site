@@ -1420,11 +1420,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             Math.sin(angle) * radius + (Math.random() - 0.5) * 25 // Much wider depth spread
           ] as [number, number, number],
           startY: yPos,
-          floatSpeed: 0.0004 + Math.random() * 0.0002, // Very slow, consistent speed
+          floatSpeed: 0.0003 + Math.random() * 0.0002, // Very slow, smooth floating speed
           velocity: [
-            (Math.random() - 0.5) * 0.0003, // Very slow horizontal movement
-            Math.random() * 0.00015 + 0.0001, // Very slow upward movement
-            (Math.random() - 0.5) * 0.0003 // Very slow depth movement
+            (Math.random() - 0.5) * 0.00025, // Very slow, smooth horizontal movement
+            Math.random() * 0.00012 + 0.00008, // Very slow, smooth upward movement
+            (Math.random() - 0.5) * 0.00025 // Very slow, smooth depth movement
           ] as [number, number, number],
           scale: sizeVariation,
           mirrored: i % 3 === 0, // 33% mirrored, 67% non-mirrored - both colors have non-mirrored leaves
