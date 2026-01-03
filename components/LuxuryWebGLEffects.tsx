@@ -1875,12 +1875,13 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     )
   }
 
-  // Video Bubble Component
-  const VideoBubble = memo(function VideoBubble({ videoPath, position, type, index }: { 
+  // Video Bubble Component - Magic 3D ball showing the future
+  const VideoBubble = memo(function VideoBubble({ videoPath, position, type, index, size = 0.4 }: { 
     videoPath: string
     position: [number, number, number]
     type: 'sphere' | 'disk'
     index: number
+    size?: number
   }) {
     const meshRef = useRef<Mesh>(null)
     const videoRef = useRef<HTMLVideoElement | null>(null)
@@ -1891,11 +1892,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     
     const geometry = useMemo(() => {
       if (type === 'sphere') {
-        return new THREE.SphereGeometry(0.15, 16, 16)
+        return new THREE.SphereGeometry(size, 32, 32) // Higher resolution for magic ball effect
       } else {
-        return new THREE.CircleGeometry(0.2, 32)
+        return new THREE.CircleGeometry(size, 32)
       }
-    }, [type])
+    }, [type, size])
 
     useEffect(() => {
       const video = document.createElement('video')
@@ -1940,12 +1941,12 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     const material = useMemo(() => {
       const mat = new THREE.MeshStandardMaterial({
         transparent: true,
-        opacity: 0.7,
+        opacity: 0.85, // More visible for magic ball effect
         side: DoubleSide,
-        metalness: 0.3,
-        roughness: 0.1,
+        metalness: 0.8, // More metallic for magical appearance
+        roughness: 0.05, // Very smooth, glass-like
         emissive: '#d4c5a0',
-        emissiveIntensity: 0.1,
+        emissiveIntensity: 0.3, // More glow for magic effect
         color: '#ffffff',
       })
       
@@ -1986,10 +1987,18 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         meshRef.current.rotation.z = time * 0.05 + offset
       }
       
-      const pulse = 1 + Math.sin(time * 0.3 + offset) * 0.05
-      const maxPulse = type === 'sphere' ? 1.3 : 1.4
+      // Magic ball pulsing effect - more pronounced
+      const pulse = 1 + Math.sin(time * 0.4 + offset) * 0.08
+      const maxPulse = type === 'sphere' ? 1.2 : 1.3
       const clampedPulse = Math.min(pulse, maxPulse)
       meshRef.current.scale.setScalar(clampedPulse)
+      
+      // Add magical glow effect to material
+      const mat = meshRef.current.material as THREE.MeshStandardMaterial
+      if (mat) {
+        mat.emissiveIntensity = 0.3 + Math.sin(time * 0.6 + offset) * 0.15
+        mat.opacity = 0.85 + Math.sin(time * 0.5 + offset) * 0.1
+      }
     })
 
     return (
@@ -2002,16 +2011,17 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     )
   })
 
-  // Video Bubbles - Soap bubble style with videos
-  const VIDEO_PATHS = ['/videos/video1.mp4', '/videos/video2.mp4', '/videos/video3.mp4', '/videos/video4.mp4']
+  // Video Bubbles - Magic 3D balls showing the future (2 smaller spheres with videos)
+  const VIDEO_PATHS = ['/videos/video1.mp4', '/videos/video2.mp4']
   
   const VideoBubbles = () => {
     const bubblesData = useMemo(() => {
       return VIDEO_PATHS.map((videoPath, index) => {
+        // Position 2 smaller bubbles on opposite sides
         const angle = (index / VIDEO_PATHS.length) * Math.PI * 2
-        const radius = 1.2 + (index % 3) * 0.3
-        const height = (index - 1.5) * 0.5
-        const depth = 3.0
+        const radius = 1.5 // Smaller radius for smaller bubbles
+        const height = index === 0 ? -0.8 : 0.8 // One above, one below center
+        const depth = 2.5 // Closer to camera for better visibility
         
         return {
           videoPath,
@@ -2020,8 +2030,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             height,
             depth
           ] as [number, number, number],
-          type: index % 2 === 0 ? 'sphere' as const : 'disk' as const,
-          index
+          type: 'sphere' as const, // Always use sphere for magic ball effect
+          index,
+          size: 0.4 // Smaller size for the 2 bubbles
         }
       })
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -2036,6 +2047,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             position={bubble.position}
             type={bubble.type}
             index={bubble.index}
+            size={bubble.size}
           />
         ))}
       </>

@@ -10,6 +10,7 @@ const LANGUAGES: { code: Locale; label: string; nativeLabel: string }[] = [
   { code: 'ar', label: 'Arabic', nativeLabel: 'العربية' },
   { code: 'nl', label: 'Dutch', nativeLabel: 'Nederlands' },
   { code: 'fr', label: 'French', nativeLabel: 'Français' },
+  { code: 'zh', label: 'Chinese', nativeLabel: '中文' },
   { code: 'ru', label: 'Russian', nativeLabel: 'Русский' },
 ]
 

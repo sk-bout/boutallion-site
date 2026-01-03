@@ -4,6 +4,7 @@
 import { useState, Suspense, useMemo, useEffect, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { PerspectiveCamera } from '@react-three/drei'
+import Image from 'next/image'
 import LuxuryWebGLEffects from '@/components/LuxuryWebGLEffects'
 import { getTranslations, Locale } from '@/lib/i18n'
 import PermanentLanguageSwitcher from '@/components/PermanentLanguageSwitcher'
@@ -367,37 +368,32 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
 
       {/* Main content */}
       <main className="relative z-10 text-center px-4 sm:px-6 py-8 sm:py-12 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-center min-h-[100vh] min-h-[100dvh] safe-area-inset">
-        {/* BOUTALLION text in Portrait font with 3D effect - always LTR for proper font rendering */}
-        <h1 
+        {/* BOUTALLION Logo - centered and responsive */}
+        <div 
           ref={logoRef}
           id="boutallion-logo"
-          data-font="portrait"
           key={`boutallion-logo-${params.locale}`}
-          className="relative z-10 font-portrait text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-7xl 2xl:text-7xl tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.2em] lg:tracking-[0.15em] xl:tracking-[0.12em] 2xl:tracking-[0.1em] text-gold-light sm:text-gold-DEFAULT mb-8 sm:mb-12 md:mb-16 text-3d break-words hyphens-none leading-tight w-full px-4 sm:px-6 md:px-8"
+          className="relative z-10 mb-8 sm:mb-12 md:mb-16 w-full px-4 sm:px-6 md:px-8 flex justify-center items-center"
           style={{
-            fontFamily: "'Portrait', var(--font-portrait), serif",
-            textRendering: 'optimizeLegibility',
-            WebkitFontSmoothing: 'antialiased',
-            MozOsxFontSmoothing: 'grayscale',
-            fontFeatureSettings: '"liga" 1, "kern" 1',
-            WebkitTextSizeAdjust: '100%',
-            textSizeAdjust: '100%',
             willChange: 'transform',
-            fontWeight: 'normal',
-            fontStyle: 'normal',
-            fontVariant: 'normal',
-            fontStretch: 'normal',
-            wordBreak: 'break-word',
-            overflowWrap: 'break-word',
             maxWidth: '100%',
             boxSizing: 'border-box',
-            direction: 'ltr',
-            unicodeBidi: 'bidi-override',
           } as React.CSSProperties}
-          dir="ltr"
         >
-          BOUTALLION
-        </h1>
+          <div className="relative w-full max-w-[280px] sm:max-w-[360px] md:max-w-[480px] lg:max-w-[640px] aspect-square">
+            <Image
+              src="/BOUTALLION LOGO ARTWORK_RGB-23.png"
+              alt="Boutallion"
+              fill
+              className="object-contain"
+              priority
+              sizes="(max-width: 640px) 280px, (max-width: 768px) 360px, (max-width: 1024px) 480px, 640px"
+              style={{
+                filter: 'brightness(0.95)',
+              }}
+            />
+          </div>
+        </div>
         
 
         {/* By Invitation Only text */}

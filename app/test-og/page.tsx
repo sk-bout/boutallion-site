@@ -5,6 +5,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'
 export const metadata: Metadata = {
   title: 'OG Image Test - Boutallion',
   description: 'Test page to verify OG image configuration',
+  robots: {
+    index: false,
+    follow: false,
+  },
   openGraph: {
     title: 'OG Image Test - Boutallion',
     description: 'Test page to verify OG image configuration',

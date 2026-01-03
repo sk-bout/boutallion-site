@@ -30,8 +30,14 @@ export default function CorridorPage() {
       setTimeout(() => {
         setActiveChapter(sectionId)
       }, 800)
+    } else if (sectionId && !SECTIONS.includes(sectionId)) {
+      // Invalid section - redirect to locale homepage
+      // Use replace to avoid adding to history (301-like behavior)
+      const currentPath = window.location.pathname
+      const locale = currentPath.split('/')[1] || 'en'
+      router.replace(`/${locale}`)
     }
-  }, [sectionId])
+  }, [sectionId, router])
 
   const handleChapterClose = () => {
     setIsTransitioning(true)
