@@ -1249,12 +1249,14 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           child.position.y = -viewportHalfHeight + logoHalfHeight + bottomMargin
           startYRefs.current[0] = -viewportHalfHeight + logoHalfHeight + bottomMargin
         } else if (isMobile) {
-          // Mobile: Position b.png lower (more bottom margin)
+          // Mobile: Position b.png below the email input field box
           const rightMargin = 0.5 // Distance from right edge
-          const bottomMargin = 1.2 // Increased bottom margin for mobile (was 0.5)
+          // Position it lower on the page, below the form area (around y=-3 to -4)
+          const formAreaY = -2.5 // Approximate Y position of form area
+          const spacingBelowForm = 1.5 // Space below the form
           child.position.x = viewportHalfWidth - logoHalfWidth - rightMargin
-          child.position.y = -viewportHalfHeight + logoHalfHeight + bottomMargin
-          startYRefs.current[0] = -viewportHalfHeight + logoHalfHeight + bottomMargin
+          child.position.y = formAreaY - spacingBelowForm - logoHalfHeight
+          startYRefs.current[0] = formAreaY - spacingBelowForm - logoHalfHeight
           
           // Keep it fixed horizontally on desktop (no drift)
           child.position.z = b.position[2]
