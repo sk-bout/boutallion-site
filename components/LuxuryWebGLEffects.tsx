@@ -40,6 +40,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           const scale = 0.5 + Math.sin(time * 0.8 + i) * 0.2
           child.scale.setScalar(scale)
           
+          // Constrain crystals to left side to avoid b.png on right (x < 1.5)
+          if (child.position.x > 1.5) {
+            child.position.x = 1.5 - (child.position.x - 1.5) * 0.3 // Push back to left with damping
+          }
+          
           // Light refraction effect
           const material = child.material as THREE.MeshStandardMaterial
           if (material) {
@@ -56,13 +61,19 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           const angle = (i / 12) * Math.PI * 2
           const radius = 2.5 + Math.sin(i) * 0.8
           const material = baseMaterial.clone()
+          // Constrain crystals to left and center, avoid right side where b.png is
+          let x = Math.cos(angle) * radius
+          // Keep crystals on left side (x < 1.5) to avoid b.png on right
+          if (x > 1.5) {
+            x = 1.5 - (x - 1.5) // Mirror to left side
+          }
           return (
             <mesh
               key={i}
               geometry={geometry}
               material={material}
               position={[
-                Math.cos(angle) * radius,
+                x,
                 Math.sin(angle * 2) * 1.2,
                 Math.sin(angle) * radius
               ]}
@@ -86,9 +97,14 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       for (let i = 0; i < count; i++) {
         // Spread particles evenly across the page, with more focus on bottom
         // Use a more even distribution to avoid clustering
+        // Constrain particles to left and center, avoid right side where b.png is
         const angle = (i / count) * Math.PI * 2
         const radius = Math.random() * 12 + 2 // Spread from center outward
-        const x = Math.cos(angle) * radius + (Math.random() - 0.5) * 4 // Wide horizontal spread
+        let x = Math.cos(angle) * radius + (Math.random() - 0.5) * 4 // Wide horizontal spread
+        // Keep particles on left side (x < 1.5) to avoid b.png on right
+        if (x > 1.5) {
+          x = 1.5 - (x - 1.5) * 0.5 // Constrain to left, with some compression
+        }
         const z = Math.sin(angle) * radius + (Math.random() - 0.5) * 6 // Depth spread
         // Focus more particles at the bottom of the page
         const y = -4.5 + Math.random() * 4 // More particles concentrated at bottom
@@ -139,6 +155,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         pos.x += velocity[0] + Math.sin(time * 0.5 + pos.y) * 0.0001
         pos.y += velocity[1] + Math.cos(time * 0.4 + pos.x) * 0.0002 // Slower upward drift
         pos.z += velocity[2] + Math.sin(time * 0.15 + pos.x) * 0.0001
+        
+        // Constrain particles to left side to avoid b.png on right (x < 1.5)
+        if (pos.x > 1.5) {
+          pos.x = 1.5 - (pos.x - 1.5) * 0.3 // Push back to left with damping
+        }
         
         // Keep particles in visible range, resetting to bottom when they go too high
         if (pos.y < -5) {
@@ -254,6 +275,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       bMeshRef.current.rotation.x = Math.cos(time * 0.1) * 0.05
       bMeshRef.current.position.x = Math.sin(time * 0.2) * 0.8
       bMeshRef.current.position.z = Math.cos(time * 0.2) * 0.6
+      
+      // Constrain to left side to avoid b.png on right (x < 1.5)
+      if (bMeshRef.current.position.x > 1.5) {
+        bMeshRef.current.position.x = 1.5 - (bMeshRef.current.position.x - 1.5) * 0.3
+      }
       
       // Collision detection - keep B logos apart (minimum distance 3.5)
       const minDistance = 3.5
@@ -440,10 +466,15 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       }
       
       const       elapsed = time - startTime.current
-      // Pattern 3: Right side, zigzag motion (slower)
+      // Pattern 3: Left side, zigzag motion (slower) - moved to left to avoid b.png on right
       bMeshRef.current.position.y = startY.current + elapsed * 0.019 // Much slower upward
-      bMeshRef.current.position.x = 5.5 + Math.sin(time * 0.25) * 1.0 + Math.sin(time * 0.4) * 0.5
+      bMeshRef.current.position.x = -5.5 + Math.sin(time * 0.25) * 1.0 + Math.sin(time * 0.4) * 0.5 // Moved to left side
       bMeshRef.current.position.z = -1.5 + Math.cos(time * 0.2) * 0.9 + Math.cos(time * 0.3) * 0.3
+      
+      // Constrain to left side to avoid b.png on right (x < 1.5)
+      if (bMeshRef.current.position.x > 1.5) {
+        bMeshRef.current.position.x = 1.5 - (bMeshRef.current.position.x - 1.5) * 0.3
+      }
       bMeshRef.current.rotation.y = Math.sin(time * 0.18) * 0.1
       bMeshRef.current.rotation.x = Math.cos(time * 0.12) * 0.05
       
@@ -485,7 +516,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       return (
         <mesh 
           ref={bMeshRef} 
-          position={[5.5, -2.5, -1.5]} // More spread to the right
+          position={[-5.5, -2.5, -1.5]} // Moved to left to avoid b.png on right
           material={bMaterial}
           scale={0.55}
         >
@@ -600,12 +631,22 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       }
       
       const elapsed = time - startTime.current
-      // Pattern 5: Right-center, wave-like motion (slower) - floating DOWN from top
+      // Pattern 5: Left-center, wave-like motion (slower) - floating DOWN from top - moved to left to avoid b.png
       bMeshRef.current.position.y = startY.current - elapsed * 0.018 // Float downward slowly
-      bMeshRef.current.position.x = 2.5 + Math.sin(time * 0.22) * 1.0 + Math.sin(time * 0.35) * 0.4
+      bMeshRef.current.position.x = -2.5 + Math.sin(time * 0.22) * 1.0 + Math.sin(time * 0.35) * 0.4 // Moved to left to avoid b.png
       bMeshRef.current.position.z = 2 + Math.cos(time * 0.2) * 0.9 + Math.cos(time * 0.32) * 0.3
       bMeshRef.current.rotation.y = Math.sin(time * 0.16) * 0.11
       bMeshRef.current.rotation.x = Math.cos(time * 0.12) * 0.07
+      
+      // Constrain to left side to avoid b.png on right (x < 1.5)
+      if (bMeshRef.current.position.x > 1.5) {
+        bMeshRef.current.position.x = 1.5 - (bMeshRef.current.position.x - 1.5) * 0.3
+      }
+      
+      // Constrain to left side to avoid b.png on right (x < 1.5)
+      if (bMeshRef.current.position.x > 1.5) {
+        bMeshRef.current.position.x = 1.5 - (bMeshRef.current.position.x - 1.5) * 0.3
+      }
 
       if (bMeshRef.current.position.y < -4) {
         bMeshRef.current.position.y = startY.current
@@ -791,6 +832,16 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.position.x = leaf.position[0] + driftX
         child.position.z = leaf.position[2] + driftZ
         child.position.y = leaf.startY + elapsed // Smooth upward movement
+        
+        // Constrain leaves to left side to avoid b.png on right (x < 1.5)
+        if (child.position.x > 1.5) {
+          child.position.x = 1.5 - (child.position.x - 1.5) * 0.3
+        }
+        
+        // Constrain leaves to left side to avoid b.png on right (x < 1.5)
+        if (child.position.x > 1.5) {
+          child.position.x = 1.5 - (child.position.x - 1.5) * 0.3
+        }
         
         // Smooth scaling animation - bigger to smaller and back (very slow)
         const scalePulse = 1 + Math.sin(time * 0.15 + i * 0.5) * 0.1 // Slow pulse between 0.9 and 1.1
@@ -1363,6 +1414,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.position.y += velocity[1] + Math.cos(time * 0.012 + i) * 0.0002
         child.position.z += velocity[2] + Math.sin(time * 0.014 + i * 0.7) * 0.0001
         
+        // Constrain leaves to left side to avoid b.png on right (x < 1.5)
+        if (child.position.x > 1.5) {
+          child.position.x = 1.5 - (child.position.x - 1.5) * 0.3
+        }
+        
         let newX = child.position.x
         let newZ = child.position.z
         
@@ -1573,6 +1629,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.position.y += velocity[1] + Math.cos(time * 0.012 + i) * 0.0002
         child.position.z += velocity[2] + Math.sin(time * 0.014 + i * 0.7) * 0.0001
         
+        // Constrain leaves to left side to avoid b.png on right (x < 1.5)
+        if (child.position.x > 1.5) {
+          child.position.x = 1.5 - (child.position.x - 1.5) * 0.3
+        }
+        
         let newX = child.position.x
         let newZ = child.position.z
         
@@ -1756,6 +1817,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.position.x += velocity[0] + Math.sin(time * 0.015 + i) * 0.0001
         child.position.y += velocity[1] + Math.cos(time * 0.012 + i) * 0.0002
         child.position.z += velocity[2] + Math.sin(time * 0.014 + i * 0.7) * 0.0001
+        
+        // Constrain leaves to left side to avoid b.png on right (x < 1.5)
+        if (child.position.x > 1.5) {
+          child.position.x = 1.5 - (child.position.x - 1.5) * 0.3
+        }
         
         let newX = child.position.x
         let newZ = child.position.z
@@ -1989,6 +2055,16 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       meshRef.current.position.x = initialPosition.x + Math.sin(time * 0.15 + offset) * 0.4
       meshRef.current.position.y = initialPosition.y + Math.cos(time * 0.12 + offset * 1.3) * 0.3
       meshRef.current.position.z = initialPosition.z + Math.sin(time * 0.18 + offset * 0.8) * 0.3
+      
+      // Constrain video bubbles to left side to avoid b.png on right (x < 1.5)
+      if (meshRef.current.position.x > 1.5) {
+        meshRef.current.position.x = 1.5 - (meshRef.current.position.x - 1.5) * 0.3
+      }
+      
+      // Constrain video bubbles to left side to avoid b.png on right (x < 1.5)
+      if (meshRef.current.position.x > 1.5) {
+        meshRef.current.position.x = 1.5 - (meshRef.current.position.x - 1.5) * 0.3
+      }
       
       if (type === 'sphere') {
         meshRef.current.rotation.y = time * 0.1 + offset
