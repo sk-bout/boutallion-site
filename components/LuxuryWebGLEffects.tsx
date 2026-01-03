@@ -1399,24 +1399,24 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const goldenAngle = Math.PI * (3 - Math.sqrt(5)) // Golden angle for even distribution
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
-        // Use much larger radius and spread to cover entire page (both mobile and desktop)
-        const radius = 50 + Math.random() * 40 // Much larger radius (50-90) for both mobile and desktop
+        // Use much larger radius and spread to cover entire page and beyond (both mobile and desktop)
+        const radius = 70 + Math.random() * 50 // Much larger radius (70-120) to allow floating in and out
         // Maximum size constraint - increased to allow larger leaves sometimes
         const MAX_LEAF_SCALE = 2.2
         const sizeVariation = Math.min(1.4 + Math.random() * 1.8, MAX_LEAF_SCALE) // Larger range, sometimes bigger
-        // Distribute leaves across full vertical space across entire page
+        // Distribute leaves across full vertical space and beyond to allow floating in and out
         let yPos: number
         if (isMobile) {
-          // Mobile: Full vertical spread across entire page (-10 to 5 for full coverage)
-          yPos = -10 + Math.random() * 15 // Spread from -10 to 5
+          // Mobile: Extended vertical spread (-15 to 8) to allow floating in and out
+          yPos = -15 + Math.random() * 23 // Spread from -15 to 8
         } else {
-          // Desktop: Full vertical spread across entire page (-10 to 5 for full coverage)
-          yPos = -10 + Math.random() * 15 // Spread from -10 to 5
+          // Desktop: Extended vertical spread (-15 to 8) to allow floating in and out
+          yPos = -15 + Math.random() * 23 // Spread from -15 to 8
         }
         
-        // Spread leaves much wider horizontally and in depth (both mobile and desktop)
-        const horizontalSpread = 40 // Much wider spread for both
-        const depthSpread = 40 // Much wider spread for both
+        // Spread leaves much wider horizontally and in depth to allow floating in and out
+        const horizontalSpread = 60 // Much wider spread to allow floating beyond viewport
+        const depthSpread = 60 // Much wider spread to allow floating beyond viewport
         
         return {
           position: [
