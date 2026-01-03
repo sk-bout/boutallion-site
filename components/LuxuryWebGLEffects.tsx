@@ -1507,7 +1507,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
 
         // Smooth scale pulse - preserve mirrored scale (bigger variation) with mouse influence
         // Maximum scale constraint to prevent leaves from becoming unclear
-        const MAX_LEAF_SCALE = 1.6
+        const MAX_LEAF_SCALE = 2.2
         const scalePulse = 1 + Math.sin(time * 0.15 + i * 0.5) * 0.25 + mouseInfluence * 0.2
         const finalScale = Math.min(leaf.scale * scalePulse, MAX_LEAF_SCALE)
         const aspectRatio = leafTexture.image && leafTexture.image.width && leafTexture.image.height
@@ -1936,7 +1936,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
 
         // Smooth scale pulse - preserve mirrored scale (bigger variation) with mouse influence
         // Maximum scale constraint to prevent leaves from becoming unclear
-        const MAX_LEAF_SCALE = 1.6
+        const MAX_LEAF_SCALE = 2.2
         const scalePulse = 1 + Math.sin(time * 0.15 + i * 0.5) * 0.25 + mouseInfluence * 0.2
         const finalScale = Math.min(leaf.scale * scalePulse, MAX_LEAF_SCALE)
         const aspectRatio = leafTexture.image && leafTexture.image.width && leafTexture.image.height
