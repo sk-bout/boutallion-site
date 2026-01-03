@@ -803,7 +803,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           scale: sizeVariation,
           mirrored,
           startY: y,
-          floatSpeed: 0.001 + Math.random() * 0.0005, // Slow speed to prevent flickering
+          floatSpeed: 0.0012 + Math.random() * 0.0006, // Slightly faster for floating in and out
           rotationSpeed: [
             0.00005 + Math.random() * 0.0001, // Minimal rotation to prevent flickering
             0.0001 + Math.random() * 0.00015,
