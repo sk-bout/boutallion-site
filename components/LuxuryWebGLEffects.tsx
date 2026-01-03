@@ -1005,16 +1005,17 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const button = buttonsData[i]
         if (!button) return
 
-        // Elegant floating movement - smooth and graceful, very slow
+        // Elegant floating movement - smooth and graceful, very slow, no shocking movements
         const velocity = button.velocity
-        child.position.x += velocity[0] + Math.sin(time * 0.005 + i) * 0.00005 // Much slower oscillation
-        child.position.y += velocity[1] + Math.cos(time * 0.004 + i) * 0.0001 // Much slower oscillation
-        child.position.z += velocity[2] + Math.sin(time * 0.005 + i * 0.6) * 0.00005 // Much slower oscillation
+        // Remove oscillation completely for smooth, consistent movement
+        child.position.x += velocity[0]
+        child.position.y += velocity[1]
+        child.position.z += velocity[2]
         
         let newX = child.position.x
         let newZ = child.position.z
         
-        // Collision detection - prevent overlapping with other buttons
+        // Collision detection - prevent overlapping with other buttons (very gentle)
         const minDistance = 7.0 // Increased for universe effect
         allButtonsRef.current.forEach((otherButton, key) => {
           if (key === i || !otherButton) return
@@ -1023,40 +1024,41 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           const dz = newZ - otherButton.position.z
           const distance = Math.sqrt(dx * dx + dy * dy + dz * dz)
           if (distance < minDistance && distance > 0) {
-            const pushStrength = (minDistance - distance) / minDistance * 0.1 // Reduced push strength for smoother movement
+            // Very gentle push with damping to prevent shocking movements
+            const pushStrength = (minDistance - distance) / minDistance * 0.03 // Very gentle push
             newX += dx / distance * pushStrength
             newZ += dz / distance * pushStrength
             if (Math.abs(dy) < 1.5) {
-              child.position.y += (dy > 0 ? 1 : -1) * pushStrength * 0.2 // Reduced vertical push
+              child.position.y += (dy > 0 ? 1 : -1) * pushStrength * 0.1 // Very gentle vertical push
             }
           }
         })
         
-        child.position.x = newX
-        child.position.z = newZ
+        // Smooth interpolation instead of direct assignment to prevent shocking movements
+        const lerpFactor = 0.1 // Smooth interpolation factor
+        child.position.x += (newX - child.position.x) * lerpFactor
+        child.position.z += (newZ - child.position.z) * lerpFactor
 
         // Very slow, smooth rotation
         child.rotation.x += button.rotationSpeed[0] * 0.5 // Slower rotation
         child.rotation.y += button.rotationSpeed[1] * 0.5 // Slower rotation
         child.rotation.z += button.rotationSpeed[2] * 0.5 // Slower rotation
 
-        // Reset when buttons go out of bounds - like particles
+        // Smooth boundary constraints instead of instant resets to prevent shocking movements
         if (child.position.y > 8) {
-          child.position.y = -7 + Math.random() * 2
-          child.position.x = (Math.random() - 0.5) * 20
-          child.position.z = (Math.random() - 0.5) * 20
+          // Smoothly move back instead of instant reset
+          child.position.y -= 0.01
         } else if (child.position.y < -8) {
-          child.position.y = 6 + Math.random() * 2
-          child.position.x = (Math.random() - 0.5) * 20
-          child.position.z = (Math.random() - 0.5) * 20
+          // Smoothly move back instead of instant reset
+          child.position.y += 0.01
         }
         
-        // Reset horizontally if too far
+        // Smooth horizontal boundary constraints
         if (Math.abs(child.position.x) > 12) {
-          child.position.x = (Math.random() - 0.5) * 16
+          child.position.x += (child.position.x > 0 ? -1 : 1) * 0.01
         }
         if (Math.abs(child.position.z) > 10) {
-          child.position.z = (Math.random() - 0.5) * 14
+          child.position.z += (child.position.z > 0 ? -1 : 1) * 0.01
         }
       })
     })
@@ -1425,21 +1427,22 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const leaf = leavesData[i]
         if (!leaf) return
 
-        // Elegant floating movement - smooth and graceful, very slow
+        // Elegant floating movement - smooth and graceful, very slow, no shocking movements
         const velocity = leaf.velocity
-        child.position.x += velocity[0] + Math.sin(time * 0.006 + i) * 0.00005 // Much slower oscillation
-        child.position.y += velocity[1] + Math.cos(time * 0.005 + i) * 0.0001 // Much slower oscillation
-        child.position.z += velocity[2] + Math.sin(time * 0.006 + i * 0.7) * 0.00005 // Much slower oscillation
+        // Remove oscillation completely for smooth, consistent movement
+        child.position.x += velocity[0]
+        child.position.y += velocity[1]
+        child.position.z += velocity[2]
         
-        // Constrain leaves to left side to avoid b.png on right (x < 1.5)
+        // Smooth constraint to left side to avoid b.png on right (x < 1.5)
         if (child.position.x > 1.5) {
-          child.position.x = 1.5 - (child.position.x - 1.5) * 0.3
+          child.position.x -= (child.position.x - 1.5) * 0.05 // Smooth damping instead of instant
         }
         
         let newX = child.position.x
         let newZ = child.position.z
         
-        // Collision detection - prevent overlapping with other leaves (increased for universe effect)
+        // Collision detection - prevent overlapping with other leaves (very gentle)
         const minDistance = 8.0 // Increased minimum distance between leaves
         allLeavesRef.current.forEach((otherLeaf, key) => {
           if (key === `leaf2-${i}` || !otherLeaf) return // Skip self
@@ -1450,16 +1453,12 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           const distance = Math.sqrt(dx * dx + dy * dy + dz * dz)
           
           if (distance < minDistance && distance > 0) {
-            // Push leaves apart smoothly
-            const pushStrength = (minDistance - distance) / minDistance * 0.1 // Reduced for smoother movement
+            // Very gentle push with damping to prevent shocking movements
+            const pushStrength = (minDistance - distance) / minDistance * 0.03 // Very gentle push
             newX += dx / distance * pushStrength
             newZ += dz / distance * pushStrength
-            if (Math.abs(dy) < 1.5) {
-              child.position.y += (dy > 0 ? 1 : -1) * pushStrength * 0.2 // Reduced vertical push
-            }
-            // Also push vertically if too close
             if (Math.abs(dy) < 2) {
-              child.position.y += (dy > 0 ? 1 : -1) * pushStrength * 0.2 // Reduced vertical push for smoother movement
+              child.position.y += (dy > 0 ? 1 : -1) * pushStrength * 0.1 // Very gentle vertical push
             }
           }
         })
@@ -1474,16 +1473,18 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const mouseInfluence = Math.max(0, 1 - mouseDistance / mouseInfluenceRadius)
         
         if (mouseInfluence > 0) {
-          // Push leaf away from mouse
+          // Very gentle mouse influence to prevent shocking movements
           const pushDirectionX = (newX - mouseRef.current.x) / mouseDistance
           const pushDirectionZ = (newZ - mouseRef.current.z) / mouseDistance
-          const pushStrength = mouseInfluence * 0.3
+          const pushStrength = mouseInfluence * 0.1 // Reduced mouse influence
           newX += pushDirectionX * pushStrength
           newZ += pushDirectionZ * pushStrength
         }
         
-        child.position.x = newX
-        child.position.z = newZ
+        // Smooth interpolation instead of direct assignment to prevent shocking movements
+        const lerpFactor = 0.1 // Smooth interpolation factor
+        child.position.x += (newX - child.position.x) * lerpFactor
+        child.position.z += (newZ - child.position.z) * lerpFactor
 
         // Smooth rotation with mouse influence - very slow
         const rotationInfluence = mouseInfluence * 0.3 // Reduced influence
@@ -1505,23 +1506,21 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           child.scale.set(finalScale * aspectRatio, finalScale, 1)
         }
 
-        // Reset when leaves go out of bounds - like particles
+        // Smooth boundary constraints instead of instant resets to prevent shocking movements
         if (child.position.y > 8) {
-          child.position.y = -7 + Math.random() * 2
-          child.position.x = (Math.random() - 0.5) * 20
-          child.position.z = (Math.random() - 0.5) * 20
+          // Smoothly move back instead of instant reset
+          child.position.y -= 0.01
         } else if (child.position.y < -8) {
-          child.position.y = 6 + Math.random() * 2
-          child.position.x = (Math.random() - 0.5) * 20
-          child.position.z = (Math.random() - 0.5) * 20
+          // Smoothly move back instead of instant reset
+          child.position.y += 0.01
         }
         
-        // Reset horizontally if too far
+        // Smooth horizontal boundary constraints
         if (Math.abs(child.position.x) > 12) {
-          child.position.x = (Math.random() - 0.5) * 16
+          child.position.x += (child.position.x > 0 ? -1 : 1) * 0.01
         }
         if (Math.abs(child.position.z) > 10) {
-          child.position.z = (Math.random() - 0.5) * 14
+          child.position.z += (child.position.z > 0 ? -1 : 1) * 0.01
         }
       })
     })
@@ -1646,21 +1645,22 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const leaf = leavesData[i]
         if (!leaf) return
 
-        // Elegant floating movement - smooth and graceful, very slow
+        // Elegant floating movement - smooth and graceful, no shocking movements
         const velocity = leaf.velocity
-        child.position.x += velocity[0] + Math.sin(time * 0.006 + i) * 0.00005 // Much slower oscillation
-        child.position.y += velocity[1] + Math.cos(time * 0.005 + i) * 0.0001 // Much slower oscillation
-        child.position.z += velocity[2] + Math.sin(time * 0.006 + i * 0.7) * 0.00005 // Much slower oscillation
+        // Remove oscillation completely for smooth, consistent movement
+        child.position.x += velocity[0]
+        child.position.y += velocity[1]
+        child.position.z += velocity[2]
         
-        // Constrain leaves to left side to avoid b.png on right (x < 1.5)
+        // Smooth constraint to left side to avoid b.png on right (x < 1.5)
         if (child.position.x > 1.5) {
-          child.position.x = 1.5 - (child.position.x - 1.5) * 0.3
+          child.position.x -= (child.position.x - 1.5) * 0.05 // Smooth damping instead of instant
         }
         
         let newX = child.position.x
         let newZ = child.position.z
         
-        // Collision detection - prevent overlapping with other leaves (increased distance)
+        // Collision detection - prevent overlapping with other leaves (very gentle)
         const minDistance = 4.0
         allLeavesRef.current.forEach((otherLeaf, key) => {
           if (key === `leaf-${i}` || !otherLeaf) return
@@ -1671,14 +1671,17 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           const distance = Math.sqrt(dx * dx + dy * dy + dz * dz)
           
           if (distance < minDistance && distance > 0) {
-            const pushStrength = (minDistance - distance) / minDistance * 0.05 // Further reduced for very smooth movement
+            // Very gentle push with damping to prevent shocking movements
+            const pushStrength = (minDistance - distance) / minDistance * 0.02 // Very gentle push
             newX += dx / distance * pushStrength
             newZ += dz / distance * pushStrength
           }
         })
         
-        child.position.x = newX
-        child.position.z = newZ
+        // Smooth interpolation instead of direct assignment to prevent shocking movements
+        const lerpFactor = 0.1 // Smooth interpolation factor
+        child.position.x += (newX - child.position.x) * lerpFactor
+        child.position.z += (newZ - child.position.z) * lerpFactor
 
         child.rotation.x += leaf.rotationSpeed[0]
         child.rotation.y += leaf.rotationSpeed[1]
@@ -1695,23 +1698,21 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           child.scale.set(leaf.scale * aspectRatio * scalePulse, leaf.scale * scalePulse, 1)
         }
 
-        // Reset when leaves go out of bounds - like particles
+        // Smooth boundary constraints instead of instant resets to prevent shocking movements
         if (child.position.y > 8) {
-          child.position.y = -7 + Math.random() * 2
-          child.position.x = (Math.random() - 0.5) * 20
-          child.position.z = (Math.random() - 0.5) * 20
+          // Smoothly move back instead of instant reset
+          child.position.y -= 0.01
         } else if (child.position.y < -8) {
-          child.position.y = 6 + Math.random() * 2
-          child.position.x = (Math.random() - 0.5) * 20
-          child.position.z = (Math.random() - 0.5) * 20
+          // Smoothly move back instead of instant reset
+          child.position.y += 0.01
         }
         
-        // Reset horizontally if too far
+        // Smooth horizontal boundary constraints
         if (Math.abs(child.position.x) > 12) {
-          child.position.x = (Math.random() - 0.5) * 16
+          child.position.x += (child.position.x > 0 ? -1 : 1) * 0.01
         }
         if (Math.abs(child.position.z) > 10) {
-          child.position.z = (Math.random() - 0.5) * 14
+          child.position.z += (child.position.z > 0 ? -1 : 1) * 0.01
         }
       })
     })
@@ -1906,23 +1907,21 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           child.scale.set(finalScale * aspectRatio, finalScale, 1)
         }
 
-        // Reset when leaves go out of bounds - like particles
+        // Smooth boundary constraints instead of instant resets to prevent shocking movements
         if (child.position.y > 8) {
-          child.position.y = -7 + Math.random() * 2
-          child.position.x = (Math.random() - 0.5) * 20
-          child.position.z = (Math.random() - 0.5) * 20
+          // Smoothly move back instead of instant reset
+          child.position.y -= 0.01
         } else if (child.position.y < -8) {
-          child.position.y = 6 + Math.random() * 2
-          child.position.x = (Math.random() - 0.5) * 20
-          child.position.z = (Math.random() - 0.5) * 20
+          // Smoothly move back instead of instant reset
+          child.position.y += 0.01
         }
         
-        // Reset horizontally if too far
+        // Smooth horizontal boundary constraints
         if (Math.abs(child.position.x) > 12) {
-          child.position.x = (Math.random() - 0.5) * 16
+          child.position.x += (child.position.x > 0 ? -1 : 1) * 0.01
         }
         if (Math.abs(child.position.z) > 10) {
-          child.position.z = (Math.random() - 0.5) * 14
+          child.position.z += (child.position.z > 0 ? -1 : 1) * 0.01
         }
       })
     })
