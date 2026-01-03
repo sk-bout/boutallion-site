@@ -1007,12 +1007,12 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const button = buttonsData[i]
         if (!button) return
 
-        // Elegant floating movement - smooth and graceful, very slow, no shocking movements
+        // Elegant floating movement - smooth and graceful, very slow, subtle floating
         const velocity = button.velocity
-        // Remove oscillation completely for smooth, consistent movement
-        child.position.x += velocity[0]
-        child.position.y += velocity[1]
-        child.position.z += velocity[2]
+        // Very subtle oscillation for gentle floating effect
+        child.position.x += velocity[0] + Math.sin(time * 0.003 + i) * 0.00003 // Very slow, subtle oscillation
+        child.position.y += velocity[1] + Math.cos(time * 0.0025 + i) * 0.00005 // Very slow, subtle oscillation
+        child.position.z += velocity[2] + Math.sin(time * 0.003 + i * 0.6) * 0.00003 // Very slow, subtle oscillation
         
         let newX = child.position.x
         let newZ = child.position.z
@@ -1440,12 +1440,12 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const leaf = leavesData[i]
         if (!leaf) return
 
-        // Elegant floating movement - smooth and graceful, very slow, no shocking movements
+        // Elegant floating movement - smooth and graceful, very slow, subtle floating
         const velocity = leaf.velocity
-        // Remove oscillation completely for smooth, consistent movement
-        child.position.x += velocity[0]
-        child.position.y += velocity[1]
-        child.position.z += velocity[2]
+        // Very subtle oscillation for gentle floating effect
+        child.position.x += velocity[0] + Math.sin(time * 0.003 + i) * 0.00003 // Very slow, subtle oscillation
+        child.position.y += velocity[1] + Math.cos(time * 0.0025 + i) * 0.00005 // Very slow, subtle oscillation
+        child.position.z += velocity[2] + Math.sin(time * 0.003 + i * 0.7) * 0.00003 // Very slow, subtle oscillation
         
         // Smooth constraint to left side to avoid b.png on right (x < 1.5)
         if (child.position.x > 1.5) {
