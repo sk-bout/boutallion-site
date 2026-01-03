@@ -399,7 +399,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         
 
         {/* By Invitation Only text */}
-        <p className={`font-refined text-white/70 mb-1 sm:mb-1 md:mb-1.5 tracking-[0.1em] sm:tracking-[0.15em] uppercase px-4 break-words ${
+        <p className={`font-refined text-white/70 mb-1 sm:mb-1 md:mb-1.5 tracking-[0.1em] sm:tracking-[0.15em] uppercase px-4 break-words -mt-7 sm:-mt-7 md:-mt-8 ${
           params.locale === 'ar' || params.locale === 'ru'
             ? 'text-base sm:text-lg md:text-xl lg:text-2xl'
             : 'text-sm sm:text-base md:text-lg lg:text-xl'
