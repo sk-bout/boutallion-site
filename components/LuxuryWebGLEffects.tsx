@@ -113,7 +113,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           position: [x, y, z],
           velocity: [
             (Math.random() - 0.5) * 0.0004, // Slower horizontal movement
-            Math.random() * 0.0012 + 0.001, // Slower upward velocity
+            Math.random() * 0.0003 + 0.0002, // Very slow upward velocity for elegant flow
             (Math.random() - 0.5) * 0.0004 // Slower depth movement
           ],
           size: Math.random() * 0.08 + 0.05
@@ -153,7 +153,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         
         // Elegant floating motion - slower and more graceful
         pos.x += velocity[0] + Math.sin(time * 0.5 + pos.y) * 0.0001
-        pos.y += velocity[1] + Math.cos(time * 0.4 + pos.x) * 0.0002 // Slower upward drift
+        pos.y += velocity[1] + Math.cos(time * 0.4 + pos.x) * 0.0001 // Very slow upward drift for elegant flow
         pos.z += velocity[2] + Math.sin(time * 0.15 + pos.x) * 0.0001
         
         // Constrain particles to left side to avoid b.png on right (x < 1.5)
@@ -1382,10 +1382,10 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             Math.sin(angle) * radius + (Math.random() - 0.5) * 18 // Increased depth spread
           ] as [number, number, number],
           startY: yPos,
-          floatSpeed: 0.003 + Math.random() * 0.002, // Increased speed for visible movement
+          floatSpeed: 0.0008 + Math.random() * 0.0005, // Very slow speed for elegant flow
           velocity: [
             (Math.random() - 0.5) * 0.0008, // Elegant slow horizontal movement
-            Math.random() * 0.001 + 0.0005, // Elegant slow upward movement
+            Math.random() * 0.0003 + 0.0002, // Very slow upward movement for elegant flow
             (Math.random() - 0.5) * 0.0008 // Elegant slow depth movement
           ] as [number, number, number],
           scale: sizeVariation,
@@ -1600,10 +1600,10 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             Math.sin(angle) * radius + (Math.random() - 0.5) * 15 // Increased depth spread
           ] as [number, number, number],
           startY: -7 + Math.random() * 16,
-          floatSpeed: 0.003 + Math.random() * 0.002, // Increased speed for visible movement
+          floatSpeed: 0.0008 + Math.random() * 0.0005, // Very slow speed for elegant flow
           velocity: [
             (Math.random() - 0.5) * 0.0015,
-            Math.random() * 0.002 + 0.001,
+            Math.random() * 0.0003 + 0.0002, // Very slow upward movement for elegant flow
             (Math.random() - 0.5) * 0.0015
           ] as [number, number, number],
           scale: sizeVariation,
@@ -1789,10 +1789,10 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             Math.sin(angle) * radius + (Math.random() - 0.5) * 15 // Increased depth spread
           ] as [number, number, number],
           startY: -7 + Math.random() * 16,
-          floatSpeed: 0.003 + Math.random() * 0.002, // Increased speed for visible movement
+          floatSpeed: 0.0008 + Math.random() * 0.0005, // Very slow speed for elegant flow
           velocity: [
             (Math.random() - 0.5) * 0.0015,
-            Math.random() * 0.002 + 0.001,
+            Math.random() * 0.0003 + 0.0002, // Very slow upward movement for elegant flow
             (Math.random() - 0.5) * 0.0015
           ] as [number, number, number],
           scale: sizeVariation,
