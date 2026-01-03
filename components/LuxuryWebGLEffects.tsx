@@ -947,6 +947,8 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
   const FloatingButtons = () => {
     const buttonsGroupRef = useRef<Group>(null)
     const [textureLoaded, setTextureLoaded] = useState(false)
+    const { viewport } = useThree()
+    const isMobile = viewport.width < 6
     
     const buttonTexture = useMemo(() => {
       const loader = new THREE.TextureLoader()
@@ -994,7 +996,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
                 ]
               }
             })
-          }, [])
+          }, [isMobile])
 
     useFrame(({ clock }) => {
       if (!buttonsGroupRef.current || !textureLoaded) return
@@ -1372,7 +1374,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       )
       return tex
     }, [])
-
+    
+    const isMobile = viewport.width < 6
+    
     const leavesData = useMemo(() => {
       const count = 5 // Reduced for elegant, less crowded appearance
       const goldenAngle = Math.PI * (3 - Math.sqrt(5)) // Golden angle for even distribution
@@ -1382,11 +1386,20 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         // Maximum size constraint to prevent leaves from becoming unclear
         const MAX_LEAF_SCALE = 1.6
         const sizeVariation = Math.min(1.2 + Math.random() * 1.5, MAX_LEAF_SCALE) // Constrained to max 1.6
-        // Avoid center area where BOUTALLION is (y between -1.5 and 1.5)
-        let yPos = -7 + Math.random() * 16
-        if (yPos > -1.5 && yPos < 1.5) {
-          yPos = yPos < 0 ? -2.5 + Math.random() * 1 : 1.5 + Math.random() * 1
+        // On mobile, distribute leaves across full vertical space including above BOUTALLION
+        // On desktop, avoid center area where BOUTALLION is (y between -1.5 and 1.5)
+        let yPos: number
+        if (isMobile) {
+          // Mobile: Full vertical spread from -7 to 3 (well above BOUTALLION)
+          yPos = -7 + Math.random() * 10 // Spread from -7 to 3
+        } else {
+          // Desktop: Original logic
+          yPos = -7 + Math.random() * 16
+          if (yPos > -1.5 && yPos < 1.5) {
+            yPos = yPos < 0 ? -2.5 + Math.random() * 1 : 1.5 + Math.random() * 1
+          }
         }
+        
         return {
           position: [
             Math.cos(angle) * radius + (Math.random() - 0.5) * 18, // Increased spread for universe effect
@@ -1409,7 +1422,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           ]
         }
       })
-    }, [])
+    }, [isMobile])
 
     useFrame(({ clock, viewport, pointer }) => {
       if (!leavesGroupRef.current || !textureLoaded) return
@@ -1597,6 +1610,8 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       )
       return tex
     }, [])
+    
+    const isMobile = viewport.width < 6
 
     const leavesData = useMemo(() => {
       const count = 4 // Reduced for elegant, less crowded appearance
@@ -1605,13 +1620,25 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const angle = i * goldenAngle
         const radius = 20 + Math.random() * 18 // Increased spread for universe effect
         const sizeVariation = 1.2 + Math.random() * 1.5 // Bigger sizes
+        // On mobile, distribute leaves across full vertical space including above BOUTALLION
+        let yPos: number
+        let startY: number
+        if (isMobile) {
+          // Mobile: Full vertical spread from -7 to 3 (well above BOUTALLION)
+          yPos = -7 + Math.random() * 10 // Spread from -7 to 3
+          startY = yPos
+        } else {
+          // Desktop: Original positioning
+          yPos = -10 + Math.random() * 25 // Increased vertical spread
+          startY = -7 + Math.random() * 16
+        }
         return {
           position: [
             Math.cos(angle) * radius + (Math.random() - 0.5) * 15, // Increased spread
-            -10 + Math.random() * 25, // Increased vertical spread
+            yPos,
             Math.sin(angle) * radius + (Math.random() - 0.5) * 15 // Increased depth spread
           ] as [number, number, number],
-          startY: -7 + Math.random() * 16,
+          startY,
           floatSpeed: 0.0008 + Math.random() * 0.0005, // Very slow speed for elegant flow
           velocity: [
             (Math.random() - 0.5) * 0.0015,
@@ -1627,7 +1654,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           ]
         }
       })
-    }, [])
+    }, [isMobile])
 
     useFrame(({ clock, viewport, pointer }) => {
       if (!leavesGroupRef.current || !textureLoaded) return
@@ -1788,6 +1815,8 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       )
       return tex
     }, [])
+    
+    const isMobile = viewport.width < 6
 
     const leavesData = useMemo(() => {
       const count = 4 // Reduced for elegant, less crowded appearance
@@ -1796,13 +1825,25 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const angle = i * goldenAngle
         const radius = 20 + Math.random() * 18 // Increased spread for universe effect
         const sizeVariation = 1.2 + Math.random() * 1.5 // Bigger sizes
+        // On mobile, distribute leaves across full vertical space including above BOUTALLION
+        let yPos: number
+        let startY: number
+        if (isMobile) {
+          // Mobile: Full vertical spread from -7 to 3 (well above BOUTALLION)
+          yPos = -7 + Math.random() * 10 // Spread from -7 to 3
+          startY = yPos
+        } else {
+          // Desktop: Original positioning
+          yPos = -10 + Math.random() * 25 // Increased vertical spread
+          startY = -7 + Math.random() * 16
+        }
         return {
           position: [
             Math.cos(angle) * radius + (Math.random() - 0.5) * 15, // Increased spread
-            -10 + Math.random() * 25, // Increased vertical spread
+            yPos,
             Math.sin(angle) * radius + (Math.random() - 0.5) * 15 // Increased depth spread
           ] as [number, number, number],
-          startY: -7 + Math.random() * 16,
+          startY,
           floatSpeed: 0.0008 + Math.random() * 0.0005, // Very slow speed for elegant flow
           velocity: [
             (Math.random() - 0.5) * 0.0015,
@@ -1818,7 +1859,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           ]
         }
       })
-    }, [])
+    }, [isMobile])
 
     useFrame(({ clock, viewport, pointer }) => {
       if (!leavesGroupRef.current || !textureLoaded) return
@@ -2137,13 +2178,27 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
   const VIDEO_PATHS = ['/videos/video1.mp4', '/videos/video2.mp4']
   
   const VideoBubbles = () => {
+    const { viewport } = useThree()
+    const isMobile = viewport.width < 6
+    
     const bubblesData = useMemo(() => {
       return VIDEO_PATHS.map((videoPath, index) => {
         // Position 2 smaller bubbles on left side to avoid b.png (which is on right)
         // Place them more to the left and center to avoid overlap
         const angle = (index / VIDEO_PATHS.length) * Math.PI * 2
         const radius = 1.2 // Smaller radius, positioned more to the left
-        const height = index === 0 ? -0.6 : 0.6 // One above, one below center
+        
+        // On mobile, distribute bubbles across full vertical space, with one clearly above BOUTALLION
+        // On desktop, keep original positioning
+        let height: number
+        if (isMobile) {
+          // Mobile: One bubble well above center (above BOUTALLION), one below
+          height = index === 0 ? 2.5 : -1.5 // First bubble high above, second below
+        } else {
+          // Desktop: Original positioning
+          height = index === 0 ? -0.6 : 0.6 // One above, one below center
+        }
+        
         const depth = 2.8 // Slightly further back
         // Position bubbles on left side (negative x) to avoid b.png on right
         const xOffset = -1.5 // Shift left to avoid right side where b.png is
@@ -2161,7 +2216,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         }
       })
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [isMobile])
 
     return (
       <>
