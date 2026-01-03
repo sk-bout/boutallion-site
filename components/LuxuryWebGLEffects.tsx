@@ -2140,14 +2140,17 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       meshRef.current.position.y = initialPosition.y + Math.cos(time * 0.12 + offset * 1.3) * 0.3
       meshRef.current.position.z = initialPosition.z + Math.sin(time * 0.18 + offset * 0.8) * 0.3
       
-      // Constrain video bubbles to left side to avoid b.png on right (x < 1.5)
-      if (meshRef.current.position.x > 1.5) {
-        meshRef.current.position.x = 1.5 - (meshRef.current.position.x - 1.5) * 0.3
-      }
+      // Constrain video bubbles to stay visible - not too far left (cut off) or too far right (overlap b.png)
+      const { viewport } = state
+      const viewportHalfWidth = viewport.width / 2
+      const bubbleRadius = size || 0.25
+      const minX = -viewportHalfWidth + bubbleRadius + 0.2 // Keep bubble visible on left edge
+      const maxX = 1.5 // Keep bubble on left side to avoid b.png on right
       
-      // Constrain video bubbles to left side to avoid b.png on right (x < 1.5)
-      if (meshRef.current.position.x > 1.5) {
-        meshRef.current.position.x = 1.5 - (meshRef.current.position.x - 1.5) * 0.3
+      if (meshRef.current.position.x < minX) {
+        meshRef.current.position.x = minX // Prevent cut-off on left edge
+      } else if (meshRef.current.position.x > maxX) {
+        meshRef.current.position.x = maxX - (meshRef.current.position.x - maxX) * 0.3 // Keep on left side
       }
       
       if (type === 'sphere') {
@@ -2213,13 +2216,14 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         }
         
         const depth = 2.8 // Slightly further back
-        // Position bubbles on left side (negative x) to avoid b.png on right
-        const xOffset = -1.5 // Shift left to avoid right side where b.png is
+        // Position bubbles on left side but not too far left (to avoid cut-off)
+        // Keep them visible on the left side of the page
+        const xOffset = -1.0 // Shift left but not too far to avoid cut-off
         
         return {
           videoPath,
           position: [
-            Math.cos(angle) * radius + xOffset, // Shift left
+            Math.cos(angle) * radius + xOffset, // Shift left but keep visible
             height,
             depth
           ] as [number, number, number],
