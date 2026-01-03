@@ -1057,16 +1057,14 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.rotation.y += button.rotationSpeed[1] * 0.5 // Slower rotation
         child.rotation.z += button.rotationSpeed[2] * 0.5 // Slower rotation
 
-        // Allow leaves to float in and out of viewport - only gently guide them back if too far
+        // Allow buttons to float in and out of viewport - only gently guide them back if too far
         // Extended boundaries to allow natural floating in and out
         if (child.position.y > 12) {
           // Very gentle guidance back if too far above (allows floating out and back in)
           child.position.y -= (child.position.y - 12) * 0.005 // Very gentle, allows floating out
-          startYRefs.current[i] = child.position.y
         } else if (child.position.y < -18) {
           // Very gentle guidance back if too far below (allows floating out and back in)
           child.position.y += (-18 - child.position.y) * 0.005 // Very gentle, allows floating out
-          startYRefs.current[i] = child.position.y
         }
         
         // Allow horizontal and depth movement beyond viewport - only gentle guidance if extremely far
