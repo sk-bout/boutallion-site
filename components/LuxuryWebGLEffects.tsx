@@ -1879,9 +1879,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
 
         // Elegant floating movement - smooth and graceful, very slow
         const velocity = leaf.velocity
-        child.position.x += velocity[0] + Math.sin(time * 0.006 + i) * 0.00005 // Much slower oscillation
-        child.position.y += velocity[1] + Math.cos(time * 0.005 + i) * 0.0001 // Much slower oscillation
-        child.position.z += velocity[2] + Math.sin(time * 0.006 + i * 0.7) * 0.00005 // Much slower oscillation
+        child.position.x += velocity[0] + Math.sin(time * 0.003 + i) * 0.00003 // Very slow, subtle oscillation
+        child.position.y += velocity[1] + Math.cos(time * 0.0025 + i) * 0.00005 // Very slow, subtle oscillation
+        child.position.z += velocity[2] + Math.sin(time * 0.003 + i * 0.7) * 0.00003 // Very slow, subtle oscillation
         
         // Constrain leaves to left side to avoid b.png on right (x < 1.5)
         if (child.position.x > 1.5) {
