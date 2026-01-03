@@ -775,8 +775,10 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         }
         
         // Vary sizes - some tiny, some small, some bigger
+        // Maximum size constraint to prevent leaves from becoming unclear
+        const MAX_LEAF_SCALE = 1.6
         const sizeCategory = sizeCategories[Math.floor(Math.random() * sizeCategories.length)]
-        const sizeVariation = sizeCategory + (Math.random() - 0.5) * 0.1
+        const sizeVariation = Math.min(sizeCategory + (Math.random() - 0.5) * 0.1, MAX_LEAF_SCALE)
         
         leaves.push({
           position: [x, y, z],
@@ -844,8 +846,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         }
         
         // Smooth scaling animation - bigger to smaller and back (very slow)
+        // Maximum scale constraint to prevent leaves from becoming unclear
+        const MAX_LEAF_SCALE = 1.6
         const scalePulse = 1 + Math.sin(time * 0.15 + i * 0.5) * 0.1 // Slow pulse between 0.9 and 1.1
-        child.scale.setScalar(leaf.scale * scalePulse)
+        const finalScale = Math.min(leaf.scale * scalePulse, MAX_LEAF_SCALE)
+        child.scale.setScalar(finalScale)
         
         // Very slow rotation to prevent flickering
         child.rotation.x += leaf.rotationSpeed[0] * 0.5
@@ -1362,7 +1367,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
         const radius = 16 + Math.random() * 12 // Much wider spread - keep away from center
-        const sizeVariation = 1.2 + Math.random() * 1.5 // Bigger sizes (increased from 0.6-1.6 to 1.2-2.7)
+        // Maximum size constraint to prevent leaves from becoming unclear
+        const MAX_LEAF_SCALE = 1.6
+        const sizeVariation = Math.min(1.2 + Math.random() * 1.5, MAX_LEAF_SCALE) // Constrained to max 1.6
         // Avoid center area where BOUTALLION is (y between -1.5 and 1.5)
         let yPos = -7 + Math.random() * 16
         if (yPos > -1.5 && yPos < 1.5) {
@@ -1472,14 +1479,17 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.rotation.z += leaf.rotationSpeed[2] * (1 + rotationInfluence)
 
         // Smooth scale pulse - preserve mirrored scale (bigger variation) with mouse influence
+        // Maximum scale constraint to prevent leaves from becoming unclear
+        const MAX_LEAF_SCALE = 1.6
         const scalePulse = 1 + Math.sin(time * 0.15 + i * 0.5) * 0.25 + mouseInfluence * 0.2
+        const finalScale = Math.min(leaf.scale * scalePulse, MAX_LEAF_SCALE)
         const aspectRatio = leafTexture.image && leafTexture.image.width && leafTexture.image.height
           ? leafTexture.image.width / leafTexture.image.height
           : 1
         if (leaf.mirrored) {
-          child.scale.set(-leaf.scale * aspectRatio * scalePulse, leaf.scale * scalePulse, 1)
+          child.scale.set(-finalScale * aspectRatio, finalScale, 1)
         } else {
-          child.scale.set(leaf.scale * aspectRatio * scalePulse, leaf.scale * scalePulse, 1)
+          child.scale.set(finalScale * aspectRatio, finalScale, 1)
         }
 
         // Reset when leaves go out of bounds - like particles
@@ -1870,14 +1880,17 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.rotation.z += leaf.rotationSpeed[2] * (1 + rotationInfluence)
 
         // Smooth scale pulse - preserve mirrored scale (bigger variation) with mouse influence
+        // Maximum scale constraint to prevent leaves from becoming unclear
+        const MAX_LEAF_SCALE = 1.6
         const scalePulse = 1 + Math.sin(time * 0.15 + i * 0.5) * 0.25 + mouseInfluence * 0.2
+        const finalScale = Math.min(leaf.scale * scalePulse, MAX_LEAF_SCALE)
         const aspectRatio = leafTexture.image && leafTexture.image.width && leafTexture.image.height
           ? leafTexture.image.width / leafTexture.image.height
           : 1
         if (leaf.mirrored) {
-          child.scale.set(-leaf.scale * aspectRatio * scalePulse, leaf.scale * scalePulse, 1)
+          child.scale.set(-finalScale * aspectRatio, finalScale, 1)
         } else {
-          child.scale.set(leaf.scale * aspectRatio * scalePulse, leaf.scale * scalePulse, 1)
+          child.scale.set(finalScale * aspectRatio, finalScale, 1)
         }
 
         // Reset when leaves go out of bounds - like particles
