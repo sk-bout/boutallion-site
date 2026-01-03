@@ -97,14 +97,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       for (let i = 0; i < count; i++) {
         // Spread particles evenly across the page, with more focus on bottom
         // Use a more even distribution to avoid clustering
-        // Constrain particles to left and center, avoid right side where b.png is
+        // On desktop, allow particles on right side (more gold dust on right)
+        // On mobile/tablet, constraint will be applied in useFrame based on viewport
         const angle = (i / count) * Math.PI * 2
         const radius = Math.random() * 25 + 5 // Increased spread for universe effect
-        let x = Math.cos(angle) * radius + (Math.random() - 0.5) * 8 // Wider horizontal spread
-        // Keep particles on left side (x < 1.5) to avoid b.png on right
-        if (x > 1.5) {
-          x = 1.5 - (x - 1.5) * 0.5 // Constrain to left, with some compression
-        }
+        const x = Math.cos(angle) * radius + (Math.random() - 0.5) * 8 // Wider horizontal spread
         const z = Math.sin(angle) * radius + (Math.random() - 0.5) * 12 // Increased depth spread for universe effect
         // Focus more particles at the bottom of the page
         const y = -4.5 + Math.random() * 4 // More particles concentrated at bottom
@@ -138,9 +135,13 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
 
     const groupRef = useRef<Group>(null)
 
-    useFrame(({ clock }) => {
+    useFrame(({ clock, viewport }) => {
       if (!groupRef.current) return
       const time = clock.getElapsedTime()
+      
+      // Determine device type based on viewport
+      const isMobile = viewport.width < 6
+      const isTablet = viewport.width >= 6 && viewport.width < 10
       
       groupRef.current.children.forEach((child, i) => {
         if (!(child instanceof THREE.Mesh)) return
@@ -156,9 +157,10 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         pos.y += velocity[1] + Math.cos(time * 0.4 + pos.x) * 0.0001 // Very slow upward drift for elegant flow
         pos.z += velocity[2] + Math.sin(time * 0.15 + pos.x) * 0.0001
         
-        // Constrain particles to left side to avoid b.png on right (x < 1.5)
-        if (pos.x > 1.5) {
-          pos.x = 1.5 - (pos.x - 1.5) * 0.3 // Push back to left with damping
+        // On desktop, allow particles on right side (more gold dust on right)
+        // On mobile/tablet, constrain to left side to avoid b.png
+        if ((isMobile || isTablet) && pos.x > 1.5) {
+          pos.x = 1.5 - (pos.x - 1.5) * 0.3 // Push back to left with damping on mobile/tablet
         }
         
         // Keep particles in visible range, resetting to bottom when they go too high
@@ -1238,6 +1240,13 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           // Desktop: Fixed position in bottom right corner
           const rightMargin = 0.5 // Distance from right edge
           const bottomMargin = 0.5 // Distance from bottom edge
+          child.position.x = viewportHalfWidth - logoHalfWidth - rightMargin
+          child.position.y = -viewportHalfHeight + logoHalfHeight + bottomMargin
+          startYRefs.current[0] = -viewportHalfHeight + logoHalfHeight + bottomMargin
+        } else if (isMobile) {
+          // Mobile: Position b.png lower (more bottom margin)
+          const rightMargin = 0.5 // Distance from right edge
+          const bottomMargin = 1.2 // Increased bottom margin for mobile (was 0.5)
           child.position.x = viewportHalfWidth - logoHalfWidth - rightMargin
           child.position.y = -viewportHalfHeight + logoHalfHeight + bottomMargin
           startYRefs.current[0] = -viewportHalfHeight + logoHalfHeight + bottomMargin
