@@ -965,7 +965,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
 
           const buttonsData = useMemo(() => {
             const count = 20 // Reduced from 35 to 20 (less crowded)
-            const sizeCategories = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8] // Smaller sizes - never too big
+            const sizeCategories = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2] // Larger sizes so engraving is visible
             return Array.from({ length: count }, (_, i) => {
               const angle = (i / count) * Math.PI * 2
               const radius = 22 + Math.random() * 18 // Increased spread for universe effect
@@ -1383,9 +1383,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
         const radius = 25 + Math.random() * 20 // Increased spread for universe effect
-        // Maximum size constraint to prevent leaves from becoming unclear
-        const MAX_LEAF_SCALE = 1.6
-        const sizeVariation = Math.min(1.2 + Math.random() * 1.5, MAX_LEAF_SCALE) // Constrained to max 1.6
+        // Maximum size constraint - increased to allow larger leaves sometimes
+        const MAX_LEAF_SCALE = 2.2
+        const sizeVariation = Math.min(1.4 + Math.random() * 1.8, MAX_LEAF_SCALE) // Larger range, sometimes bigger
         // On mobile, distribute leaves across full vertical space including above BOUTALLION
         // On desktop, avoid center area where BOUTALLION is (y between -1.5 and 1.5)
         let yPos: number
@@ -1619,7 +1619,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
         const radius = 20 + Math.random() * 18 // Increased spread for universe effect
-        const sizeVariation = 1.2 + Math.random() * 1.5 // Bigger sizes
+        const sizeVariation = 1.4 + Math.random() * 1.8 // Bigger sizes - sometimes larger
         // On mobile, distribute leaves across full vertical space including above BOUTALLION
         let yPos: number
         let startY: number
@@ -1824,7 +1824,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
         const radius = 20 + Math.random() * 18 // Increased spread for universe effect
-        const sizeVariation = 1.2 + Math.random() * 1.5 // Bigger sizes
+        const sizeVariation = 1.4 + Math.random() * 1.8 // Bigger sizes - sometimes larger
         // On mobile, distribute leaves across full vertical space including above BOUTALLION
         let yPos: number
         let startY: number
