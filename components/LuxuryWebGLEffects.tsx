@@ -97,11 +97,14 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       for (let i = 0; i < count; i++) {
         // Spread particles evenly across the page, with more focus on bottom
         // Use a more even distribution to avoid clustering
-        // On desktop, allow particles on right side (more gold dust on right)
+        // On desktop, focus more particles on right side (more gold dust on right)
         // On mobile/tablet, constraint will be applied in useFrame based on viewport
         const angle = (i / count) * Math.PI * 2
         const radius = Math.random() * 25 + 5 // Increased spread for universe effect
-        const x = Math.cos(angle) * radius + (Math.random() - 0.5) * 8 // Wider horizontal spread
+        // Bias particles to the right side on desktop (x > 0) - 70% chance
+        const rightBias = Math.random() > 0.3 ? 1 : -1 // 70% chance to be on right side
+        const baseX = Math.cos(angle) * radius + (Math.random() - 0.5) * 8
+        const x = baseX * rightBias + (rightBias > 0 ? Math.random() * 3 : 0) // More particles on right
         const z = Math.sin(angle) * radius + (Math.random() - 0.5) * 12 // Increased depth spread for universe effect
         // Focus more particles at the bottom of the page
         const y = -4.5 + Math.random() * 4 // More particles concentrated at bottom
