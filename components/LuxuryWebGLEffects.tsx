@@ -1399,30 +1399,24 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const goldenAngle = Math.PI * (3 - Math.sqrt(5)) // Golden angle for even distribution
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
-        // On mobile, use much larger radius and spread to cover entire page
-        const radius = isMobile 
-          ? 50 + Math.random() * 40 // Much larger radius on mobile (50-90)
-          : 35 + Math.random() * 30 // Desktop: original spread
+        // Use much larger radius and spread to cover entire page (both mobile and desktop)
+        const radius = 50 + Math.random() * 40 // Much larger radius (50-90) for both mobile and desktop
         // Maximum size constraint - increased to allow larger leaves sometimes
         const MAX_LEAF_SCALE = 2.2
         const sizeVariation = Math.min(1.4 + Math.random() * 1.8, MAX_LEAF_SCALE) // Larger range, sometimes bigger
-        // On mobile, distribute leaves across full vertical space including above BOUTALLION
-        // On desktop, avoid center area where BOUTALLION is (y between -1.5 and 1.5)
+        // Distribute leaves across full vertical space across entire page
         let yPos: number
         if (isMobile) {
           // Mobile: Full vertical spread across entire page (-10 to 5 for full coverage)
           yPos = -10 + Math.random() * 15 // Spread from -10 to 5
         } else {
-          // Desktop: Original logic
-          yPos = -7 + Math.random() * 16
-          if (yPos > -1.5 && yPos < 1.5) {
-            yPos = yPos < 0 ? -2.5 + Math.random() * 1 : 1.5 + Math.random() * 1
-          }
+          // Desktop: Full vertical spread across entire page (-10 to 5 for full coverage)
+          yPos = -10 + Math.random() * 15 // Spread from -10 to 5
         }
         
-        // On mobile, spread leaves much wider horizontally and in depth
-        const horizontalSpread = isMobile ? 40 : 25 // Much wider on mobile
-        const depthSpread = isMobile ? 40 : 25 // Much wider on mobile
+        // Spread leaves much wider horizontally and in depth (both mobile and desktop)
+        const horizontalSpread = 40 // Much wider spread for both
+        const depthSpread = 40 // Much wider spread for both
         
         return {
           position: [
@@ -1644,12 +1638,10 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const goldenAngle = Math.PI * (3 - Math.sqrt(5))
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
-        // On mobile, use much larger radius and spread to cover entire page
-        const radius = isMobile 
-          ? 50 + Math.random() * 40 // Much larger radius on mobile (50-90)
-          : 30 + Math.random() * 25 // Desktop: original spread
+        // Use much larger radius and spread to cover entire page (both mobile and desktop)
+        const radius = 50 + Math.random() * 40 // Much larger radius (50-90) for both mobile and desktop
         const sizeVariation = 1.4 + Math.random() * 1.8 // Bigger sizes - sometimes larger
-        // On mobile, distribute leaves across full vertical space including above BOUTALLION
+        // Distribute leaves across full vertical space across entire page
         let yPos: number
         let startY: number
         if (isMobile) {
@@ -1657,14 +1649,14 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           yPos = -10 + Math.random() * 15 // Spread from -10 to 5
           startY = yPos
         } else {
-          // Desktop: Original positioning
-          yPos = -10 + Math.random() * 25 // Increased vertical spread
-          startY = -7 + Math.random() * 16
+          // Desktop: Full vertical spread across entire page (-10 to 5 for full coverage)
+          yPos = -10 + Math.random() * 15 // Spread from -10 to 5
+          startY = yPos
         }
         
-        // On mobile, spread leaves much wider horizontally and in depth
-        const horizontalSpread = isMobile ? 40 : 22 // Much wider on mobile
-        const depthSpread = isMobile ? 40 : 22 // Much wider on mobile
+        // Spread leaves much wider horizontally and in depth (both mobile and desktop)
+        const horizontalSpread = 40 // Much wider spread for both
+        const depthSpread = 40 // Much wider spread for both
         
         return {
           position: [
@@ -1863,12 +1855,10 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const goldenAngle = Math.PI * (3 - Math.sqrt(5))
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
-        // On mobile, use much larger radius and spread to cover entire page
-        const radius = isMobile 
-          ? 50 + Math.random() * 40 // Much larger radius on mobile (50-90)
-          : 30 + Math.random() * 25 // Desktop: original spread
+        // Use much larger radius and spread to cover entire page (both mobile and desktop)
+        const radius = 50 + Math.random() * 40 // Much larger radius (50-90) for both mobile and desktop
         const sizeVariation = 1.4 + Math.random() * 1.8 // Bigger sizes - sometimes larger
-        // On mobile, distribute leaves across full vertical space including above BOUTALLION
+        // Distribute leaves across full vertical space across entire page
         let yPos: number
         let startY: number
         if (isMobile) {
@@ -1876,14 +1866,14 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           yPos = -10 + Math.random() * 15 // Spread from -10 to 5
           startY = yPos
         } else {
-          // Desktop: Original positioning
-          yPos = -10 + Math.random() * 25 // Increased vertical spread
-          startY = -7 + Math.random() * 16
+          // Desktop: Full vertical spread across entire page (-10 to 5 for full coverage)
+          yPos = -10 + Math.random() * 15 // Spread from -10 to 5
+          startY = yPos
         }
         
-        // On mobile, spread leaves much wider horizontally and in depth
-        const horizontalSpread = isMobile ? 40 : 22 // Much wider on mobile
-        const depthSpread = isMobile ? 40 : 22 // Much wider on mobile
+        // Spread leaves much wider horizontally and in depth (both mobile and desktop)
+        const horizontalSpread = 40 // Much wider spread for both
+        const depthSpread = 40 // Much wider spread for both
         
         return {
           position: [
