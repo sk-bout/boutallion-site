@@ -1959,10 +1959,12 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.rotation.y += leaf.rotationSpeed[1] * (0.5 + rotationInfluence * 0.2) // Slower base rotation
         child.rotation.z += leaf.rotationSpeed[2] * (0.5 + rotationInfluence * 0.2) // Slower base rotation
 
-        // Smooth scale pulse - preserve mirrored scale (bigger variation) with mouse influence
+        // Smooth galaxy-like scale pulse - elegant breathing effect (bigger and smaller)
         // Maximum scale constraint to prevent leaves from becoming unclear
         const MAX_LEAF_SCALE = 2.2
-        const scalePulse = 1 + Math.sin(time * 0.15 + i * 0.5) * 0.25 + mouseInfluence * 0.2
+        const pulseSpeed = 0.08 + i * 0.01 // Varying pulse speeds for galaxy effect
+        const pulseAmplitude = 0.3 + i * 0.02 // Varying pulse sizes
+        const scalePulse = 1 + Math.sin(time * pulseSpeed + i * 0.7) * pulseAmplitude + mouseInfluence * 0.15
         const finalScale = Math.min(leaf.scale * scalePulse, MAX_LEAF_SCALE)
         const aspectRatio = leafTexture.image && leafTexture.image.width && leafTexture.image.height
           ? leafTexture.image.width / leafTexture.image.height
