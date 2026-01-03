@@ -172,8 +172,16 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         }
         
         // Reset particles that drift too far horizontally - wider reset range
+        // On desktop, bias reset to right side (x > 0)
         if (Math.abs(pos.x) > 10) {
-          pos.x = (Math.random() - 0.5) * 14
+          if (!isMobile && !isTablet) {
+            // Desktop: Bias to right side (70% chance)
+            const rightBias = Math.random() > 0.3 ? 1 : -1
+            pos.x = (Math.random() * 7 + 2) * rightBias // More particles on right side
+          } else {
+            // Mobile/Tablet: Keep on left side
+            pos.x = (Math.random() - 0.5) * 14
+          }
         }
         if (Math.abs(pos.z) > 6) {
           pos.z = (Math.random() - 0.5) * 8
