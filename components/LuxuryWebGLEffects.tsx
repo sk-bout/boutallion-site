@@ -59,7 +59,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       <group ref={crystalsGroupRef}>
         {Array.from({ length: 12 }, (_, i) => {
           const angle = (i / 12) * Math.PI * 2
-          const radius = 2.5 + Math.sin(i) * 0.8
+          const radius = 5.0 + Math.sin(i) * 1.5 // Increased spread for universe effect
           const material = baseMaterial.clone()
           // Constrain crystals to left and center, avoid right side where b.png is
           let x = Math.cos(angle) * radius
@@ -99,13 +99,13 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         // Use a more even distribution to avoid clustering
         // Constrain particles to left and center, avoid right side where b.png is
         const angle = (i / count) * Math.PI * 2
-        const radius = Math.random() * 12 + 2 // Spread from center outward
-        let x = Math.cos(angle) * radius + (Math.random() - 0.5) * 4 // Wide horizontal spread
+        const radius = Math.random() * 25 + 5 // Increased spread for universe effect
+        let x = Math.cos(angle) * radius + (Math.random() - 0.5) * 8 // Wider horizontal spread
         // Keep particles on left side (x < 1.5) to avoid b.png on right
         if (x > 1.5) {
           x = 1.5 - (x - 1.5) * 0.5 // Constrain to left, with some compression
         }
-        const z = Math.sin(angle) * radius + (Math.random() - 0.5) * 6 // Depth spread
+        const z = Math.sin(angle) * radius + (Math.random() - 0.5) * 12 // Increased depth spread for universe effect
         // Focus more particles at the bottom of the page
         const y = -4.5 + Math.random() * 4 // More particles concentrated at bottom
         
@@ -281,8 +281,8 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         bMeshRef.current.position.x = 1.5 - (bMeshRef.current.position.x - 1.5) * 0.3
       }
       
-      // Collision detection - keep B logos apart (minimum distance 3.5)
-      const minDistance = 3.5
+      // Collision detection - keep B logos apart (minimum distance increased for universe effect)
+      const minDistance = 7.0
       allBLogosRef.current.forEach((otherB) => {
         if (otherB === bMeshRef.current || !otherB || !bMeshRef.current) return // Skip self
         
@@ -735,8 +735,8 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       // Size categories: tiny, small, medium, bigger
       const sizeCategories = [0.6, 0.75, 1.0, 1.4]
       
-      // Minimum distance between leaves to prevent clustering (increased for better spread)
-      const minDistance = 3.5
+      // Minimum distance between leaves to prevent clustering (increased for universe effect)
+      const minDistance = 8.0
       
       for (let i = 0; i < count; i++) {
         const mirrored = i % 2 === 0 // Alternate between mirrored and not
@@ -751,11 +751,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           // Even distribution using golden angle for better spread
           const goldenAngle = Math.PI * (3 - Math.sqrt(5)) // Golden angle for even distribution
           const angle = i * goldenAngle
-          const radius = Math.sqrt(i / count) * 30 + 3 // Even spread from center outward
-          x = Math.cos(angle) * radius + (Math.random() - 0.5) * 16 // Very wide horizontal spread
-          z = Math.sin(angle) * radius + (Math.random() - 0.5) * 18 // Very wide depth spread
+          const radius = Math.sqrt(i / count) * 50 + 5 // Increased spread for universe effect
+          x = Math.cos(angle) * radius + (Math.random() - 0.5) * 25 // Much wider horizontal spread
+          z = Math.sin(angle) * radius + (Math.random() - 0.5) * 30 // Much wider depth spread
           // Spread leaves evenly across entire page including above BOUTALLION
-          y = -8 + Math.random() * 20 // Even vertical spread, including above text (up to y=12)
+          y = -12 + Math.random() * 30 // Increased vertical spread for universe effect
           
           // Check distance from existing leaves
           validPosition = true
@@ -964,18 +964,18 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             const sizeCategories = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8] // Smaller sizes - never too big
             return Array.from({ length: count }, (_, i) => {
               const angle = (i / count) * Math.PI * 2
-              const radius = 14 + Math.random() * 10 // Much wider spread - keep away from center
+              const radius = 22 + Math.random() * 18 // Increased spread for universe effect
               const sizeVariation = sizeCategories[Math.floor(Math.random() * sizeCategories.length)] + (Math.random() - 0.5) * 0.2
               // Avoid center area where BOUTALLION is (y between -1 and 1)
-              let yPos = -7 + Math.random() * 16
+              let yPos = -10 + Math.random() * 25 // Increased vertical spread
               if (yPos > -1 && yPos < 1) {
                 yPos = yPos < 0 ? -2 + Math.random() * 1 : 1 + Math.random() * 1
               }
               return {
                 position: [
-                  Math.cos(angle) * radius + (Math.random() - 0.5) * 8, // More spread
+                  Math.cos(angle) * radius + (Math.random() - 0.5) * 15, // Increased spread for universe effect
                   yPos,
-                  Math.sin(angle) * radius + (Math.random() - 0.5) * 8 // More depth spread
+                  Math.sin(angle) * radius + (Math.random() - 0.5) * 15 // Increased depth spread
                 ] as [number, number, number],
                 startY: yPos,
                 floatSpeed: 0.002 + Math.random() * 0.001,
@@ -1013,7 +1013,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         let newZ = child.position.z
         
         // Collision detection - prevent overlapping with other buttons
-        const minDistance = 3.5
+        const minDistance = 7.0 // Increased for universe effect
         allButtonsRef.current.forEach((otherButton, key) => {
           if (key === i || !otherButton) return
           const dx = newX - otherButton.position.x
@@ -1366,7 +1366,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const goldenAngle = Math.PI * (3 - Math.sqrt(5)) // Golden angle for even distribution
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
-        const radius = 16 + Math.random() * 12 // Much wider spread - keep away from center
+        const radius = 25 + Math.random() * 20 // Increased spread for universe effect
         // Maximum size constraint to prevent leaves from becoming unclear
         const MAX_LEAF_SCALE = 1.6
         const sizeVariation = Math.min(1.2 + Math.random() * 1.5, MAX_LEAF_SCALE) // Constrained to max 1.6
@@ -1377,9 +1377,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         }
         return {
           position: [
-            Math.cos(angle) * radius + (Math.random() - 0.5) * 10, // More spread
+            Math.cos(angle) * radius + (Math.random() - 0.5) * 18, // Increased spread for universe effect
             yPos,
-            Math.sin(angle) * radius + (Math.random() - 0.5) * 10 // More depth spread
+            Math.sin(angle) * radius + (Math.random() - 0.5) * 18 // Increased depth spread
           ] as [number, number, number],
           startY: yPos,
           floatSpeed: 0.003 + Math.random() * 0.002, // Increased speed for visible movement
@@ -1429,8 +1429,8 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         let newX = child.position.x
         let newZ = child.position.z
         
-        // Collision detection - prevent overlapping with other leaves (increased distance)
-        const minDistance = 4.0 // Increased minimum distance between leaves
+        // Collision detection - prevent overlapping with other leaves (increased for universe effect)
+        const minDistance = 8.0 // Increased minimum distance between leaves
         allLeavesRef.current.forEach((otherLeaf, key) => {
           if (key === `leaf2-${i}` || !otherLeaf) return // Skip self
           
@@ -1591,13 +1591,13 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const goldenAngle = Math.PI * (3 - Math.sqrt(5))
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
-        const radius = 12 + Math.random() * 10
+        const radius = 20 + Math.random() * 18 // Increased spread for universe effect
         const sizeVariation = 1.2 + Math.random() * 1.5 // Bigger sizes
         return {
           position: [
-            Math.cos(angle) * radius + (Math.random() - 0.5) * 8,
-            -7 + Math.random() * 16,
-            Math.sin(angle) * radius + (Math.random() - 0.5) * 8
+            Math.cos(angle) * radius + (Math.random() - 0.5) * 15, // Increased spread
+            -10 + Math.random() * 25, // Increased vertical spread
+            Math.sin(angle) * radius + (Math.random() - 0.5) * 15 // Increased depth spread
           ] as [number, number, number],
           startY: -7 + Math.random() * 16,
           floatSpeed: 0.003 + Math.random() * 0.002, // Increased speed for visible movement
@@ -1780,13 +1780,13 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       const goldenAngle = Math.PI * (3 - Math.sqrt(5))
       return Array.from({ length: count }, (_, i) => {
         const angle = i * goldenAngle
-        const radius = 12 + Math.random() * 10
+        const radius = 20 + Math.random() * 18 // Increased spread for universe effect
         const sizeVariation = 1.2 + Math.random() * 1.5 // Bigger sizes
         return {
           position: [
-            Math.cos(angle) * radius + (Math.random() - 0.5) * 8,
-            -7 + Math.random() * 16,
-            Math.sin(angle) * radius + (Math.random() - 0.5) * 8
+            Math.cos(angle) * radius + (Math.random() - 0.5) * 15, // Increased spread
+            -10 + Math.random() * 25, // Increased vertical spread
+            Math.sin(angle) * radius + (Math.random() - 0.5) * 15 // Increased depth spread
           ] as [number, number, number],
           startY: -7 + Math.random() * 16,
           floatSpeed: 0.003 + Math.random() * 0.002, // Increased speed for visible movement
