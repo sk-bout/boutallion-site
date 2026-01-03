@@ -1057,21 +1057,26 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.rotation.y += button.rotationSpeed[1] * 0.5 // Slower rotation
         child.rotation.z += button.rotationSpeed[2] * 0.5 // Slower rotation
 
-        // Smooth boundary constraints instead of instant resets to prevent shocking movements
-        if (child.position.y > 8) {
-          // Smoothly move back instead of instant reset
-          child.position.y -= 0.01
-        } else if (child.position.y < -8) {
-          // Smoothly move back instead of instant reset
-          child.position.y += 0.01
+        // Allow leaves to float in and out of viewport - only gently guide them back if too far
+        // Extended boundaries to allow natural floating in and out
+        if (child.position.y > 12) {
+          // Very gentle guidance back if too far above (allows floating out and back in)
+          child.position.y -= (child.position.y - 12) * 0.005 // Very gentle, allows floating out
+          startYRefs.current[i] = child.position.y
+        } else if (child.position.y < -18) {
+          // Very gentle guidance back if too far below (allows floating out and back in)
+          child.position.y += (-18 - child.position.y) * 0.005 // Very gentle, allows floating out
+          startYRefs.current[i] = child.position.y
         }
         
-        // Smooth horizontal boundary constraints
-        if (Math.abs(child.position.x) > 12) {
-          child.position.x += (child.position.x > 0 ? -1 : 1) * 0.01
+        // Allow horizontal and depth movement beyond viewport - only gentle guidance if extremely far
+        if (child.position.x < -20) {
+          child.position.x += (-20 - child.position.x) * 0.005 // Very gentle, allows floating out
         }
-        if (Math.abs(child.position.z) > 10) {
-          child.position.z += (child.position.z > 0 ? -1 : 1) * 0.01
+        if (child.position.z < -20) {
+          child.position.z += (-20 - child.position.z) * 0.005 // Very gentle, allows floating out
+        } else if (child.position.z > 20) {
+          child.position.z -= (child.position.z - 20) * 0.005 // Very gentle, allows floating out
         }
       })
     })
@@ -1539,21 +1544,26 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           child.scale.set(finalScale * aspectRatio, finalScale, 1)
         }
 
-        // Smooth boundary constraints instead of instant resets to prevent shocking movements
-        if (child.position.y > 8) {
-          // Smoothly move back instead of instant reset
-          child.position.y -= 0.01
-        } else if (child.position.y < -8) {
-          // Smoothly move back instead of instant reset
-          child.position.y += 0.01
+        // Allow leaves to float in and out of viewport - only gently guide them back if too far
+        // Extended boundaries to allow natural floating in and out
+        if (child.position.y > 12) {
+          // Very gentle guidance back if too far above (allows floating out and back in)
+          child.position.y -= (child.position.y - 12) * 0.005 // Very gentle, allows floating out
+          startYRefs.current[i] = child.position.y
+        } else if (child.position.y < -18) {
+          // Very gentle guidance back if too far below (allows floating out and back in)
+          child.position.y += (-18 - child.position.y) * 0.005 // Very gentle, allows floating out
+          startYRefs.current[i] = child.position.y
         }
         
-        // Smooth horizontal boundary constraints
-        if (Math.abs(child.position.x) > 12) {
-          child.position.x += (child.position.x > 0 ? -1 : 1) * 0.01
+        // Allow horizontal and depth movement beyond viewport - only gentle guidance if extremely far
+        if (child.position.x < -20) {
+          child.position.x += (-20 - child.position.x) * 0.005 // Very gentle, allows floating out
         }
-        if (Math.abs(child.position.z) > 10) {
-          child.position.z += (child.position.z > 0 ? -1 : 1) * 0.01
+        if (child.position.z < -20) {
+          child.position.z += (-20 - child.position.z) * 0.005 // Very gentle, allows floating out
+        } else if (child.position.z > 20) {
+          child.position.z -= (child.position.z - 20) * 0.005 // Very gentle, allows floating out
         }
       })
     })
@@ -1757,21 +1767,26 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           child.scale.set(leaf.scale * aspectRatio * scalePulse, leaf.scale * scalePulse, 1)
         }
 
-        // Smooth boundary constraints instead of instant resets to prevent shocking movements
-        if (child.position.y > 8) {
-          // Smoothly move back instead of instant reset
-          child.position.y -= 0.01
-        } else if (child.position.y < -8) {
-          // Smoothly move back instead of instant reset
-          child.position.y += 0.01
+        // Allow leaves to float in and out of viewport - only gently guide them back if too far
+        // Extended boundaries to allow natural floating in and out
+        if (child.position.y > 12) {
+          // Very gentle guidance back if too far above (allows floating out and back in)
+          child.position.y -= (child.position.y - 12) * 0.005 // Very gentle, allows floating out
+          startYRefs.current[i] = child.position.y
+        } else if (child.position.y < -18) {
+          // Very gentle guidance back if too far below (allows floating out and back in)
+          child.position.y += (-18 - child.position.y) * 0.005 // Very gentle, allows floating out
+          startYRefs.current[i] = child.position.y
         }
         
-        // Smooth horizontal boundary constraints
-        if (Math.abs(child.position.x) > 12) {
-          child.position.x += (child.position.x > 0 ? -1 : 1) * 0.01
+        // Allow horizontal and depth movement beyond viewport - only gentle guidance if extremely far
+        if (child.position.x < -20) {
+          child.position.x += (-20 - child.position.x) * 0.005 // Very gentle, allows floating out
         }
-        if (Math.abs(child.position.z) > 10) {
-          child.position.z += (child.position.z > 0 ? -1 : 1) * 0.01
+        if (child.position.z < -20) {
+          child.position.z += (-20 - child.position.z) * 0.005 // Very gentle, allows floating out
+        } else if (child.position.z > 20) {
+          child.position.z -= (child.position.z - 20) * 0.005 // Very gentle, allows floating out
         }
       })
     })
@@ -1988,21 +2003,26 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           child.scale.set(finalScale * aspectRatio, finalScale, 1)
         }
 
-        // Smooth boundary constraints instead of instant resets to prevent shocking movements
-        if (child.position.y > 8) {
-          // Smoothly move back instead of instant reset
-          child.position.y -= 0.01
-        } else if (child.position.y < -8) {
-          // Smoothly move back instead of instant reset
-          child.position.y += 0.01
+        // Allow leaves to float in and out of viewport - only gently guide them back if too far
+        // Extended boundaries to allow natural floating in and out
+        if (child.position.y > 12) {
+          // Very gentle guidance back if too far above (allows floating out and back in)
+          child.position.y -= (child.position.y - 12) * 0.005 // Very gentle, allows floating out
+          startYRefs.current[i] = child.position.y
+        } else if (child.position.y < -18) {
+          // Very gentle guidance back if too far below (allows floating out and back in)
+          child.position.y += (-18 - child.position.y) * 0.005 // Very gentle, allows floating out
+          startYRefs.current[i] = child.position.y
         }
         
-        // Smooth horizontal boundary constraints
-        if (Math.abs(child.position.x) > 12) {
-          child.position.x += (child.position.x > 0 ? -1 : 1) * 0.01
+        // Allow horizontal and depth movement beyond viewport - only gentle guidance if extremely far
+        if (child.position.x < -20) {
+          child.position.x += (-20 - child.position.x) * 0.005 // Very gentle, allows floating out
         }
-        if (Math.abs(child.position.z) > 10) {
-          child.position.z += (child.position.z > 0 ? -1 : 1) * 0.01
+        if (child.position.z < -20) {
+          child.position.z += (-20 - child.position.z) * 0.005 // Very gentle, allows floating out
+        } else if (child.position.z > 20) {
+          child.position.z -= (child.position.z - 20) * 0.005 // Very gentle, allows floating out
         }
       })
     })
