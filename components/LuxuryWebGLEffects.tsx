@@ -980,17 +980,17 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
                   Math.sin(angle) * radius + (Math.random() - 0.5) * 15 // Increased depth spread
                 ] as [number, number, number],
                 startY: yPos,
-                floatSpeed: 0.002 + Math.random() * 0.001,
+                floatSpeed: 0.0005 + Math.random() * 0.0003, // Very slow, consistent speed
                 velocity: [
-                  (Math.random() - 0.5) * 0.0006, // Elegant slow horizontal movement
-                  Math.random() * 0.0009 + 0.0004, // Elegant slow upward movement
-                  (Math.random() - 0.5) * 0.0006 // Elegant slow depth movement
+                  (Math.random() - 0.5) * 0.0002, // Very slow horizontal movement
+                  Math.random() * 0.0003 + 0.00015, // Very slow upward movement
+                  (Math.random() - 0.5) * 0.0002 // Very slow depth movement
                 ] as [number, number, number],
                 scale: sizeVariation,
                 rotationSpeed: [
-                  (Math.random() - 0.5) * 0.0005, // Slower, more elegant rotation
-                  (Math.random() - 0.5) * 0.0005,
-                  (Math.random() - 0.5) * 0.0005
+                  (Math.random() - 0.5) * 0.0002, // Very slow, smooth rotation
+                  (Math.random() - 0.5) * 0.0002,
+                  (Math.random() - 0.5) * 0.0002
                 ]
               }
             })
@@ -1005,11 +1005,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const button = buttonsData[i]
         if (!button) return
 
-        // Elegant floating movement - smooth and graceful
+        // Elegant floating movement - smooth and graceful, very slow
         const velocity = button.velocity
-        child.position.x += velocity[0] + Math.sin(time * 0.012 + i) * 0.0001
-        child.position.y += velocity[1] + Math.cos(time * 0.01 + i) * 0.0002
-        child.position.z += velocity[2] + Math.sin(time * 0.011 + i * 0.6) * 0.0001
+        child.position.x += velocity[0] + Math.sin(time * 0.005 + i) * 0.00005 // Much slower oscillation
+        child.position.y += velocity[1] + Math.cos(time * 0.004 + i) * 0.0001 // Much slower oscillation
+        child.position.z += velocity[2] + Math.sin(time * 0.005 + i * 0.6) * 0.00005 // Much slower oscillation
         
         let newX = child.position.x
         let newZ = child.position.z
@@ -1023,11 +1023,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           const dz = newZ - otherButton.position.z
           const distance = Math.sqrt(dx * dx + dy * dy + dz * dz)
           if (distance < minDistance && distance > 0) {
-            const pushStrength = (minDistance - distance) / minDistance * 0.25
+            const pushStrength = (minDistance - distance) / minDistance * 0.1 // Reduced push strength for smoother movement
             newX += dx / distance * pushStrength
             newZ += dz / distance * pushStrength
             if (Math.abs(dy) < 1.5) {
-              child.position.y += (dy > 0 ? 1 : -1) * pushStrength * 0.4
+              child.position.y += (dy > 0 ? 1 : -1) * pushStrength * 0.2 // Reduced vertical push
             }
           }
         })
@@ -1035,9 +1035,10 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.position.x = newX
         child.position.z = newZ
 
-        child.rotation.x += button.rotationSpeed[0]
-        child.rotation.y += button.rotationSpeed[1]
-        child.rotation.z += button.rotationSpeed[2]
+        // Very slow, smooth rotation
+        child.rotation.x += button.rotationSpeed[0] * 0.5 // Slower rotation
+        child.rotation.y += button.rotationSpeed[1] * 0.5 // Slower rotation
+        child.rotation.z += button.rotationSpeed[2] * 0.5 // Slower rotation
 
         // Reset when buttons go out of bounds - like particles
         if (child.position.y > 8) {
@@ -1391,11 +1392,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             Math.sin(angle) * radius + (Math.random() - 0.5) * 18 // Increased depth spread
           ] as [number, number, number],
           startY: yPos,
-          floatSpeed: 0.0008 + Math.random() * 0.0005, // Very slow speed for elegant flow
+          floatSpeed: 0.0004 + Math.random() * 0.0002, // Very slow, consistent speed
           velocity: [
-            (Math.random() - 0.5) * 0.0008, // Elegant slow horizontal movement
-            Math.random() * 0.0003 + 0.0002, // Very slow upward movement for elegant flow
-            (Math.random() - 0.5) * 0.0008 // Elegant slow depth movement
+            (Math.random() - 0.5) * 0.0003, // Very slow horizontal movement
+            Math.random() * 0.00015 + 0.0001, // Very slow upward movement
+            (Math.random() - 0.5) * 0.0003 // Very slow depth movement
           ] as [number, number, number],
           scale: sizeVariation,
           mirrored: i % 2 === 0, // 50% mirrored (alternating)
@@ -1424,11 +1425,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const leaf = leavesData[i]
         if (!leaf) return
 
-        // Elegant floating movement - smooth and graceful
+        // Elegant floating movement - smooth and graceful, very slow
         const velocity = leaf.velocity
-        child.position.x += velocity[0] + Math.sin(time * 0.015 + i) * 0.0001
-        child.position.y += velocity[1] + Math.cos(time * 0.012 + i) * 0.0002
-        child.position.z += velocity[2] + Math.sin(time * 0.014 + i * 0.7) * 0.0001
+        child.position.x += velocity[0] + Math.sin(time * 0.006 + i) * 0.00005 // Much slower oscillation
+        child.position.y += velocity[1] + Math.cos(time * 0.005 + i) * 0.0001 // Much slower oscillation
+        child.position.z += velocity[2] + Math.sin(time * 0.006 + i * 0.7) * 0.00005 // Much slower oscillation
         
         // Constrain leaves to left side to avoid b.png on right (x < 1.5)
         if (child.position.x > 1.5) {
@@ -1449,13 +1450,16 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           const distance = Math.sqrt(dx * dx + dy * dy + dz * dz)
           
           if (distance < minDistance && distance > 0) {
-            // Push leaves apart more aggressively
-            const pushStrength = (minDistance - distance) / minDistance * 0.3
+            // Push leaves apart smoothly
+            const pushStrength = (minDistance - distance) / minDistance * 0.1 // Reduced for smoother movement
             newX += dx / distance * pushStrength
             newZ += dz / distance * pushStrength
+            if (Math.abs(dy) < 1.5) {
+              child.position.y += (dy > 0 ? 1 : -1) * pushStrength * 0.2 // Reduced vertical push
+            }
             // Also push vertically if too close
             if (Math.abs(dy) < 2) {
-              child.position.y += (dy > 0 ? 1 : -1) * pushStrength * 0.5
+              child.position.y += (dy > 0 ? 1 : -1) * pushStrength * 0.2 // Reduced vertical push for smoother movement
             }
           }
         })
@@ -1481,11 +1485,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.position.x = newX
         child.position.z = newZ
 
-        // Smooth rotation with mouse influence
-        const rotationInfluence = mouseInfluence * 0.5
-        child.rotation.x += leaf.rotationSpeed[0] * (1 + rotationInfluence)
-        child.rotation.y += leaf.rotationSpeed[1] * (1 + rotationInfluence)
-        child.rotation.z += leaf.rotationSpeed[2] * (1 + rotationInfluence)
+        // Smooth rotation with mouse influence - very slow
+        const rotationInfluence = mouseInfluence * 0.3 // Reduced influence
+        child.rotation.x += leaf.rotationSpeed[0] * (0.5 + rotationInfluence * 0.2) // Slower base rotation
+        child.rotation.y += leaf.rotationSpeed[1] * (0.5 + rotationInfluence * 0.2) // Slower base rotation
+        child.rotation.z += leaf.rotationSpeed[2] * (0.5 + rotationInfluence * 0.2) // Slower base rotation
 
         // Smooth scale pulse - preserve mirrored scale (bigger variation) with mouse influence
         // Maximum scale constraint to prevent leaves from becoming unclear
@@ -1642,11 +1646,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const leaf = leavesData[i]
         if (!leaf) return
 
-        // Elegant floating movement - smooth and graceful
+        // Elegant floating movement - smooth and graceful, very slow
         const velocity = leaf.velocity
-        child.position.x += velocity[0] + Math.sin(time * 0.015 + i) * 0.0001
-        child.position.y += velocity[1] + Math.cos(time * 0.012 + i) * 0.0002
-        child.position.z += velocity[2] + Math.sin(time * 0.014 + i * 0.7) * 0.0001
+        child.position.x += velocity[0] + Math.sin(time * 0.006 + i) * 0.00005 // Much slower oscillation
+        child.position.y += velocity[1] + Math.cos(time * 0.005 + i) * 0.0001 // Much slower oscillation
+        child.position.z += velocity[2] + Math.sin(time * 0.006 + i * 0.7) * 0.00005 // Much slower oscillation
         
         // Constrain leaves to left side to avoid b.png on right (x < 1.5)
         if (child.position.x > 1.5) {
@@ -1667,7 +1671,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           const distance = Math.sqrt(dx * dx + dy * dy + dz * dz)
           
           if (distance < minDistance && distance > 0) {
-            const pushStrength = (minDistance - distance) / minDistance * 0.1
+            const pushStrength = (minDistance - distance) / minDistance * 0.05 // Further reduced for very smooth movement
             newX += dx / distance * pushStrength
             newZ += dz / distance * pushStrength
           }
@@ -1831,11 +1835,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const leaf = leavesData[i]
         if (!leaf) return
 
-        // Elegant floating movement - smooth and graceful
+        // Elegant floating movement - smooth and graceful, very slow
         const velocity = leaf.velocity
-        child.position.x += velocity[0] + Math.sin(time * 0.015 + i) * 0.0001
-        child.position.y += velocity[1] + Math.cos(time * 0.012 + i) * 0.0002
-        child.position.z += velocity[2] + Math.sin(time * 0.014 + i * 0.7) * 0.0001
+        child.position.x += velocity[0] + Math.sin(time * 0.006 + i) * 0.00005 // Much slower oscillation
+        child.position.y += velocity[1] + Math.cos(time * 0.005 + i) * 0.0001 // Much slower oscillation
+        child.position.z += velocity[2] + Math.sin(time * 0.006 + i * 0.7) * 0.00005 // Much slower oscillation
         
         // Constrain leaves to left side to avoid b.png on right (x < 1.5)
         if (child.position.x > 1.5) {
@@ -1856,7 +1860,7 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           const distance = Math.sqrt(dx * dx + dy * dy + dz * dz)
           
           if (distance < minDistance && distance > 0) {
-            const pushStrength = (minDistance - distance) / minDistance * 0.1
+            const pushStrength = (minDistance - distance) / minDistance * 0.05 // Further reduced for very smooth movement
             newX += dx / distance * pushStrength
             newZ += dz / distance * pushStrength
           }
@@ -1882,11 +1886,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.position.x = newX
         child.position.z = newZ
 
-        // Smooth rotation with mouse influence
-        const rotationInfluence = mouseInfluence * 0.5
-        child.rotation.x += leaf.rotationSpeed[0] * (1 + rotationInfluence)
-        child.rotation.y += leaf.rotationSpeed[1] * (1 + rotationInfluence)
-        child.rotation.z += leaf.rotationSpeed[2] * (1 + rotationInfluence)
+        // Smooth rotation with mouse influence - very slow
+        const rotationInfluence = mouseInfluence * 0.3 // Reduced influence
+        child.rotation.x += leaf.rotationSpeed[0] * (0.5 + rotationInfluence * 0.2) // Slower base rotation
+        child.rotation.y += leaf.rotationSpeed[1] * (0.5 + rotationInfluence * 0.2) // Slower base rotation
+        child.rotation.z += leaf.rotationSpeed[2] * (0.5 + rotationInfluence * 0.2) // Slower base rotation
 
         // Smooth scale pulse - preserve mirrored scale (bigger variation) with mouse influence
         // Maximum scale constraint to prevent leaves from becoming unclear
