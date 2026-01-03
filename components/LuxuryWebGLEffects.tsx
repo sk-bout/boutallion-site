@@ -1652,11 +1652,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             Math.sin(angle) * radius + (Math.random() - 0.5) * 22 // Much wider depth spread
           ] as [number, number, number],
           startY,
-          floatSpeed: 0.0008 + Math.random() * 0.0005, // Very slow speed for elegant flow
+          floatSpeed: 0.0003 + Math.random() * 0.0002, // Very slow, smooth floating speed
           velocity: [
-            (Math.random() - 0.5) * 0.0015,
-            Math.random() * 0.0003 + 0.0002, // Very slow upward movement for elegant flow
-            (Math.random() - 0.5) * 0.0015
+            (Math.random() - 0.5) * 0.00025, // Very slow, smooth horizontal movement
+            Math.random() * 0.00012 + 0.00008, // Very slow, smooth upward movement
+            (Math.random() - 0.5) * 0.00025 // Very slow, smooth depth movement
           ] as [number, number, number],
           scale: sizeVariation,
           mirrored: i % 3 === 0, // 33% mirrored, 67% non-mirrored - both colors have non-mirrored leaves
@@ -1685,12 +1685,12 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         const leaf = leavesData[i]
         if (!leaf) return
 
-        // Elegant floating movement - smooth and graceful, no shocking movements
+        // Elegant floating movement - smooth and graceful, subtle floating
         const velocity = leaf.velocity
-        // Remove oscillation completely for smooth, consistent movement
-        child.position.x += velocity[0]
-        child.position.y += velocity[1]
-        child.position.z += velocity[2]
+        // Very subtle oscillation for gentle floating effect
+        child.position.x += velocity[0] + Math.sin(time * 0.003 + i) * 0.00003 // Very slow, subtle oscillation
+        child.position.y += velocity[1] + Math.cos(time * 0.0025 + i) * 0.00005 // Very slow, subtle oscillation
+        child.position.z += velocity[2] + Math.sin(time * 0.003 + i * 0.7) * 0.00003 // Very slow, subtle oscillation
         
         // Smooth constraint to left side to avoid b.png on right (x < 1.5)
         if (child.position.x > 1.5) {
@@ -1857,11 +1857,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             Math.sin(angle) * radius + (Math.random() - 0.5) * 22 // Much wider depth spread
           ] as [number, number, number],
           startY,
-          floatSpeed: 0.0008 + Math.random() * 0.0005, // Very slow speed for elegant flow
+          floatSpeed: 0.0003 + Math.random() * 0.0002, // Very slow, smooth floating speed
           velocity: [
-            (Math.random() - 0.5) * 0.0015,
-            Math.random() * 0.0003 + 0.0002, // Very slow upward movement for elegant flow
-            (Math.random() - 0.5) * 0.0015
+            (Math.random() - 0.5) * 0.00025, // Very slow, smooth horizontal movement
+            Math.random() * 0.00012 + 0.00008, // Very slow, smooth upward movement
+            (Math.random() - 0.5) * 0.00025 // Very slow, smooth depth movement
           ] as [number, number, number],
           scale: sizeVariation,
           mirrored: i % 3 === 0, // 33% mirrored, 67% non-mirrored - both colors have non-mirrored leaves
