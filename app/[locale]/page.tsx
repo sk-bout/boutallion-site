@@ -375,7 +375,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
           ref={logoRef}
           id="boutallion-logo"
           key={`boutallion-logo-${params.locale}`}
-          className="relative z-10 mb-4 sm:mb-5 md:mb-0 w-full px-4 sm:px-6 md:px-8 flex justify-center items-center"
+          className="relative z-10 mb-4 sm:mb-5 md:mb-5 w-full px-4 sm:px-6 md:px-8 flex justify-center items-center"
           style={{
             willChange: 'transform',
             maxWidth: '100%',
@@ -398,8 +398,8 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         </div>
         
 
-        {/* By Invitation Only text - centered with equal padding above and below on mobile/tablet */}
-        <p className={`font-refined text-white/70 mb-4 sm:mb-5 md:mb-1.5 tracking-[0.1em] sm:tracking-[0.15em] uppercase px-4 break-words ${
+        {/* By Invitation Only text - centered with equal padding above and below on all devices */}
+        <p className={`font-refined text-white/70 mb-4 sm:mb-5 md:mb-5 tracking-[0.1em] sm:tracking-[0.15em] uppercase px-4 break-words ${
           params.locale === 'ar' || params.locale === 'ru'
             ? 'text-base sm:text-lg md:text-xl lg:text-2xl'
             : 'text-sm sm:text-base md:text-lg lg:text-xl'
@@ -408,7 +408,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         </p>
 
         {/* Subscription form */}
-        <div className="max-w-md mx-auto flex flex-col items-center w-full px-4 sm:px-6 md:-mt-1.5">
+        <div className="max-w-md mx-auto flex flex-col items-center w-full px-4 sm:px-6">
           {isSubmitted ? (
             <div className="text-gold-light text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-refined animate-fade-in text-center px-6 sm:px-4 py-4 break-words leading-relaxed w-full" style={{ 
               maxWidth: 'calc(100% - 2rem)',
