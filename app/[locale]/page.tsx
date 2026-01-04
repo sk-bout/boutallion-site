@@ -424,8 +424,8 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         </div>
         
 
-        {/* By Invitation Only text - centered with equal padding above and below on all devices */}
-        <p className={`font-refined text-white/70 -mt-2 sm:-mt-3 md:-mt-3 mb-4 sm:mb-6 md:mb-6 tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] uppercase px-4 break-words ${
+        {/* By Invitation Only text - centered with more spacing from form on mobile */}
+        <p className={`font-refined text-white/70 -mt-2 sm:-mt-3 md:-mt-3 mb-10 sm:mb-6 md:mb-6 tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] uppercase px-4 break-words ${
           params.locale === 'ar' || params.locale === 'ru'
             ? 'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-2xl'
             : 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl'
