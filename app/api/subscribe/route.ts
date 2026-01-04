@@ -551,6 +551,9 @@ export async function POST(request: NextRequest) {
     try {
       await sendSlackNotification({
         email,
+        fullName,
+        cityCountry,
+        whatBringsYou,
         ipAddress,
         location: {
           country: locationSummary.country,

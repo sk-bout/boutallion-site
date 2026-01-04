@@ -5,6 +5,9 @@
 
 export interface SlackNotificationData {
   email: string
+  fullName?: string
+  cityCountry?: string
+  whatBringsYou?: string
   ipAddress: string
   location?: {
     country?: string
@@ -431,17 +434,57 @@ export async function sendSlackNotification(data: SlackNotificationData): Promis
             emoji: true,
           },
         },
+        // Form Fields Section
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: '*📝 Form Submission Details*',
+          } as { type: 'mrkdwn'; text: string },
+        },
         {
           type: 'section',
           fields: [
+            {
+              type: 'mrkdwn',
+              text: `*Full Name:*\n${data.fullName || 'Not provided'}`,
+            },
             {
               type: 'mrkdwn',
               text: `*Email:*\n${data.email}`,
             },
             {
               type: 'mrkdwn',
+              text: `*City / Country:*\n${data.cityCountry || 'Not provided'}`,
+            },
+            {
+              type: 'mrkdwn',
               text: `*Status:*\n${data.mailerliteSuccess ? '✅ Success' : '⚠️ Partial'}`,
             },
+          ],
+        },
+        // What brings you section (can be long, so separate)
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `*What brings you to Boutallion?*\n${data.whatBringsYou || 'Not provided'}`,
+          } as { type: 'mrkdwn'; text: string },
+        },
+        {
+          type: 'divider',
+        },
+        // Location and Technical Details
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: '*📍 Location & Technical Details*',
+          } as { type: 'mrkdwn'; text: string },
+        },
+        {
+          type: 'section',
+          fields: [
             {
               type: 'mrkdwn',
               text: `*Location:*\n${locationString}`,
