@@ -803,11 +803,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
           scale: sizeVariation,
           mirrored,
           startY: y,
-          floatSpeed: 0.0012 + Math.random() * 0.0006, // Slightly faster for floating in and out
+          floatSpeed: 0.003 + Math.random() * 0.002, // Increased speed for visible movement
           rotationSpeed: [
-            0.00005 + Math.random() * 0.0001, // Minimal rotation to prevent flickering
-            0.0001 + Math.random() * 0.00015,
-            0.00005 + Math.random() * 0.00008
+            0.0002 + Math.random() * 0.0003, // Increased rotation for visible movement
+            0.0004 + Math.random() * 0.0005,
+            0.0002 + Math.random() * 0.0004
           ]
         })
       }
@@ -835,13 +835,13 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         // Elegant floating upward with very slow, smooth movement
         const elapsed = time * leaf.floatSpeed
         
-        // Gentle floating motion - VERY SLOW to prevent flickering
+        // Gentle floating motion - increased speed for visible movement
         // Each leaf has unique movement pattern based on its index
-        const patternSpeed = 0.02 + (i % 3) * 0.005 // Extremely slow speed per leaf
+        const patternSpeed = 0.08 + (i % 3) * 0.02 // Increased speed per leaf
         const patternOffset = i * 0.5 // Unique offset per leaf
         
-        const driftX = Math.sin(time * patternSpeed + patternOffset) * 0.15 + Math.cos(time * patternSpeed * 0.7 + patternOffset) * 0.08
-        const driftZ = Math.cos(time * patternSpeed * 0.8 + patternOffset) * 0.12 + Math.sin(time * patternSpeed * 0.6 + patternOffset) * 0.05
+        const driftX = Math.sin(time * patternSpeed + patternOffset) * 0.3 + Math.cos(time * patternSpeed * 0.7 + patternOffset) * 0.15
+        const driftZ = Math.cos(time * patternSpeed * 0.8 + patternOffset) * 0.25 + Math.sin(time * patternSpeed * 0.6 + patternOffset) * 0.1
         
         // Update position smoothly - move across page like B logos, but very slowly
         child.position.x = leaf.position[0] + driftX
@@ -866,9 +866,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.scale.setScalar(finalScale)
         
         // Very slow rotation to prevent flickering
-        child.rotation.x += leaf.rotationSpeed[0] * 0.5
-        child.rotation.y += leaf.rotationSpeed[1] * 0.5
-        child.rotation.z += leaf.rotationSpeed[2] * 0.5
+        child.rotation.x += leaf.rotationSpeed[0] * 2
+        child.rotation.y += leaf.rotationSpeed[1] * 2
+        child.rotation.z += leaf.rotationSpeed[2] * 2
         
         // Collision detection disabled to prevent erratic movement
         // Leaves will move smoothly without collision interference
@@ -1000,17 +1000,17 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
                   Math.sin(angle) * radius + (Math.random() - 0.5) * 15 // Increased depth spread
                 ] as [number, number, number],
                 startY: yPos,
-                floatSpeed: 0.0005 + Math.random() * 0.0003, // Very slow, consistent speed
+                floatSpeed: 0.002 + Math.random() * 0.0015, // Increased speed for visible movement
                 velocity: [
-                  (Math.random() - 0.5) * 0.0002, // Very slow horizontal movement
-                  Math.random() * 0.0003 + 0.00015, // Very slow upward movement
-                  (Math.random() - 0.5) * 0.0002 // Very slow depth movement
+                  (Math.random() - 0.5) * 0.001, // Increased horizontal movement
+                  Math.random() * 0.0015 + 0.0008, // Increased upward movement
+                  (Math.random() - 0.5) * 0.001 // Increased depth movement
                 ] as [number, number, number],
                 scale: sizeVariation,
                 rotationSpeed: [
-                  (Math.random() - 0.5) * 0.0002, // Very slow, smooth rotation
-                  (Math.random() - 0.5) * 0.0002,
-                  (Math.random() - 0.5) * 0.0002
+                  (Math.random() - 0.5) * 0.001, // Increased rotation speed
+                  (Math.random() - 0.5) * 0.001,
+                  (Math.random() - 0.5) * 0.001
                 ]
               }
             })
@@ -1027,10 +1027,10 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
 
         // Elegant floating movement - smooth and graceful, very slow, subtle floating
         const velocity = button.velocity
-        // Very subtle oscillation for gentle floating effect
-        child.position.x += velocity[0] + Math.sin(time * 0.003 + i) * 0.00003 // Very slow, subtle oscillation
-        child.position.y += velocity[1] + Math.cos(time * 0.0025 + i) * 0.00005 // Very slow, subtle oscillation
-        child.position.z += velocity[2] + Math.sin(time * 0.003 + i * 0.6) * 0.00003 // Very slow, subtle oscillation
+        // Increased oscillation for visible floating effect
+        child.position.x += velocity[0] + Math.sin(time * 0.01 + i) * 0.0002 // Increased oscillation
+        child.position.y += velocity[1] + Math.cos(time * 0.008 + i) * 0.0003 // Increased oscillation
+        child.position.z += velocity[2] + Math.sin(time * 0.01 + i * 0.6) * 0.0002 // Increased oscillation
         
         let newX = child.position.x
         let newZ = child.position.z
@@ -1060,9 +1060,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.position.z += (newZ - child.position.z) * lerpFactor
 
         // Very slow, smooth rotation
-        child.rotation.x += button.rotationSpeed[0] * 0.5 // Slower rotation
-        child.rotation.y += button.rotationSpeed[1] * 0.5 // Slower rotation
-        child.rotation.z += button.rotationSpeed[2] * 0.5 // Slower rotation
+        child.rotation.x += button.rotationSpeed[0] * 2 // Increased rotation
+        child.rotation.y += button.rotationSpeed[1] * 2 // Increased rotation
+        child.rotation.z += button.rotationSpeed[2] * 2 // Increased rotation
 
         // Allow buttons to float in and out of viewport - only gently guide them back if too far
         // Extended boundaries to allow natural floating in and out
@@ -1450,18 +1450,18 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             zOffset
           ] as [number, number, number],
           startY: yPos,
-          floatSpeed: 0.0004 + Math.random() * 0.0003, // Smooth galaxy-like floating speed
+          floatSpeed: 0.0015 + Math.random() * 0.001, // Increased speed for visible movement
           velocity: [
-            (Math.random() - 0.5) * 0.0004, // Smooth horizontal movement across page
-            Math.random() * 0.0002 + 0.0001, // Smooth upward movement
-            (Math.random() - 0.5) * 0.0004 // Smooth depth movement
+            (Math.random() - 0.5) * 0.0015, // Increased horizontal movement
+            Math.random() * 0.001 + 0.0005, // Increased upward movement
+            (Math.random() - 0.5) * 0.0015 // Increased depth movement
           ] as [number, number, number],
           scale: sizeVariation,
           mirrored: i % 2 === 0, // 50% mirrored, 50% non-mirrored - equal distribution
           rotationSpeed: [
-            (Math.random() - 0.5) * 0.00015, // Slower, more elegant rotation
-            (Math.random() - 0.5) * 0.00015,
-            (Math.random() - 0.5) * 0.00015
+            (Math.random() - 0.5) * 0.0006, // Increased rotation for visible movement
+            (Math.random() - 0.5) * 0.0006,
+            (Math.random() - 0.5) * 0.0006
           ]
         }
       })
@@ -1486,11 +1486,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         // Elegant galaxy-like floating movement - smooth, graceful, flowing across the page
         const velocity = leaf.velocity
         // Galaxy-like orbital motion with multiple frequencies for elegant flow
-        const orbitSpeed = 0.002 + i * 0.0001 // Varying speeds for galaxy effect
+        const orbitSpeed = 0.008 + i * 0.0004 // Increased speeds for visible galaxy effect
         const orbitRadius = 0.8 + i * 0.1 // Varying orbit sizes
-        child.position.x += velocity[0] + Math.sin(time * orbitSpeed + i) * orbitRadius * 0.0001 // Galaxy-like orbital motion
-        child.position.y += velocity[1] + Math.cos(time * orbitSpeed * 0.8 + i * 1.3) * orbitRadius * 0.00015 // Elegant vertical flow
-        child.position.z += velocity[2] + Math.sin(time * orbitSpeed * 1.2 + i * 0.7) * orbitRadius * 0.0001 // Depth flow
+        child.position.x += velocity[0] + Math.sin(time * orbitSpeed + i) * orbitRadius * 0.0005 // Increased orbital motion
+        child.position.y += velocity[1] + Math.cos(time * orbitSpeed * 0.8 + i * 1.3) * orbitRadius * 0.0008 // Increased vertical flow
+        child.position.z += velocity[2] + Math.sin(time * orbitSpeed * 1.2 + i * 0.7) * orbitRadius * 0.0005 // Increased depth flow
         
         // Smooth constraint to left side to avoid b.png on right (x < 1.5)
         if (child.position.x > 1.5) {
@@ -1544,11 +1544,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.position.x += (newX - child.position.x) * lerpFactor
         child.position.z += (newZ - child.position.z) * lerpFactor
 
-        // Smooth rotation with mouse influence - very slow
+        // Smooth rotation with mouse influence - increased speed
         const rotationInfluence = mouseInfluence * 0.3 // Reduced influence
-        child.rotation.x += leaf.rotationSpeed[0] * (0.5 + rotationInfluence * 0.2) // Slower base rotation
-        child.rotation.y += leaf.rotationSpeed[1] * (0.5 + rotationInfluence * 0.2) // Slower base rotation
-        child.rotation.z += leaf.rotationSpeed[2] * (0.5 + rotationInfluence * 0.2) // Slower base rotation
+        child.rotation.x += leaf.rotationSpeed[0] * (2 + rotationInfluence * 0.5) // Increased base rotation
+        child.rotation.y += leaf.rotationSpeed[1] * (2 + rotationInfluence * 0.5) // Increased base rotation
+        child.rotation.z += leaf.rotationSpeed[2] * (2 + rotationInfluence * 0.5) // Increased base rotation
 
         // Smooth scale pulse - preserve mirrored scale (bigger variation) with mouse influence
         // Maximum scale constraint to prevent leaves from becoming unclear
@@ -1708,18 +1708,18 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             zOffset
           ] as [number, number, number],
           startY,
-          floatSpeed: 0.0004 + Math.random() * 0.0003, // Smooth galaxy-like floating speed
+          floatSpeed: 0.0015 + Math.random() * 0.001, // Increased speed for visible movement
           velocity: [
-            (Math.random() - 0.5) * 0.0004, // Smooth horizontal movement across page
-            Math.random() * 0.0002 + 0.0001, // Smooth upward movement
-            (Math.random() - 0.5) * 0.0004 // Smooth depth movement
+            (Math.random() - 0.5) * 0.0015, // Increased horizontal movement
+            Math.random() * 0.001 + 0.0005, // Increased upward movement
+            (Math.random() - 0.5) * 0.0015 // Increased depth movement
           ] as [number, number, number],
           scale: sizeVariation,
           mirrored: i % 2 === 0, // 50% mirrored, 50% non-mirrored - equal distribution
           rotationSpeed: [
-            (Math.random() - 0.5) * 0.00015, // Slower, more elegant rotation
-            (Math.random() - 0.5) * 0.00015,
-            (Math.random() - 0.5) * 0.00015
+            (Math.random() - 0.5) * 0.0006, // Increased rotation for visible movement
+            (Math.random() - 0.5) * 0.0006,
+            (Math.random() - 0.5) * 0.0006
           ]
         }
       })
@@ -1744,11 +1744,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         // Elegant galaxy-like floating movement - smooth, graceful, flowing across the page
         const velocity = leaf.velocity
         // Galaxy-like orbital motion with multiple frequencies for elegant flow
-        const orbitSpeed = 0.002 + i * 0.0001 // Varying speeds for galaxy effect
+        const orbitSpeed = 0.008 + i * 0.0004 // Increased speeds for visible galaxy effect
         const orbitRadius = 0.8 + i * 0.1 // Varying orbit sizes
-        child.position.x += velocity[0] + Math.sin(time * orbitSpeed + i) * orbitRadius * 0.0001 // Galaxy-like orbital motion
-        child.position.y += velocity[1] + Math.cos(time * orbitSpeed * 0.8 + i * 1.3) * orbitRadius * 0.00015 // Elegant vertical flow
-        child.position.z += velocity[2] + Math.sin(time * orbitSpeed * 1.2 + i * 0.7) * orbitRadius * 0.0001 // Depth flow
+        child.position.x += velocity[0] + Math.sin(time * orbitSpeed + i) * orbitRadius * 0.0005 // Increased orbital motion
+        child.position.y += velocity[1] + Math.cos(time * orbitSpeed * 0.8 + i * 1.3) * orbitRadius * 0.0008 // Increased vertical flow
+        child.position.z += velocity[2] + Math.sin(time * orbitSpeed * 1.2 + i * 0.7) * orbitRadius * 0.0005 // Increased depth flow
         
         // Smooth constraint to left side to avoid b.png on right (x < 1.5)
         if (child.position.x > 1.5) {
@@ -1781,9 +1781,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.position.x += (newX - child.position.x) * lerpFactor
         child.position.z += (newZ - child.position.z) * lerpFactor
 
-        child.rotation.x += leaf.rotationSpeed[0]
-        child.rotation.y += leaf.rotationSpeed[1]
-        child.rotation.z += leaf.rotationSpeed[2]
+        child.rotation.x += leaf.rotationSpeed[0] * 2
+        child.rotation.y += leaf.rotationSpeed[1] * 2
+        child.rotation.z += leaf.rotationSpeed[2] * 2
 
         // Smooth galaxy-like scale pulse - elegant breathing effect (bigger and smaller)
         const MAX_LEAF_SCALE = 2.2
@@ -1943,18 +1943,18 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
             zOffset
           ] as [number, number, number],
           startY,
-          floatSpeed: 0.0004 + Math.random() * 0.0003, // Smooth galaxy-like floating speed
+          floatSpeed: 0.0015 + Math.random() * 0.001, // Increased speed for visible movement
           velocity: [
-            (Math.random() - 0.5) * 0.0004, // Smooth horizontal movement across page
-            Math.random() * 0.0002 + 0.0001, // Smooth upward movement
-            (Math.random() - 0.5) * 0.0004 // Smooth depth movement
+            (Math.random() - 0.5) * 0.0015, // Increased horizontal movement
+            Math.random() * 0.001 + 0.0005, // Increased upward movement
+            (Math.random() - 0.5) * 0.0015 // Increased depth movement
           ] as [number, number, number],
           scale: sizeVariation,
           mirrored: i % 2 === 0, // 50% mirrored, 50% non-mirrored - equal distribution
           rotationSpeed: [
-            (Math.random() - 0.5) * 0.00015, // Slower, more elegant rotation
-            (Math.random() - 0.5) * 0.00015,
-            (Math.random() - 0.5) * 0.00015
+            (Math.random() - 0.5) * 0.0006, // Increased rotation for visible movement
+            (Math.random() - 0.5) * 0.0006,
+            (Math.random() - 0.5) * 0.0006
           ]
         }
       })
@@ -1978,9 +1978,9 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
 
         // Elegant floating movement - smooth and graceful, very slow
         const velocity = leaf.velocity
-        child.position.x += velocity[0] + Math.sin(time * 0.003 + i) * 0.00003 // Very slow, subtle oscillation
-        child.position.y += velocity[1] + Math.cos(time * 0.0025 + i) * 0.00005 // Very slow, subtle oscillation
-        child.position.z += velocity[2] + Math.sin(time * 0.003 + i * 0.7) * 0.00003 // Very slow, subtle oscillation
+        child.position.x += velocity[0] + Math.sin(time * 0.015 + i) * 0.0002 // Increased oscillation
+        child.position.y += velocity[1] + Math.cos(time * 0.012 + i) * 0.0003 // Increased oscillation
+        child.position.z += velocity[2] + Math.sin(time * 0.015 + i * 0.7) * 0.0002 // Increased oscillation
         
         // Constrain leaves to left side to avoid b.png on right (x < 1.5)
         if (child.position.x > 1.5) {
@@ -2027,11 +2027,11 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
         child.position.x = newX
         child.position.z = newZ
 
-        // Smooth rotation with mouse influence - very slow
+        // Smooth rotation with mouse influence - increased speed
         const rotationInfluence = mouseInfluence * 0.3 // Reduced influence
-        child.rotation.x += leaf.rotationSpeed[0] * (0.5 + rotationInfluence * 0.2) // Slower base rotation
-        child.rotation.y += leaf.rotationSpeed[1] * (0.5 + rotationInfluence * 0.2) // Slower base rotation
-        child.rotation.z += leaf.rotationSpeed[2] * (0.5 + rotationInfluence * 0.2) // Slower base rotation
+        child.rotation.x += leaf.rotationSpeed[0] * (2 + rotationInfluence * 0.5) // Increased base rotation
+        child.rotation.y += leaf.rotationSpeed[1] * (2 + rotationInfluence * 0.5) // Increased base rotation
+        child.rotation.z += leaf.rotationSpeed[2] * (2 + rotationInfluence * 0.5) // Increased base rotation
 
         // Smooth galaxy-like scale pulse - elegant breathing effect (bigger and smaller)
         // Maximum scale constraint to prevent leaves from becoming unclear
