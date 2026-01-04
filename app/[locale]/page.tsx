@@ -393,27 +393,27 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       </div>
 
       {/* Main content */}
-      <main className="relative z-10 text-center px-4 sm:px-6 py-8 sm:py-12 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-center min-h-[100vh] min-h-[100dvh] safe-area-inset">
+      <main className="relative z-10 text-center px-4 sm:px-6 py-2 sm:py-4 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-center min-h-[100vh] min-h-[100dvh] safe-area-inset">
         {/* BOUTALLION Logo - centered and responsive */}
         <div 
           ref={logoRef}
           id="boutallion-logo"
           key={`boutallion-logo-${params.locale}`}
-          className="relative z-10 mb-0 sm:mb-0 md:mb-0 w-full px-4 sm:px-6 md:px-8 flex justify-center items-center"
+          className="relative z-10 mb-0 w-full px-4 sm:px-6 md:px-8 flex justify-center items-center"
           style={{
             willChange: 'transform',
             maxWidth: '100%',
             boxSizing: 'border-box',
           } as React.CSSProperties}
         >
-          <div className="relative w-full max-w-[280px] sm:max-w-[360px] md:max-w-[480px] lg:max-w-[640px] aspect-square">
+          <div className="relative w-full max-w-[200px] sm:max-w-[280px] md:max-w-[360px] lg:max-w-[480px] aspect-square">
             <Image
               src="/BOUTALLION LOGO ARTWORK_RGB-23.png"
               alt="Boutallion"
               fill
               className="object-contain"
               priority
-              sizes="(max-width: 640px) 280px, (max-width: 768px) 360px, (max-width: 1024px) 480px, 640px"
+              sizes="(max-width: 640px) 200px, (max-width: 768px) 280px, (max-width: 1024px) 360px, 480px"
               style={{
                 filter: 'brightness(0.95)',
               }}
@@ -423,10 +423,10 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         
 
         {/* By Invitation Only text - centered with equal padding above and below on all devices */}
-        <p className={`font-refined text-white/70 -mt-2 sm:-mt-2 md:-mt-2 mb-4 sm:mb-5 md:mb-5 tracking-[0.1em] sm:tracking-[0.15em] uppercase px-4 break-words ${
+        <p className={`font-refined text-white/70 -mt-1 sm:-mt-1 md:-mt-1 mb-2 sm:mb-3 md:mb-3 tracking-[0.1em] sm:tracking-[0.15em] uppercase px-4 break-words ${
           params.locale === 'ar' || params.locale === 'ru'
-            ? 'text-base sm:text-lg md:text-xl lg:text-2xl'
-            : 'text-sm sm:text-base md:text-lg lg:text-xl'
+            ? 'text-sm sm:text-base md:text-lg lg:text-xl'
+            : 'text-xs sm:text-sm md:text-base lg:text-lg'
         }`}>
           {t['by-invitation-only']}
         </p>
@@ -450,8 +450,8 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6 w-full flex flex-col items-center">
-              <div className="flex flex-col gap-4 w-full items-center justify-center max-w-md">
+            <form onSubmit={handleSubmit} className="space-y-3 w-full flex flex-col items-center">
+              <div className="flex flex-col gap-2.5 w-full items-center justify-center max-w-md">
                 {/* Full Name */}
                 <div className="w-full flex flex-col">
                   <input
@@ -461,7 +461,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                     onChange={handleInputChange}
                     placeholder="Full Name"
                     required
-                    className="w-full px-5 py-3 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10"
+                    className="w-full px-4 py-2.5 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-xs sm:text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10"
                   />
                 </div>
                 
@@ -475,7 +475,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                     onBlur={() => validateEmail(formData.email)}
                     placeholder={t['enter-your-email']}
                     required
-                    className={`w-full px-5 py-3 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10 ${
+                    className={`w-full px-4 py-2.5 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-xs sm:text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10 ${
                       emailError
                         ? 'border-red-500/60 focus:border-red-500/80'
                         : formData.email && !emailError
@@ -484,12 +484,12 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                     }`}
                   />
                   {emailError && (
-                    <p className="mt-1 text-xs text-red-400/80 font-sans px-1 animate-fade-in">
+                    <p className="mt-0.5 text-xs text-red-400/80 font-sans px-1 animate-fade-in">
                       {emailError}
                     </p>
                   )}
                   {formData.email && !emailError && (
-                    <p className="mt-1 text-xs text-green-400/80 font-sans px-1 animate-fade-in">
+                    <p className="mt-0.5 text-xs text-green-400/80 font-sans px-1 animate-fade-in">
                       ✓ Valid email
                     </p>
                   )}
@@ -504,7 +504,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                     onChange={handleInputChange}
                     placeholder="City / Country"
                     required
-                    className="w-full px-5 py-3 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10"
+                    className="w-full px-4 py-2.5 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-xs sm:text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10"
                   />
                 </div>
                 
@@ -516,15 +516,15 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                     onChange={handleInputChange}
                     placeholder="What brings you to Boutallion?"
                     required
-                    rows={4}
-                    className="w-full px-5 py-3 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10 resize-none"
+                    rows={3}
+                    className="w-full px-4 py-2.5 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-xs sm:text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10 resize-none"
                   />
                 </div>
                 
                 <button
                   type="submit"
                   disabled={isSubmitting || !!emailError || !formData.email || !formData.fullName}
-                  className="w-full px-5 py-3 bg-gold-DEFAULT/20 backdrop-blur-md border-2 border-gold-DEFAULT/40 text-gold-DEFAULT font-sans text-xs tracking-[0.2em] uppercase hover:bg-gold-DEFAULT/30 hover:border-gold-DEFAULT/60 active:bg-gold-DEFAULT/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-semibold shadow-lg shadow-gold-DEFAULT/20 hover:shadow-xl hover:shadow-gold-DEFAULT/30 whitespace-nowrap"
+                  className="w-full px-4 py-2.5 bg-gold-DEFAULT/20 backdrop-blur-md border-2 border-gold-DEFAULT/40 text-gold-DEFAULT font-sans text-xs tracking-[0.2em] uppercase hover:bg-gold-DEFAULT/30 hover:border-gold-DEFAULT/60 active:bg-gold-DEFAULT/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-semibold shadow-lg shadow-gold-DEFAULT/20 hover:shadow-xl hover:shadow-gold-DEFAULT/30 whitespace-nowrap mt-1"
                 >
                   {isSubmitting ? t['submitting'] : t['register-your-interest']}
                 </button>
@@ -535,9 +535,9 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
           {/* Contact button */}
           <a
             href="mailto:info@boutallion.com"
-            className={`mt-6 sm:mt-8 text-white/60 hover:text-gold-DEFAULT transition-colors duration-300 font-sans tracking-[0.15em] uppercase px-4 ${
+            className={`mt-3 sm:mt-4 text-white/60 hover:text-gold-DEFAULT transition-colors duration-300 font-sans tracking-[0.15em] uppercase px-4 ${
               params.locale === 'ar' || params.locale === 'ru'
-                ? 'text-sm sm:text-base'
+                ? 'text-xs sm:text-sm'
                 : 'text-xs'
             }`}
           >
