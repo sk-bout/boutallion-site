@@ -14,7 +14,12 @@ import { hiddenBrandMentions } from '@/lib/backlinks-seo'
 import { getAnalyticsTracker } from '@/lib/analytics'
 
 export default function ComingSoon({ params }: { params: { locale: Locale } }) {
-  const [email, setEmail] = useState('')
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    cityCountry: '',
+    whatBringsYou: '',
+  })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [emailError, setEmailError] = useState('')
@@ -110,7 +115,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
     // Trim whitespace
     const trimmedEmail = emailValue.trim()
     if (trimmedEmail !== emailValue) {
-      setEmail(trimmedEmail)
+      setFormData(prev => ({ ...prev, email: trimmedEmail }))
     }
     
     // Check for @ symbol first - most basic requirement
@@ -236,17 +241,26 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
     return true
   }
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newEmail = e.target.value
-    setEmail(newEmail)
-    validateEmail(newEmail)
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+    
+    if (name === 'email') {
+      validateEmail(value)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
     // Validate email before submission
-    if (!validateEmail(email)) {
+    if (!validateEmail(formData.email)) {
+      return
+    }
+    
+    // Validate required fields
+    if (!formData.fullName.trim()) {
+      setEmailError('Full name is required')
       return
     }
     
@@ -258,7 +272,12 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          email: formData.email,
+          fullName: formData.fullName,
+          cityCountry: formData.cityCountry,
+          whatBringsYou: formData.whatBringsYou,
+        }),
       })
 
       const data = await response.json()
@@ -270,7 +289,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       // Track successful subscription with analytics
       // Note: Location data is captured server-side in the API
       const tracker = getAnalyticsTracker()
-      await tracker.trackSubscription(email, {
+      await tracker.trackSubscription(formData.email, {
         subscriptionMethod: 'email_form',
         subscriptionSuccess: true,
         locale: params.locale,
@@ -278,7 +297,12 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       })
 
       setIsSubmitted(true)
-      setEmail('')
+      setFormData({
+        fullName: '',
+        email: '',
+        cityCountry: '',
+        whatBringsYou: '',
+      })
       setEmailError('')
     } catch (error) {
       console.error('Subscription error:', error)
@@ -286,7 +310,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       // Track failed subscription attempt
       const tracker = getAnalyticsTracker()
       await tracker.trackEvent('subscription', {
-        email,
+        email: formData.email,
         subscriptionSuccess: false,
         error: error instanceof Error ? error.message : 'Unknown error',
         locale: params.locale,
@@ -428,18 +452,33 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6 w-full flex flex-col items-center">
               <div className="flex flex-col gap-4 w-full items-center justify-center max-w-md">
+                {/* Full Name */}
+                <div className="w-full flex flex-col">
+                  <input
+                    type="text"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleInputChange}
+                    placeholder="Full Name"
+                    required
+                    className="w-full px-5 py-3 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10"
+                  />
+                </div>
+                
+                {/* Email */}
                 <div className="w-full flex flex-col">
                   <input
                     type="email"
-                    value={email}
-                    onChange={handleEmailChange}
-                    onBlur={() => validateEmail(email)}
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    onBlur={() => validateEmail(formData.email)}
                     placeholder={t['enter-your-email']}
                     required
                     className={`w-full px-5 py-3 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10 ${
                       emailError
                         ? 'border-red-500/60 focus:border-red-500/80'
-                        : email && !emailError
+                        : formData.email && !emailError
                         ? 'border-green-500/60 focus:border-green-500/80'
                         : ''
                     }`}
@@ -449,15 +488,42 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                       {emailError}
                     </p>
                   )}
-                  {email && !emailError && (
+                  {formData.email && !emailError && (
                     <p className="mt-1 text-xs text-green-400/80 font-sans px-1 animate-fade-in">
                       ✓ Valid email
                     </p>
                   )}
                 </div>
+                
+                {/* City / Country */}
+                <div className="w-full flex flex-col">
+                  <input
+                    type="text"
+                    name="cityCountry"
+                    value={formData.cityCountry}
+                    onChange={handleInputChange}
+                    placeholder="City / Country"
+                    required
+                    className="w-full px-5 py-3 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10"
+                  />
+                </div>
+                
+                {/* What brings you to Boutallion? */}
+                <div className="w-full flex flex-col">
+                  <textarea
+                    name="whatBringsYou"
+                    value={formData.whatBringsYou}
+                    onChange={handleInputChange}
+                    placeholder="What brings you to Boutallion?"
+                    required
+                    rows={4}
+                    className="w-full px-5 py-3 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10 resize-none"
+                  />
+                </div>
+                
                 <button
                   type="submit"
-                  disabled={isSubmitting || !!emailError || !email}
+                  disabled={isSubmitting || !!emailError || !formData.email || !formData.fullName}
                   className="w-full px-5 py-3 bg-gold-DEFAULT/20 backdrop-blur-md border-2 border-gold-DEFAULT/40 text-gold-DEFAULT font-sans text-xs tracking-[0.2em] uppercase hover:bg-gold-DEFAULT/30 hover:border-gold-DEFAULT/60 active:bg-gold-DEFAULT/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-semibold shadow-lg shadow-gold-DEFAULT/20 hover:shadow-xl hover:shadow-gold-DEFAULT/30 whitespace-nowrap"
                 >
                   {isSubmitting ? t['submitting'] : t['register-your-interest']}

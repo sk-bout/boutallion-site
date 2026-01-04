@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getLocationFromIP, getLocationSummary } from '@/lib/geolocation'
 import { getDbPool } from '@/lib/db'
 import { sendSlackNotification } from '@/lib/slack'
+import { sendEmail, formatFormSubmissionEmail } from '@/lib/email'
 
 // Force dynamic rendering - don't run during build
 export const dynamic = 'force-dynamic'
@@ -12,14 +13,36 @@ export async function POST(request: NextRequest) {
   console.log('📧 Subscription API called at:', new Date().toISOString())
   
   try {
-    const { email } = await request.json()
-    console.log('📧 Email received:', email)
+    const { email, fullName, cityCountry, whatBringsYou } = await request.json()
+    console.log('📧 Form submission received:', { email, fullName, cityCountry, whatBringsYou })
 
     // Validate email
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       console.error('❌ Invalid email format:', email)
       return NextResponse.json(
         { error: 'Invalid email address' },
+        { status: 400 }
+      )
+    }
+
+    // Validate required fields
+    if (!fullName || !fullName.trim()) {
+      return NextResponse.json(
+        { error: 'Full name is required' },
+        { status: 400 }
+      )
+    }
+
+    if (!cityCountry || !cityCountry.trim()) {
+      return NextResponse.json(
+        { error: 'City / Country is required' },
+        { status: 400 }
+      )
+    }
+
+    if (!whatBringsYou || !whatBringsYou.trim()) {
+      return NextResponse.json(
+        { error: 'What brings you to Boutallion is required' },
         { status: 400 }
       )
     }
@@ -42,6 +65,9 @@ export async function POST(request: NextRequest) {
       const formData = new URLSearchParams()
       formData.append('email', email)
       formData.append('fields[source]', 'Website Subscription')
+      formData.append('fields[full_name]', fullName)
+      formData.append('fields[city_country]', cityCountry)
+      formData.append('fields[what_brings_you]', whatBringsYou)
 
       try {
         const response = await fetch(mailerliteFormUrl, {
@@ -137,9 +163,12 @@ export async function POST(request: NextRequest) {
 
         const apiUrl = `https://api.mailerlite.com/api/v2/subscribers`
         
-        // Prepare custom fields with location data
+        // Prepare custom fields with location data and form fields
         const customFields: Record<string, string> = {
           source: 'Website Subscription',
+          full_name: fullName,
+          city_country: cityCountry,
+          what_brings_you: whatBringsYou,
         }
         
         // Add location fields if available
@@ -437,6 +466,26 @@ export async function POST(request: NextRequest) {
       hour12: false,
     }).format(new Date())
     
+    // Send email copy to boutallion.ae@gmail.com (non-blocking)
+    try {
+      const emailHtml = formatFormSubmissionEmail({
+        fullName,
+        email,
+        cityCountry,
+        whatBringsYou,
+      })
+      
+      await sendEmail({
+        to: 'boutallion.ae@gmail.com',
+        subject: `New Boutallion Registration: ${fullName}`,
+        html: emailHtml,
+      })
+      console.log('✅ Email copy sent to boutallion.ae@gmail.com')
+    } catch (emailError) {
+      console.error('⚠️ Email copy error (non-critical):', emailError)
+      // Don't fail subscription if email copy fails
+    }
+
     // Send Slack notification (non-blocking)
     try {
       await sendSlackNotification({
