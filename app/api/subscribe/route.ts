@@ -518,15 +518,33 @@ export async function POST(request: NextRequest) {
       if (emailBackupSuccess) {
         console.log('✅ Email backup sent successfully to boutallion.ae@gmail.com')
       } else {
-        console.error('❌ Email backup FAILED - check email service configuration!')
-        console.error('   Required: Set RESEND_API_KEY, SENDGRID_API_KEY, or EMAIL_WEBHOOK_URL in Vercel')
-        console.error('   Go to: Vercel Dashboard → Your Project → Settings → Environment Variables')
-        console.error('   Add: RESEND_API_KEY = your_resend_api_key')
+        console.error('❌ ========================================')
+        console.error('❌ EMAIL BACKUP FAILED!')
+        console.error('❌ ========================================')
+        console.error('❌ Email service configuration check:')
+        console.error('   - RESEND_API_KEY:', process.env.RESEND_API_KEY ? 'SET' : '❌ NOT SET')
+        console.error('   - SENDGRID_API_KEY:', process.env.SENDGRID_API_KEY ? 'SET' : '❌ NOT SET')
+        console.error('   - EMAIL_WEBHOOK_URL:', process.env.EMAIL_WEBHOOK_URL ? 'SET' : '❌ NOT SET')
+        console.error('   - RESEND_FROM_EMAIL:', process.env.RESEND_FROM_EMAIL || 'not set (will use onboarding@resend.dev)')
+        console.error('')
+        console.error('❌ TO FIX:')
+        console.error('   1. Go to Vercel Dashboard → Your Project → Settings → Environment Variables')
+        console.error('   2. Add RESEND_API_KEY with your Resend API key')
+        console.error('   3. (Optional) Add RESEND_FROM_EMAIL (or verify domain in Resend)')
+        console.error('   4. Redeploy your application')
+        console.error('   5. Test at: /api/test-email')
+        console.error('❌ ========================================')
       }
     } catch (emailError) {
-      console.error('❌ Email backup error:', emailError instanceof Error ? emailError.message : String(emailError))
-      console.error('❌ Full email error:', emailError)
+      console.error('❌ ========================================')
+      console.error('❌ EMAIL BACKUP EXCEPTION!')
+      console.error('❌ ========================================')
+      console.error('❌ Error:', emailError instanceof Error ? emailError.message : String(emailError))
+      if (emailError instanceof Error && emailError.stack) {
+        console.error('❌ Stack:', emailError.stack)
+      }
       console.error('❌ Make sure RESEND_API_KEY is set in Vercel environment variables!')
+      console.error('❌ ========================================')
     }
 
     // Send Slack notification (non-blocking)

@@ -53,6 +53,12 @@ export async function sendEmail(data: EmailData): Promise<boolean> {
  */
 async function sendViaResend(data: EmailData, apiKey: string): Promise<boolean> {
   try {
+    const fromEmail = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev'
+    console.log('📧 Resend: Attempting to send email...')
+    console.log('📧 Resend: From:', fromEmail)
+    console.log('📧 Resend: To:', data.to)
+    console.log('📧 Resend: Subject:', data.subject)
+    
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -60,7 +66,7 @@ async function sendViaResend(data: EmailData, apiKey: string): Promise<boolean> 
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: process.env.RESEND_FROM_EMAIL || 'noreply@boutallion.com',
+        from: fromEmail,
         to: data.to,
         subject: data.subject,
         html: data.html,
@@ -68,16 +74,39 @@ async function sendViaResend(data: EmailData, apiKey: string): Promise<boolean> 
       }),
     })
 
+    const responseData = await response.text()
+    let parsedResponse: any = {}
+    try {
+      parsedResponse = JSON.parse(responseData)
+    } catch {
+      parsedResponse = { message: responseData }
+    }
+
     if (response.ok) {
-      console.log('✅ Email sent via Resend')
+      console.log('✅ Email sent via Resend successfully!')
+      console.log('📧 Resend Response:', JSON.stringify(parsedResponse, null, 2))
       return true
     }
 
-    const errorText = await response.text()
-    console.error('❌ Resend API error:', response.status, errorText)
+    console.error('❌ Resend API error:', response.status)
+    console.error('❌ Resend Error Response:', responseData)
+    console.error('❌ Full Error Details:', JSON.stringify(parsedResponse, null, 2))
+    
+    // Check for common errors
+    if (parsedResponse.message?.includes('domain') || parsedResponse.message?.includes('verify')) {
+      console.error('❌ DOMAIN VERIFICATION ERROR:')
+      console.error('   Your "from" email domain needs to be verified in Resend')
+      console.error('   Go to Resend.com → Domains → Add and verify your domain')
+      console.error('   Or use onboarding@resend.dev for testing')
+    }
+    
     return false
   } catch (error) {
-    console.error('❌ Resend API error:', error)
+    console.error('❌ Resend API exception:', error)
+    console.error('❌ Error details:', error instanceof Error ? error.message : String(error))
+    if (error instanceof Error && error.stack) {
+      console.error('❌ Stack trace:', error.stack)
+    }
     return false
   }
 }
