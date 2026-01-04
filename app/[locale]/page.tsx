@@ -454,7 +454,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                 {/* Full Name */}
                 <div className="w-full flex flex-col">
                   <label htmlFor="fullName" className="block font-refined text-xs text-white/60 mb-1.5 md:mb-2 uppercase tracking-wider text-left">
-                    Full Name
+                    {t['full-name'] || 'Full Name'}
                   </label>
                   <input
                     type="text"
@@ -470,7 +470,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                 {/* Email */}
                 <div className="w-full flex flex-col">
                   <label htmlFor="email" className="block font-refined text-xs text-white/60 mb-1.5 md:mb-2 uppercase tracking-wider text-left">
-                    Email
+                    {t['email'] || 'Email'}
                   </label>
                   <input
                     type="email"
@@ -495,7 +495,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                   )}
                   {formData.email && !emailError && (
                     <p className="mt-1.5 text-xs text-gold-light/80 font-refined tracking-wide animate-fade-in">
-                      ✓ Valid email
+                      {t['valid-email'] || '✓ Valid email'}
                     </p>
                   )}
                 </div>
@@ -503,7 +503,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                 {/* City / Country */}
                 <div className="w-full flex flex-col">
                   <label htmlFor="cityCountry" className="block font-refined text-xs text-white/60 mb-1.5 md:mb-2 uppercase tracking-wider text-left">
-                    City / Country
+                    {t['city-country'] || 'City / Country'}
                   </label>
                   <input
                     type="text"
@@ -519,7 +519,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                 {/* What brings you to Boutallion? */}
                 <div className="w-full flex flex-col">
                   <label htmlFor="whatBringsYou" className="block font-refined text-xs text-white/60 mb-1.5 md:mb-2 uppercase tracking-wider text-left">
-                    What brings you to Boutallion?
+                    {t['what-brings-you'] || 'What brings you to Boutallion?'}
                   </label>
                   <textarea
                     id="whatBringsYou"

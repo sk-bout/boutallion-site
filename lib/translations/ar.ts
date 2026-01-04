@@ -9,6 +9,11 @@ export const translations = {
   'contact': 'اتصل بنا',
   'switch-to-english': 'English',
   'continue-in-english': 'English',
+  'full-name': 'الاسم الكامل',
+  'email': 'البريد الإلكتروني',
+  'city-country': 'المدينة / الدولة',
+  'what-brings-you': 'ما الذي جعلك تأتي إلى Boutallion؟',
+  'valid-email': '✓ بريد إلكتروني صحيح',
 }
 
 

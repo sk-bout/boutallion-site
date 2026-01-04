@@ -9,6 +9,11 @@ export const translations = {
   'contact': 'Contact',
   'switch-to-english': 'English',
   'continue-in-english': 'English',
+  'full-name': 'Volledige naam',
+  'email': 'E-mail',
+  'city-country': 'Stad / Land',
+  'what-brings-you': 'Wat brengt u naar Boutallion?',
+  'valid-email': '✓ Geldig e-mailadres',
 }
 
 
