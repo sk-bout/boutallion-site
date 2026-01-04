@@ -58,10 +58,14 @@ export async function POST(request: NextRequest) {
     const locationData = await getLocationFromIP(ipAddress)
     const locationSummary = getLocationSummary(locationData)
 
+    // Initialize MailerLite success flag
+    let mailerliteSuccess = false
+    
     // Option 1: Using MailerLite Form Action URL (simpler, no API key needed)
     const mailerliteFormUrl = process.env.MAILERLITE_FORM_URL
 
     if (mailerliteFormUrl) {
+      console.log('📧 Using MailerLite Form URL method')
       const formData = new URLSearchParams()
       formData.append('email', email)
       formData.append('fields[source]', 'Website Subscription')
@@ -70,6 +74,7 @@ export async function POST(request: NextRequest) {
       formData.append('fields[what_brings_you]', whatBringsYou)
 
       try {
+        console.log('📧 Sending to MailerLite Form URL:', mailerliteFormUrl.substring(0, 50) + '...')
         const response = await fetch(mailerliteFormUrl, {
           method: 'POST',
           headers: {
@@ -78,32 +83,38 @@ export async function POST(request: NextRequest) {
           body: formData.toString(),
         })
 
-        // MailerLite form endpoints typically return 200 for successful submissions
-        // Even duplicates are handled by MailerLite internally
-        if (response.ok || response.status === 200) {
-          return NextResponse.json({ success: true, message: 'Successfully subscribed' })
-        }
-        
-        // Some MailerLite endpoints return different status codes but still succeed
         const responseText = await response.text()
-        console.log('MailerLite form response:', response.status, responseText)
-        
-        // Treat as success - MailerLite forms handle validation internally
-        return NextResponse.json({ success: true, message: 'Successfully subscribed' })
+        console.log('📧 MailerLite Form Response Status:', response.status)
+        console.log('📧 MailerLite Form Response:', responseText.substring(0, 200))
+
+        // MailerLite form endpoints typically return 200 for successful submissions
+        if (response.ok || response.status === 200) {
+          mailerliteSuccess = true
+          console.log('✅ MailerLite Form submission successful')
+        } else {
+          console.error('❌ MailerLite Form submission failed:', response.status, responseText.substring(0, 200))
+        }
       } catch (fetchError) {
-        console.error('MailerLite form fetch error:', fetchError)
-        // Network errors - still return success as form might have processed
-        return NextResponse.json({ success: true, message: 'Successfully subscribed' })
+        console.error('❌ MailerLite Form fetch error:', fetchError instanceof Error ? fetchError.message : String(fetchError))
+        console.error('❌ Full error:', fetchError)
       }
+    } else {
+      console.log('⚠️ MAILERLITE_FORM_URL not set, trying API method...')
     }
 
     // Option 2: Using MailerLite API (requires API key)
     const mailerliteApiKey = process.env.MAILERLITE_API_KEY
     const mailerliteGroupId = process.env.MAILERLITE_GROUP_ID || process.env.MAILERLITE_LIST_ID
+    
+    console.log('📧 MailerLite Configuration Check:', {
+      hasFormUrl: !!mailerliteFormUrl,
+      hasApiKey: !!mailerliteApiKey,
+      hasGroupId: !!mailerliteGroupId,
+      groupIdPreview: mailerliteGroupId ? mailerliteGroupId.substring(0, 20) + '...' : 'NOT SET',
+    })
 
     // Prepare group ID for MailerLite (if available)
     let groupIdStr: string | null = null
-    let mailerliteSuccess = false
 
     if (mailerliteApiKey && mailerliteGroupId) {
       try {
@@ -466,7 +477,9 @@ export async function POST(request: NextRequest) {
       hour12: false,
     }).format(new Date())
     
-    // Send email copy to boutallion.ae@gmail.com (non-blocking)
+    // ALWAYS send email copy to boutallion.ae@gmail.com as backup
+    // This ensures we capture all submissions even if MailerLite fails
+    let emailBackupSuccess = false
     try {
       const emailHtml = formatFormSubmissionEmail({
         fullName,
@@ -475,15 +488,29 @@ export async function POST(request: NextRequest) {
         whatBringsYou,
       })
       
-      await sendEmail({
+      emailBackupSuccess = await sendEmail({
         to: 'boutallion.ae@gmail.com',
-        subject: `New Boutallion Registration: ${fullName}`,
-        html: emailHtml,
+        subject: `[Boutallion Registration] ${fullName} - ${email}`,
+        html: emailHtml + `
+          <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+          <p style="font-size: 12px; color: #666;">
+            <strong>MailerLite Status:</strong> ${mailerliteSuccess ? '✅ Success' : '❌ Failed or Not Configured'}<br>
+            <strong>Timestamp:</strong> ${new Date().toISOString()}<br>
+            <strong>IP Address:</strong> ${ipAddress}<br>
+            <strong>Location:</strong> ${locationSummary.location}
+          </p>
+        `,
       })
-      console.log('✅ Email copy sent to boutallion.ae@gmail.com')
+      
+      if (emailBackupSuccess) {
+        console.log('✅ Email backup sent to boutallion.ae@gmail.com')
+      } else {
+        console.error('❌ Email backup FAILED - check email service configuration!')
+        console.error('   Set RESEND_API_KEY, SENDGRID_API_KEY, or EMAIL_WEBHOOK_URL')
+      }
     } catch (emailError) {
-      console.error('⚠️ Email copy error (non-critical):', emailError)
-      // Don't fail subscription if email copy fails
+      console.error('❌ Email backup error:', emailError instanceof Error ? emailError.message : String(emailError))
+      console.error('❌ Full email error:', emailError)
     }
 
     // Send Slack notification (non-blocking)
@@ -518,20 +545,22 @@ export async function POST(request: NextRequest) {
     
     console.log('✅ Total processing time:', Date.now() - startTime, 'ms')
     
-    // Always return success to user
+    // Log final status
+    console.log('📊 Final Subscription Status:', {
+      email,
+      mailerliteSuccess: mailerliteSuccess ? '✅' : '❌',
+      emailBackupSuccess: emailBackupSuccess ? '✅' : '❌',
+      databaseSaved: '✅', // Database save happens before this
+    })
+    
+    // Always return success to user (even if MailerLite fails, we have email backup)
     return NextResponse.json({ 
       success: true, 
       message: 'Successfully subscribed',
       mailerliteSuccess,
+      emailBackupSuccess,
       timestamp: new Date().toISOString(),
     })
-
-    // If neither method is configured, log warning but don't block users
-    console.warn('MailerLite is not configured. Please set MAILERLITE_FORM_URL or MAILERLITE_API_KEY in environment variables.')
-    return NextResponse.json(
-      { success: true, message: 'Successfully subscribed' },
-      { status: 200 }
-    )
   } catch (error) {
     console.error('Subscription error:', error)
     // Return success on unexpected errors to avoid blocking users
