@@ -39,25 +39,25 @@ export default function GoldDustCursor() {
       mouseRef.current = { x: e.clientX, y: e.clientY }
       
       const now = Date.now()
-      // Create particles more frequently (every 20ms for smooth trail)
-      if (now - lastParticleTime > 20) {
+      // Create particles less frequently for more elegant trail (every 30ms)
+      if (now - lastParticleTime > 30) {
         lastParticleTime = now
         
-        // Create particles at cursor position - visible trail everywhere
+        // Create particles at cursor position - subtle elegant trail
         const target = e.target as HTMLElement
         const isOverInput = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.closest('input, textarea'))
         
-        // More particles when over inputs, fewer for general movement
-        const particleCount = isOverInput ? 4 : 3
+        // Fewer particles for more elegance
+        const particleCount = isOverInput ? 2 : 1
         
         for (let i = 0; i < particleCount; i++) {
           particlesRef.current.push({
-            x: e.clientX + (Math.random() - 0.5) * 12,
-            y: e.clientY + (Math.random() - 0.5) * 12,
-            opacity: isOverInput ? 0.8 + Math.random() * 0.2 : 0.6 + Math.random() * 0.3,
-            size: isOverInput ? 2.5 + Math.random() * 3 : 2 + Math.random() * 2.5,
-            vx: (Math.random() - 0.5) * 1.2,
-            vy: (Math.random() - 0.5) * 1.2,
+            x: e.clientX + (Math.random() - 0.5) * 6,
+            y: e.clientY + (Math.random() - 0.5) * 6,
+            opacity: isOverInput ? 0.5 + Math.random() * 0.2 : 0.4 + Math.random() * 0.2,
+            size: isOverInput ? 1.5 + Math.random() * 1.5 : 1 + Math.random() * 1.5,
+            vx: (Math.random() - 0.5) * 0.6,
+            vy: (Math.random() - 0.5) * 0.6,
             life: 1.0,
           })
         }
@@ -76,39 +76,39 @@ export default function GoldDustCursor() {
         particle.x += particle.vx
         particle.y += particle.vy
         
-        // Apply gentle gravity and fade
-        particle.vy += 0.01
-        particle.life -= 0.01
-        particle.opacity = particle.life
+        // Apply very gentle gravity and slower fade for elegance
+        particle.vy += 0.005
+        particle.life -= 0.008
+        particle.opacity = particle.life * 0.7 // More subtle overall
 
         // Draw particle
         if (particle.life > 0 && particle.opacity > 0) {
           ctx.save()
           
-          // Create a soft glow effect with better visibility
+          // Create a softer, more elegant glow effect
           const gradient = ctx.createRadialGradient(
             particle.x,
             particle.y,
             0,
             particle.x,
             particle.y,
-            particle.size * 4
+            particle.size * 3
           )
-          gradient.addColorStop(0, `rgba(212, 197, 160, ${particle.opacity})`)
-          gradient.addColorStop(0.2, `rgba(212, 197, 160, ${particle.opacity * 0.7})`)
-          gradient.addColorStop(0.5, `rgba(212, 197, 160, ${particle.opacity * 0.4})`)
+          gradient.addColorStop(0, `rgba(212, 197, 160, ${particle.opacity * 0.6})`)
+          gradient.addColorStop(0.3, `rgba(212, 197, 160, ${particle.opacity * 0.4})`)
+          gradient.addColorStop(0.6, `rgba(212, 197, 160, ${particle.opacity * 0.2})`)
           gradient.addColorStop(1, 'rgba(212, 197, 160, 0)')
           
           ctx.fillStyle = gradient
           ctx.beginPath()
-          ctx.arc(particle.x, particle.y, particle.size * 3, 0, Math.PI * 2)
+          ctx.arc(particle.x, particle.y, particle.size * 2.5, 0, Math.PI * 2)
           ctx.fill()
           
-          // Add a bright center dot for more visibility
-          ctx.globalAlpha = particle.opacity * 0.9
-          ctx.fillStyle = `rgba(212, 197, 160, ${particle.opacity})`
+          // Subtle center dot
+          ctx.globalAlpha = particle.opacity * 0.5
+          ctx.fillStyle = `rgba(212, 197, 160, ${particle.opacity * 0.6})`
           ctx.beginPath()
-          ctx.arc(particle.x, particle.y, particle.size * 0.8, 0, Math.PI * 2)
+          ctx.arc(particle.x, particle.y, particle.size * 0.6, 0, Math.PI * 2)
           ctx.fill()
           
           ctx.restore()
