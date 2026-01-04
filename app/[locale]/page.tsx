@@ -395,7 +395,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       </div>
 
       {/* Main content */}
-      <main className="relative z-10 text-center px-4 sm:px-6 py-8 sm:py-12 md:py-16 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-start min-h-[100vh] min-h-[100dvh] safe-area-inset">
+      <main className="relative z-10 text-center px-4 sm:px-6 pt-2 sm:pt-4 md:pt-6 pb-8 sm:pb-12 md:pb-16 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-start min-h-[100vh] min-h-[100dvh] safe-area-inset">
         {/* BOUTALLION Logo - centered and responsive */}
         <div 
           ref={logoRef}
