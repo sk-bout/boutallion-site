@@ -10,6 +10,7 @@ import { getTranslations, Locale } from '@/lib/i18n'
 import PermanentLanguageSwitcher from '@/components/PermanentLanguageSwitcher'
 import Copyright from '@/components/Copyright'
 import SocialIcons from '@/components/SocialIcons'
+import GoldDustCursor from '@/components/GoldDustCursor'
 import { hiddenBrandMentions } from '@/lib/backlinks-seo'
 import { getAnalyticsTracker } from '@/lib/analytics'
 
@@ -336,6 +337,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
 
   return (
     <div className="min-h-screen min-h-[100dvh] flex items-center justify-center relative overflow-hidden bg-boutallion-green safe-area-inset">
+      <GoldDustCursor />
       <PermanentLanguageSwitcher />
       <SocialIcons />
       <Copyright />
@@ -481,12 +483,12 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                     onChange={handleInputChange}
                     onBlur={() => validateEmail(formData.email)}
                     required
-                    className={`w-full px-5 py-3 md:px-6 md:py-4 bg-black/20 backdrop-blur-sm border text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:ring-2 focus:ring-gold-DEFAULT/20 focus:ring-offset-0 shadow-sm shadow-black/10 ${
+                    className={`w-full px-5 py-3 md:px-6 md:py-4 bg-black/20 backdrop-blur-sm border text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:shadow-[0_0_0_1px_rgba(212,197,160,0.3)] shadow-sm shadow-black/10 ${
                       emailError
-                        ? 'border-red-500/60 focus:border-red-500/80'
+                        ? 'border-red-500/40 focus:border-red-500/50'
                         : formData.email && !emailError
-                        ? 'border-green-500/60 focus:border-green-500/80'
-                        : 'border-white/20 focus:border-gold-DEFAULT/60'
+                        ? 'border-gold-DEFAULT/40 focus:border-gold-DEFAULT/50'
+                        : 'border-white/20 focus:border-gold-DEFAULT/40'
                     }`}
                   />
                   {emailError && (
@@ -513,7 +515,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                     value={formData.cityCountry}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-5 py-3 md:px-6 md:py-4 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 focus:ring-2 focus:ring-gold-DEFAULT/20 focus:ring-offset-0 shadow-sm shadow-black/10"
+                    className="w-full px-5 py-3 md:px-6 md:py-4 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/40 focus:shadow-[0_0_0_1px_rgba(212,197,160,0.3)] shadow-sm shadow-black/10"
                   />
                 </div>
                 
@@ -530,7 +532,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                     required
                     rows={3}
                     minLength={10}
-                    className="w-full px-5 py-3 md:px-6 md:py-4 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 focus:ring-2 focus:ring-gold-DEFAULT/20 focus:ring-offset-0 shadow-sm shadow-black/10 resize-none min-h-[100px] md:min-h-[120px]"
+                    className="w-full px-5 py-3 md:px-6 md:py-4 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/40 focus:shadow-[0_0_0_1px_rgba(212,197,160,0.3)] shadow-sm shadow-black/10 resize-none min-h-[100px] md:min-h-[120px]"
                   />
                 </div>
                 

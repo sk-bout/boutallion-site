@@ -502,21 +502,51 @@ html[dir="rtl"] h1[data-font="portrait"] {
   fill: rgba(212, 197, 160, 0.15);
 }
 
-/* Luxurious email input styling - prevent yellow autofill */
-input[type="email"] {
-  color: #d4c5a0 !important; /* Gold/cream color for typed text */
+/* Remove all blue focus states - use only gold/beige */
+input:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: #d4c5a0 !important; /* Gold color */
+  box-shadow: 0 0 0 1px rgba(212, 197, 160, 0.3) !important; /* Subtle gold glow */
 }
 
-input[type="email"]:-webkit-autofill,
-input[type="email"]:-webkit-autofill:hover,
-input[type="email"]:-webkit-autofill:focus,
-input[type="email"]:-webkit-autofill:active {
+/* Remove blue autofill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active {
   -webkit-text-fill-color: #d4c5a0 !important;
   -webkit-box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0.2) inset !important;
   box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0.2) inset !important;
   transition: background-color 5000s ease-in-out 0s;
+  border-color: rgba(212, 197, 160, 0.3) !important;
 }
 
-input[type="email"]::placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
+/* Luxurious input styling - prevent yellow/blue autofill */
+input[type="email"],
+input[type="text"],
+textarea {
+  color: #d4c5a0 !important; /* Gold/cream color for typed text */
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(212, 197, 160, 0.5) !important;
+}
+
+/* Remove any browser default focus rings */
+input:focus-visible,
+textarea:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+}
+
+/* Ensure caret color matches brand */
+input,
+textarea {
+  caret-color: #d4c5a0 !important; /* Gold caret */
 }
