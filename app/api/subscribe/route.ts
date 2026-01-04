@@ -481,6 +481,14 @@ export async function POST(request: NextRequest) {
     // This ensures we capture all submissions even if MailerLite fails
     let emailBackupSuccess = false
     try {
+      console.log('📧 Attempting to send email backup to boutallion.ae@gmail.com...')
+      console.log('📧 Email service check:', {
+        hasResendKey: !!process.env.RESEND_API_KEY,
+        hasSendGridKey: !!process.env.SENDGRID_API_KEY,
+        hasWebhookUrl: !!process.env.EMAIL_WEBHOOK_URL,
+        hasSmtpHost: !!process.env.SMTP_HOST,
+      })
+      
       const emailHtml = formatFormSubmissionEmail({
         fullName,
         email,
@@ -493,24 +501,32 @@ export async function POST(request: NextRequest) {
         subject: `[Boutallion Registration] ${fullName} - ${email}`,
         html: emailHtml + `
           <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
-          <p style="font-size: 12px; color: #666;">
-            <strong>MailerLite Status:</strong> ${mailerliteSuccess ? '✅ Success' : '❌ Failed or Not Configured'}<br>
-            <strong>Timestamp:</strong> ${new Date().toISOString()}<br>
-            <strong>IP Address:</strong> ${ipAddress}<br>
-            <strong>Location:</strong> ${locationSummary.location}
-          </p>
+          <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-top: 20px;">
+            <h3 style="margin-top: 0; color: #333;">Submission Details</h3>
+            <p style="font-size: 12px; color: #666; margin: 5px 0;">
+              <strong>MailerLite Status:</strong> ${mailerliteSuccess ? '✅ Success' : '❌ Failed or Not Configured'}<br>
+              <strong>Timestamp:</strong> ${new Date().toISOString()}<br>
+              <strong>IP Address:</strong> ${ipAddress}<br>
+              <strong>Location:</strong> ${locationSummary.location}<br>
+              <strong>Country:</strong> ${locationSummary.country || 'Unknown'}<br>
+              <strong>City:</strong> ${locationSummary.city || 'Unknown'}
+            </p>
+          </div>
         `,
       })
       
       if (emailBackupSuccess) {
-        console.log('✅ Email backup sent to boutallion.ae@gmail.com')
+        console.log('✅ Email backup sent successfully to boutallion.ae@gmail.com')
       } else {
         console.error('❌ Email backup FAILED - check email service configuration!')
-        console.error('   Set RESEND_API_KEY, SENDGRID_API_KEY, or EMAIL_WEBHOOK_URL')
+        console.error('   Required: Set RESEND_API_KEY, SENDGRID_API_KEY, or EMAIL_WEBHOOK_URL in Vercel')
+        console.error('   Go to: Vercel Dashboard → Your Project → Settings → Environment Variables')
+        console.error('   Add: RESEND_API_KEY = your_resend_api_key')
       }
     } catch (emailError) {
       console.error('❌ Email backup error:', emailError instanceof Error ? emailError.message : String(emailError))
       console.error('❌ Full email error:', emailError)
+      console.error('❌ Make sure RESEND_API_KEY is set in Vercel environment variables!')
     }
 
     // Send Slack notification (non-blocking)
