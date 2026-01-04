@@ -121,25 +121,25 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
     
     // Check for @ symbol first - most basic requirement
     if (!trimmedEmail.includes('@')) {
-      setEmailError('Please enter a valid email address')
+      setEmailError(t['error-email-invalid'] || 'Please enter a valid email address')
       return false
     }
     
     // Check length
     if (trimmedEmail.length > 254) {
-      setEmailError('Email address is too long (max 254 characters)')
+      setEmailError(t['error-email-too-long'] || 'Email address is too long (max 254 characters)')
       return false
     }
     
     if (trimmedEmail.length < 5) {
-      setEmailError('Email address is too short')
+      setEmailError(t['error-email-too-short'] || 'Email address is too short')
       return false
     }
     
     // Split email into local and domain parts - check this early
     const parts = trimmedEmail.split('@')
     if (parts.length !== 2) {
-      setEmailError('Please enter a valid email address')
+      setEmailError(t['error-email-invalid'] || 'Please enter a valid email address')
       return false
     }
     
@@ -147,7 +147,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
     
     if (!emailRegex.test(trimmedEmail)) {
-      setEmailError('Please enter a valid email address')
+      setEmailError(t['error-email-invalid'] || 'Please enter a valid email address')
       return false
     }
     
@@ -155,37 +155,37 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
     
     // Check local part
     if (localPart.length > 64) {
-      setEmailError('Email username is too long')
+      setEmailError(t['error-email-username-too-long'] || 'Email username is too long')
       return false
     }
     
     if (localPart.length === 0) {
-      setEmailError('Email username cannot be empty')
+      setEmailError(t['error-email-username-empty'] || 'Email username cannot be empty')
       return false
     }
     
     // Check for consecutive dots
     if (localPart.includes('..') || domain.includes('..')) {
-      setEmailError('Email cannot contain consecutive dots')
+      setEmailError(t['error-email-consecutive-dots'] || 'Email cannot contain consecutive dots')
       return false
     }
     
     // Check domain
     if (domain.length > 253) {
-      setEmailError('Email domain is too long')
+      setEmailError(t['error-email-domain-too-long'] || 'Email domain is too long')
       return false
     }
     
     // Check for valid TLD (at least 2 characters)
     const domainParts = domain.split('.')
     if (domainParts.length < 2) {
-      setEmailError('Email must have a valid domain (e.g., example.com)')
+      setEmailError(t['error-email-invalid-domain'] || 'Email must have a valid domain (e.g., example.com)')
       return false
     }
     
     const tld = domainParts[domainParts.length - 1]
     if (tld.length < 2 || !/^[a-zA-Z]+$/.test(tld)) {
-      setEmailError('Email must have a valid top-level domain')
+      setEmailError(t['error-email-invalid-tld'] || 'Email must have a valid top-level domain')
       return false
     }
     
@@ -209,7 +209,8 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
     }
     
     if (commonTypos[domainLower]) {
-      setEmailError(`Did you mean ${localPart}@${commonTypos[domainLower]}?`)
+      const suggestedEmail = `${localPart}@${commonTypos[domainLower]}`
+      setEmailError((t['error-email-typo-suggestion'] || 'Did you mean {email}?').replace('{email}', suggestedEmail))
       return false
     }
     
@@ -221,20 +222,20 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
     ]
     
     if (disposableDomains.some(disposable => domainLower.includes(disposable))) {
-      setEmailError('Please use a permanent email address')
+      setEmailError(t['error-email-disposable'] || 'Please use a permanent email address')
       return false
     }
     
     // Check for invalid characters in domain
     if (!/^[a-zA-Z0-9.-]+$/.test(domain)) {
-      setEmailError('Email domain contains invalid characters')
+      setEmailError(t['error-email-domain-invalid-chars'] || 'Email domain contains invalid characters')
       return false
     }
     
     // Check domain doesn't start or end with dot or hyphen
     if (domain.startsWith('.') || domain.endsWith('.') || 
         domain.startsWith('-') || domain.endsWith('-')) {
-      setEmailError('Invalid email domain format')
+      setEmailError(t['error-email-domain-format'] || 'Invalid email domain format')
       return false
     }
     
@@ -261,7 +262,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
     
     // Validate required fields
     if (!formData.fullName.trim()) {
-      setEmailError('Full name is required')
+      setEmailError(t['error-full-name-required'] || 'Full name is required')
       return
     }
     
@@ -317,7 +318,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         locale: params.locale,
       })
       
-      setEmailError(error instanceof Error ? error.message : 'Something went wrong. Please try again.')
+      setEmailError(error instanceof Error ? error.message : (t['error-something-wrong'] || 'Something went wrong. Please try again.'))
     } finally {
       setIsSubmitting(false)
     }

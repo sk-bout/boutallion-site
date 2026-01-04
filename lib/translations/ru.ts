@@ -14,6 +14,21 @@ export const translations = {
   'city-country': 'Город / Страна',
   'what-brings-you': 'Что привело вас в Boutallion?',
   'valid-email': '✓ Действительный email',
+  'error-email-invalid': 'Пожалуйста, введите действительный адрес электронной почты',
+  'error-email-too-long': 'Адрес электронной почты слишком длинный (максимум 254 символа)',
+  'error-email-too-short': 'Адрес электронной почты слишком короткий',
+  'error-email-username-too-long': 'Имя пользователя электронной почты слишком длинное',
+  'error-email-username-empty': 'Имя пользователя электронной почты не может быть пустым',
+  'error-email-consecutive-dots': 'Электронная почта не может содержать последовательные точки',
+  'error-email-domain-too-long': 'Домен электронной почты слишком длинный',
+  'error-email-invalid-domain': 'Электронная почта должна иметь действительный домен (например, example.com)',
+  'error-email-invalid-tld': 'Электронная почта должна иметь действительный домен верхнего уровня',
+  'error-email-typo-suggestion': 'Вы имели в виду {email}?',
+  'error-email-disposable': 'Пожалуйста, используйте постоянный адрес электронной почты',
+  'error-email-domain-invalid-chars': 'Домен электронной почты содержит недопустимые символы',
+  'error-email-domain-format': 'Недопустимый формат домена электронной почты',
+  'error-full-name-required': 'Требуется полное имя',
+  'error-something-wrong': 'Что-то пошло не так. Пожалуйста, попробуйте снова.',
 }
 
 

@@ -14,6 +14,21 @@ export const translations = {
   'city-country': '城市 / 国家',
   'what-brings-you': '是什么让您来到 Boutallion？',
   'valid-email': '✓ 有效电子邮件',
+  'error-email-invalid': '请输入有效的电子邮件地址',
+  'error-email-too-long': '电子邮件地址过长（最多254个字符）',
+  'error-email-too-short': '电子邮件地址过短',
+  'error-email-username-too-long': '电子邮件用户名过长',
+  'error-email-username-empty': '电子邮件用户名不能为空',
+  'error-email-consecutive-dots': '电子邮件不能包含连续的点',
+  'error-email-domain-too-long': '电子邮件域名过长',
+  'error-email-invalid-domain': '电子邮件必须具有有效域名（例如：example.com）',
+  'error-email-invalid-tld': '电子邮件必须具有有效的顶级域名',
+  'error-email-typo-suggestion': '您是指 {email} 吗？',
+  'error-email-disposable': '请使用永久电子邮件地址',
+  'error-email-domain-invalid-chars': '电子邮件域名包含无效字符',
+  'error-email-domain-format': '无效的电子邮件域名格式',
+  'error-full-name-required': '需要全名',
+  'error-something-wrong': '出了些问题。请重试。',
 }
 
 

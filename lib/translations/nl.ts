@@ -14,6 +14,21 @@ export const translations = {
   'city-country': 'Stad / Land',
   'what-brings-you': 'Wat brengt u naar Boutallion?',
   'valid-email': '✓ Geldig e-mailadres',
+  'error-email-invalid': 'Voer een geldig e-mailadres in',
+  'error-email-too-long': 'E-mailadres is te lang (maximaal 254 tekens)',
+  'error-email-too-short': 'E-mailadres is te kort',
+  'error-email-username-too-long': 'E-mail gebruikersnaam is te lang',
+  'error-email-username-empty': 'E-mail gebruikersnaam kan niet leeg zijn',
+  'error-email-consecutive-dots': 'E-mail kan geen opeenvolgende punten bevatten',
+  'error-email-domain-too-long': 'E-maildomein is te lang',
+  'error-email-invalid-domain': 'E-mail moet een geldig domein hebben (bijv. example.com)',
+  'error-email-invalid-tld': 'E-mail moet een geldig topniveaudomein hebben',
+  'error-email-typo-suggestion': 'Bedoelde u {email}?',
+  'error-email-disposable': 'Gebruik een permanent e-mailadres',
+  'error-email-domain-invalid-chars': 'E-maildomein bevat ongeldige tekens',
+  'error-email-domain-format': 'Ongeldig e-maildomeinformaat',
+  'error-full-name-required': 'Volledige naam is verplicht',
+  'error-something-wrong': 'Er is iets misgegaan. Probeer het opnieuw.',
 }
 
 

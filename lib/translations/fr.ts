@@ -14,6 +14,21 @@ export const translations = {
   'city-country': 'Ville / Pays',
   'what-brings-you': 'Qu\'est-ce qui vous amène à Boutallion ?',
   'valid-email': '✓ Email valide',
+  'error-email-invalid': 'Veuillez entrer une adresse email valide',
+  'error-email-too-long': 'L\'adresse email est trop longue (maximum 254 caractères)',
+  'error-email-too-short': 'L\'adresse email est trop courte',
+  'error-email-username-too-long': 'Le nom d\'utilisateur email est trop long',
+  'error-email-username-empty': 'Le nom d\'utilisateur email ne peut pas être vide',
+  'error-email-consecutive-dots': 'L\'email ne peut pas contenir de points consécutifs',
+  'error-email-domain-too-long': 'Le domaine email est trop long',
+  'error-email-invalid-domain': 'L\'email doit avoir un domaine valide (ex. example.com)',
+  'error-email-invalid-tld': 'L\'email doit avoir un domaine de premier niveau valide',
+  'error-email-typo-suggestion': 'Vouliez-vous dire {email} ?',
+  'error-email-disposable': 'Veuillez utiliser une adresse email permanente',
+  'error-email-domain-invalid-chars': 'Le domaine email contient des caractères invalides',
+  'error-email-domain-format': 'Format de domaine email invalide',
+  'error-full-name-required': 'Le nom complet est requis',
+  'error-something-wrong': 'Quelque chose s\'est mal passé. Veuillez réessayer.',
 }
 
 

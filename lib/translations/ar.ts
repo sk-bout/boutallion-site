@@ -14,6 +14,21 @@ export const translations = {
   'city-country': 'المدينة / الدولة',
   'what-brings-you': 'ما الذي جعلك تأتي إلى Boutallion؟',
   'valid-email': '✓ بريد إلكتروني صحيح',
+  'error-email-invalid': 'يرجى إدخال عنوان بريد إلكتروني صحيح',
+  'error-email-too-long': 'عنوان البريد الإلكتروني طويل جداً (الحد الأقصى 254 حرفاً)',
+  'error-email-too-short': 'عنوان البريد الإلكتروني قصير جداً',
+  'error-email-username-too-long': 'اسم مستخدم البريد الإلكتروني طويل جداً',
+  'error-email-username-empty': 'اسم مستخدم البريد الإلكتروني لا يمكن أن يكون فارغاً',
+  'error-email-consecutive-dots': 'البريد الإلكتروني لا يمكن أن يحتوي على نقاط متتالية',
+  'error-email-domain-too-long': 'نطاق البريد الإلكتروني طويل جداً',
+  'error-email-invalid-domain': 'يجب أن يحتوي البريد الإلكتروني على نطاق صحيح (مثال: example.com)',
+  'error-email-invalid-tld': 'يجب أن يحتوي البريد الإلكتروني على نطاق علوي صحيح',
+  'error-email-typo-suggestion': 'هل تقصد {email}؟',
+  'error-email-disposable': 'يرجى استخدام عنوان بريد إلكتروني دائم',
+  'error-email-domain-invalid-chars': 'نطاق البريد الإلكتروني يحتوي على أحرف غير صحيحة',
+  'error-email-domain-format': 'تنسيق نطاق البريد الإلكتروني غير صحيح',
+  'error-full-name-required': 'الاسم الكامل مطلوب',
+  'error-something-wrong': 'حدث خطأ ما. يرجى المحاولة مرة أخرى.',
 }
 
 

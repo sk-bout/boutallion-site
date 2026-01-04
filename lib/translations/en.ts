@@ -14,6 +14,21 @@ export const translations = {
   'city-country': 'City / Country',
   'what-brings-you': 'What brings you to Boutallion?',
   'valid-email': '✓ Valid email',
+  'error-email-invalid': 'Please enter a valid email address',
+  'error-email-too-long': 'Email address is too long (max 254 characters)',
+  'error-email-too-short': 'Email address is too short',
+  'error-email-username-too-long': 'Email username is too long',
+  'error-email-username-empty': 'Email username cannot be empty',
+  'error-email-consecutive-dots': 'Email cannot contain consecutive dots',
+  'error-email-domain-too-long': 'Email domain is too long',
+  'error-email-invalid-domain': 'Email must have a valid domain (e.g., example.com)',
+  'error-email-invalid-tld': 'Email must have a valid top-level domain',
+  'error-email-typo-suggestion': 'Did you mean {email}?',
+  'error-email-disposable': 'Please use a permanent email address',
+  'error-email-domain-invalid-chars': 'Email domain contains invalid characters',
+  'error-email-domain-format': 'Invalid email domain format',
+  'error-full-name-required': 'Full name is required',
+  'error-something-wrong': 'Something went wrong. Please try again.',
 }
 
 
