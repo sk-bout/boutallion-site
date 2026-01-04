@@ -447,9 +447,6 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
               <div className="block mb-2 sm:mb-3 px-2">
                 {t['thank-you-part1'] || 'Your request has been received.'}
               </div>
-              <div className="block mb-2 sm:mb-3 px-2">
-                {t['thank-you-part2'] || 'Each request is reviewed individually. If aligned, further contact will follow.'}
-              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-2 md:space-y-3 w-full flex flex-col items-center">
