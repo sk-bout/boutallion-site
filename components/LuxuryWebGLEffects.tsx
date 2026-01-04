@@ -2233,17 +2233,31 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
       meshRef.current.position.y = initialPosition.y + Math.cos(time * 0.12 + offset * 1.3) * 0.3
       meshRef.current.position.z = initialPosition.z + Math.sin(time * 0.18 + offset * 0.8) * 0.3
       
-      // Constrain video bubbles to stay visible - not too far left (cut off) or too far right (overlap b.png)
+      // Constrain video bubbles to stay in corners - away from center content
       const { viewport } = state
       const viewportHalfWidth = viewport.width / 2
+      const viewportHalfHeight = viewport.height / 2
       const bubbleRadius = size || 0.25
-      const minX = -viewportHalfWidth + bubbleRadius + 0.2 // Keep bubble visible on left edge
-      const maxX = 1.5 // Keep bubble on left side to avoid b.png on right
       
+      // Keep bubbles in corners - left corner or right corner (but avoid b.png area)
+      const minX = -viewportHalfWidth + bubbleRadius + 0.3 // Left edge with padding
+      const maxX = 1.2 // Right edge but avoid b.png area
+      const minY = -viewportHalfHeight + bubbleRadius + 0.3 // Bottom edge
+      const maxY = viewportHalfHeight - bubbleRadius - 0.3 // Top edge
+      
+      // Constrain X position to corners
       if (meshRef.current.position.x < minX) {
-        meshRef.current.position.x = minX // Prevent cut-off on left edge
+        meshRef.current.position.x = minX
       } else if (meshRef.current.position.x > maxX) {
-        meshRef.current.position.x = maxX - (meshRef.current.position.x - maxX) * 0.3 // Keep on left side
+        meshRef.current.position.x = maxX - (meshRef.current.position.x - maxX) * 0.3
+      }
+      
+      // Keep bubbles in top area (away from center content)
+      if (meshRef.current.position.y > maxY) {
+        meshRef.current.position.y = maxY
+      } else if (meshRef.current.position.y < minY + 1.0) {
+        // Allow some movement but keep in upper area
+        meshRef.current.position.y = minY + 1.0
       }
       
       if (type === 'sphere') {
@@ -2292,41 +2306,39 @@ const LuxuryWebGLEffects = memo(function LuxuryWebGLEffects() {
     
     const bubblesData = useMemo(() => {
       return VIDEO_PATHS.map((videoPath, index) => {
-        // Position 2 smaller bubbles on left side to avoid b.png (which is on right)
-        // Place them more to the left and center to avoid overlap
-        const angle = (index / VIDEO_PATHS.length) * Math.PI * 2
-        const radius = 1.2 // Smaller radius, positioned more to the left
+        // Position bubbles in corners - away from center content area for better readability
+        const viewportHalfWidth = viewport.width / 2
+        const viewportHalfHeight = viewport.height / 2
         
-        // On mobile, distribute bubbles across full vertical space, with one clearly above BOUTALLION
-        // On desktop, keep original positioning
+        // Place bubbles in top corners - well away from center text content
+        let x: number
         let height: number
+        
         if (isMobile) {
-          // Mobile: One bubble well above center (above BOUTALLION), one below
-          height = index === 0 ? 2.5 : -1.5 // First bubble high above, second below
+          // Mobile: Top corners, far from center
+          x = index === 0 
+            ? -viewportHalfWidth + 0.8  // Top-left corner
+            : viewportHalfWidth - 1.2   // Top-right but avoid b.png area
+          height = 2.8 // High up in corners, away from content
         } else {
-          // Desktop: Original positioning
-          height = index === 0 ? -0.6 : 0.6 // One above, one below center
+          // Desktop: Top corners, far from center content
+          x = index === 0 
+            ? -viewportHalfWidth + 1.0  // Top-left corner
+            : 0.8  // Top-right but constrained to avoid b.png
+          height = viewportHalfHeight - 0.6 // Top area, well away from center
         }
         
-        const depth = 2.8 // Slightly further back
-        // Position bubbles on left side but not too far left (to avoid cut-off)
-        // Keep them visible on the left side of the page
-        const xOffset = -1.0 // Shift left but not too far to avoid cut-off
+        const depth = 2.8 // Depth position
         
         return {
           videoPath,
-          position: [
-            Math.cos(angle) * radius + xOffset, // Shift left but keep visible
-            height,
-            depth
-          ] as [number, number, number],
+          position: [x, height, depth] as [number, number, number],
           type: 'sphere' as const, // Always use sphere for magic ball effect
           index,
-          size: 0.25 // Much smaller size to avoid overlap
+          size: 0.25 // Smaller size for elegant effect
         }
       })
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isMobile])
+    }, [isMobile, viewport.width, viewport.height])
 
     return (
       <>
