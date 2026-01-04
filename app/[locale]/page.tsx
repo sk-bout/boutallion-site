@@ -452,11 +452,11 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-3 w-full flex flex-col items-center">
-              <div className="flex flex-col gap-4 md:gap-5 w-full max-w-md md:max-w-lg lg:max-w-2xl">
+            <form onSubmit={handleSubmit} className="space-y-2 md:space-y-3 w-full flex flex-col items-center">
+              <div className="flex flex-col gap-3 md:gap-4 w-full max-w-md md:max-w-lg lg:max-w-2xl">
                 {/* Full Name */}
                 <div className="w-full flex flex-col">
-                  <label htmlFor="fullName" className="block font-refined text-xs text-white/60 mb-2 uppercase tracking-wider text-left">
+                  <label htmlFor="fullName" className="block font-refined text-xs text-white/60 mb-1.5 md:mb-2 uppercase tracking-wider text-left">
                     Full Name
                   </label>
                   <input
@@ -466,7 +466,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                     value={formData.fullName}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-5 py-3 md:px-6 md:py-4 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 focus:ring-2 focus:ring-gold-DEFAULT/20 focus:ring-offset-0 shadow-sm shadow-black/10"
+                    className="w-full px-5 py-2.5 md:px-6 md:py-3 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/40 focus:shadow-[0_0_0_1px_rgba(212,197,160,0.3)] shadow-sm shadow-black/10"
                   />
                 </div>
                 
@@ -483,7 +483,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                     onChange={handleInputChange}
                     onBlur={() => validateEmail(formData.email)}
                     required
-                    className={`w-full px-5 py-3 md:px-6 md:py-4 bg-black/20 backdrop-blur-sm border text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:shadow-[0_0_0_1px_rgba(212,197,160,0.3)] shadow-sm shadow-black/10 ${
+                    className={`w-full px-5 py-2.5 md:px-6 md:py-3 bg-black/20 backdrop-blur-sm border text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:shadow-[0_0_0_1px_rgba(212,197,160,0.3)] shadow-sm shadow-black/10 ${
                       emailError
                         ? 'border-red-500/40 focus:border-red-500/50'
                         : formData.email && !emailError
@@ -532,14 +532,14 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                     required
                     rows={3}
                     minLength={10}
-                    className="w-full px-5 py-3 md:px-6 md:py-4 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/40 focus:shadow-[0_0_0_1px_rgba(212,197,160,0.3)] shadow-sm shadow-black/10 resize-none min-h-[100px] md:min-h-[120px]"
+                    className="w-full px-5 py-2.5 md:px-6 md:py-3 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/40 focus:shadow-[0_0_0_1px_rgba(212,197,160,0.3)] shadow-sm shadow-black/10 resize-none min-h-[80px] md:min-h-[90px]"
                   />
                 </div>
                 
                 <button
                   type="submit"
                   disabled={isSubmitting || !!emailError || !formData.email || !formData.fullName}
-                  className="w-full px-6 py-3.5 md:px-8 md:py-4 bg-gold-DEFAULT/25 backdrop-blur-md border-2 border-gold-DEFAULT/60 text-gold-DEFAULT font-refined text-sm md:text-base tracking-[0.15em] uppercase hover:bg-gold-DEFAULT/35 hover:border-gold-DEFAULT/80 active:bg-gold-DEFAULT/30 transition-all duration-500 disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-gold-DEFAULT/30 hover:shadow-xl hover:shadow-gold-DEFAULT/40 whitespace-nowrap mt-2 font-semibold"
+                  className="w-full px-6 py-2.5 md:px-8 md:py-3 bg-gold-DEFAULT/25 backdrop-blur-md border-2 border-gold-DEFAULT/60 text-gold-DEFAULT font-refined text-sm md:text-base tracking-[0.15em] uppercase hover:bg-gold-DEFAULT/35 hover:border-gold-DEFAULT/80 active:bg-gold-DEFAULT/30 transition-all duration-500 disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-gold-DEFAULT/30 hover:shadow-xl hover:shadow-gold-DEFAULT/40 whitespace-nowrap mt-1 md:mt-2 font-semibold"
                   style={{
                     textShadow: '0 0 8px rgba(212, 197, 160, 0.3)',
                   }}
