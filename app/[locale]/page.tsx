@@ -423,10 +423,10 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         
 
         {/* By Invitation Only text - centered with equal padding above and below on all devices */}
-        <p className={`font-refined text-white/70 -mt-1 sm:-mt-1 md:-mt-1 mb-4 sm:mb-5 md:mb-6 tracking-[0.1em] sm:tracking-[0.15em] uppercase px-4 break-words ${
+        <p className={`font-refined text-white/70 -mt-1 sm:-mt-1 md:-mt-1 mb-6 sm:mb-8 md:mb-10 tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] uppercase px-4 break-words ${
           params.locale === 'ar' || params.locale === 'ru'
-            ? 'text-sm sm:text-base md:text-lg lg:text-xl'
-            : 'text-xs sm:text-sm md:text-base lg:text-lg'
+            ? 'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl'
+            : 'text-sm sm:text-base md:text-xl lg:text-2xl xl:text-3xl'
         }`}>
           {t['by-invitation-only']}
         </p>
