@@ -451,45 +451,51 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3 w-full flex flex-col items-center">
-              <div className="flex flex-col gap-2.5 w-full items-center justify-center max-w-md md:max-w-lg lg:max-w-2xl">
+              <div className="flex flex-col gap-4 md:gap-5 w-full items-center justify-center max-w-md md:max-w-lg lg:max-w-2xl">
                 {/* Full Name */}
                 <div className="w-full flex flex-col">
+                  <label htmlFor="fullName" className="block font-refined text-xs text-white/60 mb-2 uppercase tracking-wider">
+                    Full Name
+                  </label>
                   <input
                     type="text"
+                    id="fullName"
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleInputChange}
-                    placeholder="Full Name"
                     required
-                    className="w-full px-4 py-2.5 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-xs sm:text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10"
+                    className="w-full px-5 py-3 md:px-6 md:py-4 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 focus:ring-2 focus:ring-gold-DEFAULT/20 focus:ring-offset-0 shadow-sm shadow-black/10"
                   />
                 </div>
                 
                 {/* Email */}
                 <div className="w-full flex flex-col">
+                  <label htmlFor="email" className="block font-refined text-xs text-white/60 mb-2 uppercase tracking-wider">
+                    Email
+                  </label>
                   <input
                     type="email"
+                    id="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
                     onBlur={() => validateEmail(formData.email)}
-                    placeholder={t['enter-your-email']}
                     required
-                    className={`w-full px-4 py-2.5 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-xs sm:text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10 ${
+                    className={`w-full px-5 py-3 md:px-6 md:py-4 bg-black/20 backdrop-blur-sm border text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:ring-2 focus:ring-gold-DEFAULT/20 focus:ring-offset-0 shadow-sm shadow-black/10 ${
                       emailError
                         ? 'border-red-500/60 focus:border-red-500/80'
                         : formData.email && !emailError
                         ? 'border-green-500/60 focus:border-green-500/80'
-                        : ''
+                        : 'border-white/20 focus:border-gold-DEFAULT/60'
                     }`}
                   />
                   {emailError && (
-                    <p className="mt-0.5 text-xs text-red-400/80 font-sans px-1 animate-fade-in">
+                    <p className="mt-1.5 text-xs text-red-400/80 font-refined tracking-wide animate-fade-in">
                       {emailError}
                     </p>
                   )}
                   {formData.email && !emailError && (
-                    <p className="mt-0.5 text-xs text-green-400/80 font-sans px-1 animate-fade-in">
+                    <p className="mt-1.5 text-xs text-gold-light/80 font-refined tracking-wide animate-fade-in">
                       ✓ Valid email
                     </p>
                   )}
@@ -497,34 +503,41 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                 
                 {/* City / Country */}
                 <div className="w-full flex flex-col">
+                  <label htmlFor="cityCountry" className="block font-refined text-xs text-white/60 mb-2 uppercase tracking-wider">
+                    City / Country
+                  </label>
                   <input
                     type="text"
+                    id="cityCountry"
                     name="cityCountry"
                     value={formData.cityCountry}
                     onChange={handleInputChange}
-                    placeholder="City / Country"
                     required
-                    className="w-full px-4 py-2.5 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-xs sm:text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10"
+                    className="w-full px-5 py-3 md:px-6 md:py-4 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 focus:ring-2 focus:ring-gold-DEFAULT/20 focus:ring-offset-0 shadow-sm shadow-black/10"
                   />
                 </div>
                 
                 {/* What brings you to Boutallion? */}
                 <div className="w-full flex flex-col">
+                  <label htmlFor="whatBringsYou" className="block font-refined text-xs text-white/60 mb-2 uppercase tracking-wider">
+                    What brings you to Boutallion?
+                  </label>
                   <textarea
+                    id="whatBringsYou"
                     name="whatBringsYou"
                     value={formData.whatBringsYou}
                     onChange={handleInputChange}
-                    placeholder="What brings you to Boutallion?"
                     required
                     rows={3}
-                    className="w-full px-4 py-2.5 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-sans text-xs sm:text-sm tracking-wide transition-all duration-300 placeholder-white/50 focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 font-normal shadow-sm shadow-black/10 resize-none"
+                    minLength={10}
+                    className="w-full px-5 py-3 md:px-6 md:py-4 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/60 focus:ring-2 focus:ring-gold-DEFAULT/20 focus:ring-offset-0 shadow-sm shadow-black/10 resize-none min-h-[100px] md:min-h-[120px]"
                   />
                 </div>
                 
                 <button
                   type="submit"
                   disabled={isSubmitting || !!emailError || !formData.email || !formData.fullName}
-                  className="w-full px-4 py-2.5 bg-gold-DEFAULT/20 backdrop-blur-md border-2 border-gold-DEFAULT/40 text-gold-DEFAULT font-sans text-xs tracking-[0.2em] uppercase hover:bg-gold-DEFAULT/30 hover:border-gold-DEFAULT/60 active:bg-gold-DEFAULT/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-semibold shadow-lg shadow-gold-DEFAULT/20 hover:shadow-xl hover:shadow-gold-DEFAULT/30 whitespace-nowrap mt-1"
+                  className="w-full px-6 py-3.5 md:px-8 md:py-4 bg-gold-DEFAULT/10 backdrop-blur-md border border-gold-DEFAULT/30 text-gold-DEFAULT font-refined text-sm tracking-[0.15em] uppercase hover:bg-gold-DEFAULT/15 hover:border-gold-DEFAULT/50 active:bg-gold-DEFAULT/20 transition-all duration-500 disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-gold-DEFAULT/20 hover:shadow-xl hover:shadow-gold-DEFAULT/30 whitespace-nowrap mt-2"
                 >
                   {isSubmitting ? t['submitting'] : t['register-your-interest']}
                 </button>
