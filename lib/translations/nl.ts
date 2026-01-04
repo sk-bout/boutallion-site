@@ -1,5 +1,5 @@
 export const translations = {
-  'by-invitation-only': 'ALLEEN OP UITNODIGING',
+  'by-invitation-only': 'Privé toegang wordt verleend na beoordeling',
   'enter-your-email': 'Voer uw e-mailadres in',
   'register-your-interest': 'Registreer uw interesse',
   'submitting': 'Verzenden...',

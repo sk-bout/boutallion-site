@@ -1,5 +1,5 @@
 export const translations = {
-  'by-invitation-only': 'BY INVITATION ONLY',
+  'by-invitation-only': 'Private access is granted upon review',
   'enter-your-email': 'Enter your email',
   'register-your-interest': 'Register your interest',
   'submitting': 'Submitting...',

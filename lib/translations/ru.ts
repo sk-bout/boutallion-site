@@ -1,5 +1,5 @@
 export const translations = {
-  'by-invitation-only': 'ТОЛЬКО ПО ПРИГЛАШЕНИЮ',
+  'by-invitation-only': 'Приватный доступ предоставляется после проверки',
   'enter-your-email': 'Введите ваш email',
   'register-your-interest': 'Зарегистрируйте свой интерес',
   'submitting': 'Отправка...',

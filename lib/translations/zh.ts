@@ -1,5 +1,5 @@
 export const translations = {
-  'by-invitation-only': '仅限邀请',
+  'by-invitation-only': '审核后授予私人访问权限',
   'enter-your-email': '输入您的电子邮件',
   'register-your-interest': '注册您的兴趣',
   'submitting': '提交中...',
