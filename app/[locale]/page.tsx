@@ -393,7 +393,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       </div>
 
       {/* Main content */}
-      <main className="relative z-10 text-center px-4 sm:px-6 py-2 sm:py-4 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-center min-h-[100vh] min-h-[100dvh] safe-area-inset">
+      <main className="relative z-10 text-center px-4 sm:px-6 py-0 sm:py-1 md:py-2 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-center min-h-[100vh] min-h-[100dvh] safe-area-inset">
         {/* BOUTALLION Logo - centered and responsive */}
         <div 
           ref={logoRef}
@@ -423,7 +423,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         
 
         {/* By Invitation Only text - centered with equal padding above and below on all devices */}
-        <p className={`font-refined text-white/70 -mt-1 sm:-mt-1 md:-mt-1 mb-2 sm:mb-3 md:mb-3 tracking-[0.1em] sm:tracking-[0.15em] uppercase px-4 break-words ${
+        <p className={`font-refined text-white/70 -mt-1 sm:-mt-1 md:-mt-1 mb-4 sm:mb-5 md:mb-6 tracking-[0.1em] sm:tracking-[0.15em] uppercase px-4 break-words ${
           params.locale === 'ar' || params.locale === 'ru'
             ? 'text-sm sm:text-base md:text-lg lg:text-xl'
             : 'text-xs sm:text-sm md:text-base lg:text-lg'
