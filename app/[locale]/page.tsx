@@ -395,7 +395,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       </div>
 
       {/* Main content */}
-      <main className="relative z-10 text-center px-4 sm:px-6 py-0 sm:py-1 md:py-2 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-center min-h-[100vh] min-h-[100dvh] safe-area-inset">
+      <main className="relative z-10 text-center px-4 sm:px-6 py-8 sm:py-12 md:py-16 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-start min-h-[100vh] min-h-[100dvh] safe-area-inset">
         {/* BOUTALLION Logo - centered and responsive */}
         <div 
           ref={logoRef}
@@ -434,7 +434,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         </p>
 
         {/* Subscription form */}
-        <div className="max-w-md md:max-w-lg lg:max-w-2xl mx-auto flex flex-col items-center w-full px-4 sm:px-6">
+        <div className="max-w-md md:max-w-lg lg:max-w-2xl mx-auto flex flex-col items-center w-full px-4 sm:px-6 mb-8 sm:mb-12 md:mb-16">
           {isSubmitted ? (
             <div className="text-gold-light text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-refined animate-fade-in text-center px-6 sm:px-4 py-4 break-words leading-relaxed w-full" style={{ 
               maxWidth: 'calc(100% - 2rem)',
