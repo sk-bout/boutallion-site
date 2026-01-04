@@ -395,7 +395,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
       </div>
 
       {/* Main content */}
-      <main className="relative z-10 text-center px-4 sm:px-6 pt-2 sm:pt-4 md:pt-6 pb-8 sm:pb-12 md:pb-16 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-start min-h-[100vh] min-h-[100dvh] safe-area-inset">
+      <main className="relative z-10 text-center px-4 sm:px-6 pt-0 sm:pt-2 md:pt-3 pb-8 sm:pb-12 md:pb-16 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-start min-h-[100vh] min-h-[100dvh] safe-area-inset">
         {/* BOUTALLION Logo - centered and responsive */}
         <div 
           ref={logoRef}
@@ -425,10 +425,10 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         
 
         {/* By Invitation Only text - centered with equal padding above and below on all devices */}
-        <p className={`font-refined text-white/70 -mt-1 sm:-mt-1 md:-mt-1 mb-6 sm:mb-8 md:mb-10 tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] uppercase px-4 break-words ${
+        <p className={`font-refined text-white/70 -mt-2 sm:-mt-3 md:-mt-3 mb-4 sm:mb-6 md:mb-6 tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] uppercase px-4 break-words ${
           params.locale === 'ar' || params.locale === 'ru'
-            ? 'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl'
-            : 'text-sm sm:text-base md:text-xl lg:text-2xl xl:text-3xl'
+            ? 'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-2xl'
+            : 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl'
         }`}>
           {t['by-invitation-only']}
         </p>
@@ -453,10 +453,10 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3 w-full flex flex-col items-center">
-              <div className="flex flex-col gap-4 md:gap-5 w-full items-center justify-center max-w-md md:max-w-lg lg:max-w-2xl">
+              <div className="flex flex-col gap-4 md:gap-5 w-full max-w-md md:max-w-lg lg:max-w-2xl">
                 {/* Full Name */}
                 <div className="w-full flex flex-col">
-                  <label htmlFor="fullName" className="block font-refined text-xs text-white/60 mb-2 uppercase tracking-wider">
+                  <label htmlFor="fullName" className="block font-refined text-xs text-white/60 mb-2 uppercase tracking-wider text-left">
                     Full Name
                   </label>
                   <input
@@ -472,7 +472,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                 
                 {/* Email */}
                 <div className="w-full flex flex-col">
-                  <label htmlFor="email" className="block font-refined text-xs text-white/60 mb-2 uppercase tracking-wider">
+                  <label htmlFor="email" className="block font-refined text-xs text-white/60 mb-1.5 md:mb-2 uppercase tracking-wider text-left">
                     Email
                   </label>
                   <input
@@ -505,7 +505,7 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                 
                 {/* City / Country */}
                 <div className="w-full flex flex-col">
-                  <label htmlFor="cityCountry" className="block font-refined text-xs text-white/60 mb-2 uppercase tracking-wider">
+                  <label htmlFor="cityCountry" className="block font-refined text-xs text-white/60 mb-1.5 md:mb-2 uppercase tracking-wider text-left">
                     City / Country
                   </label>
                   <input
@@ -515,13 +515,13 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                     value={formData.cityCountry}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-5 py-3 md:px-6 md:py-4 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/40 focus:shadow-[0_0_0_1px_rgba(212,197,160,0.3)] shadow-sm shadow-black/10"
+                    className="w-full px-5 py-2.5 md:px-6 md:py-3 bg-black/20 backdrop-blur-sm border border-white/20 text-gold-DEFAULT font-refined text-sm tracking-wide transition-all duration-500 ease-in-out focus:outline-none focus:bg-black/30 focus:border-gold-DEFAULT/40 focus:shadow-[0_0_0_1px_rgba(212,197,160,0.3)] shadow-sm shadow-black/10"
                   />
                 </div>
                 
                 {/* What brings you to Boutallion? */}
                 <div className="w-full flex flex-col">
-                  <label htmlFor="whatBringsYou" className="block font-refined text-xs text-white/60 mb-2 uppercase tracking-wider">
+                  <label htmlFor="whatBringsYou" className="block font-refined text-xs text-white/60 mb-1.5 md:mb-2 uppercase tracking-wider text-left">
                     What brings you to Boutallion?
                   </label>
                   <textarea
@@ -539,7 +539,10 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
                 <button
                   type="submit"
                   disabled={isSubmitting || !!emailError || !formData.email || !formData.fullName}
-                  className="w-full px-6 py-3.5 md:px-8 md:py-4 bg-gold-DEFAULT/10 backdrop-blur-md border border-gold-DEFAULT/30 text-gold-DEFAULT font-refined text-sm tracking-[0.15em] uppercase hover:bg-gold-DEFAULT/15 hover:border-gold-DEFAULT/50 active:bg-gold-DEFAULT/20 transition-all duration-500 disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-gold-DEFAULT/20 hover:shadow-xl hover:shadow-gold-DEFAULT/30 whitespace-nowrap mt-2"
+                  className="w-full px-6 py-3.5 md:px-8 md:py-4 bg-gold-DEFAULT/25 backdrop-blur-md border-2 border-gold-DEFAULT/60 text-gold-DEFAULT font-refined text-sm md:text-base tracking-[0.15em] uppercase hover:bg-gold-DEFAULT/35 hover:border-gold-DEFAULT/80 active:bg-gold-DEFAULT/30 transition-all duration-500 disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-gold-DEFAULT/30 hover:shadow-xl hover:shadow-gold-DEFAULT/40 whitespace-nowrap mt-2 font-semibold"
+                  style={{
+                    textShadow: '0 0 8px rgba(212, 197, 160, 0.3)',
+                  }}
                 >
                   {isSubmitting ? t['submitting'] : t['register-your-interest']}
                 </button>
