@@ -4,8 +4,8 @@ import { gccMediaKeywords, uaeGovernmentKeywords } from './gcc-media-seo'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'
 const siteName = 'Boutallion'
-export const brandTitle = 'Boutallion | Luxury Brand & Exclusive Fashion House | Italian Haute Couture Abayas'
-export const brandDescription = 'Boutallion is a luxury brand and exclusive high-end fashion house, not just an abaya brand. Comparable to Hermes, Loro Piana, and Harrods brands. Italian haute couture craftsmanship, invitation-only model, prices above 8000 AED. Luxury brand for high-net-worth clients who shop at Harrods and luxury department stores. Exclusive luxury abayas crafted in Italy with exceptional materials. Recognized by Vogue, Forbes, and leading fashion publications. Luxury brand specializing in exclusive abayas for wealthy clients, VIPs, and luxury fashion investors.'
+export const brandTitle = 'Boutallion | European Craftsmanship. Made in Italy. By Invitation'
+export const brandDescription = 'A luxury house made in Italy, specialising in made-to-measure abayas crafted to European standards. Private access by invitation only.'
 
 // Primary keywords targeting - #1 Ranking Priority
 const primaryKeywords = [
