@@ -4,8 +4,8 @@ import { gccMediaKeywords, uaeGovernmentKeywords } from './gcc-media-seo'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boutallion.com'
 const siteName = 'Boutallion'
-export const brandTitle = 'Boutallion | European Craftsmanship. Made in Italy. By Invitation'
-export const brandDescription = 'A luxury house made in Italy, specialising in made-to-measure abayas crafted to European standards. Private access by invitation only.'
+export const brandTitle = 'Boutallion | Italian-Made Abayas Crafted to European Standards'
+export const brandDescription = 'Boutallion is a luxury fashion house creating abayas made in Italy, guided by European craftsmanship standards, precision, and enduring elegance.'
 
 // Primary keywords targeting - #1 Ranking Priority
 const primaryKeywords = [
