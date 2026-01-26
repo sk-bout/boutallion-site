@@ -16,33 +16,64 @@ export async function POST(request: NextRequest) {
     const { email, fullName, cityCountry, whatBringsYou } = await request.json()
     console.log('📧 Form submission received:', { email, fullName, cityCountry, whatBringsYou })
 
-    // Validate email
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    // Validate email - handle both string and non-string inputs
+    if (!email) {
+      console.error('❌ Missing email field')
+      return NextResponse.json(
+        { error: 'Email address is required' },
+        { status: 400 }
+      )
+    }
+
+    if (typeof email !== 'string') {
+      console.error('❌ Email is not a string:', typeof email, email)
+      return NextResponse.json(
+        { error: 'Please enter a valid email address' },
+        { status: 400 }
+      )
+    }
+
+    const trimmedEmail = email.trim()
+    if (!trimmedEmail) {
+      console.error('❌ Email is empty after trimming')
+      return NextResponse.json(
+        { error: 'Please enter a valid email address' },
+        { status: 400 }
+      )
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
       console.error('❌ Invalid email format:', email)
       return NextResponse.json(
-        { error: 'Invalid email address' },
+        { error: 'Please enter a valid email address' },
         { status: 400 }
       )
     }
 
-    // Validate required fields
-    if (!fullName || !fullName.trim()) {
+    // Use lowercase email for consistency
+    const normalizedEmail = trimmedEmail.toLowerCase()
+
+    // Validate required fields with better error messages
+    if (!fullName || typeof fullName !== 'string' || !fullName.trim()) {
+      console.error('❌ Missing full name')
       return NextResponse.json(
-        { error: 'Full name is required' },
+        { error: 'Please enter your full name' },
         { status: 400 }
       )
     }
 
-    if (!cityCountry || !cityCountry.trim()) {
+    if (!cityCountry || typeof cityCountry !== 'string' || !cityCountry.trim()) {
+      console.error('❌ Missing city/country')
       return NextResponse.json(
-        { error: 'City / Country is required' },
+        { error: 'Please enter your city and country' },
         { status: 400 }
       )
     }
 
-    if (!whatBringsYou || !whatBringsYou.trim()) {
+    if (!whatBringsYou || typeof whatBringsYou !== 'string' || !whatBringsYou.trim()) {
+      console.error('❌ Missing what brings you field')
       return NextResponse.json(
-        { error: 'What brings you to Boutallion is required' },
+        { error: 'Please tell us what brings you to Boutallion' },
         { status: 400 }
       )
     }
@@ -67,11 +98,11 @@ export async function POST(request: NextRequest) {
     if (mailerliteFormUrl) {
       console.log('📧 Using MailerLite Form URL method')
       const formData = new URLSearchParams()
-      formData.append('email', email)
+      formData.append('email', normalizedEmail)
       formData.append('fields[source]', 'Website Subscription')
-      formData.append('fields[full_name]', fullName)
-      formData.append('fields[city_country]', cityCountry)
-      formData.append('fields[what_brings_you]', whatBringsYou)
+      formData.append('fields[full_name]', fullName.trim())
+      formData.append('fields[city_country]', cityCountry.trim())
+      formData.append('fields[what_brings_you]', whatBringsYou.trim())
 
       try {
         console.log('📧 Sending to MailerLite Form URL:', mailerliteFormUrl.substring(0, 50) + '...')
@@ -193,7 +224,7 @@ export async function POST(request: NextRequest) {
         
         // Create subscriber with group included (MailerLite API v2 format)
         const requestBody: any = {
-          email: email.trim().toLowerCase(),
+          email: normalizedEmail,
           fields: customFields,
           groups: [groupIdStr], // Use as string
         }
@@ -241,7 +272,7 @@ export async function POST(request: NextRequest) {
           // Success cases (200 or 201)
           if (response.ok || response.status === 200 || response.status === 201) {
             mailerliteSuccess = true
-            console.log('✅ MailerLite subscription successful:', email)
+            console.log('✅ MailerLite subscription successful:', normalizedEmail)
             console.log('📧 MailerLite response:', JSON.stringify(responseData, null, 2))
           } else if (response.status === 400 || response.status === 422) {
             // Handle duplicate/already subscribed - treat as success
@@ -260,7 +291,7 @@ export async function POST(request: NextRequest) {
               errorMessage.includes('member')
             ) {
               mailerliteSuccess = true
-              console.log('✅ MailerLite: Email already subscribed:', email)
+              console.log('✅ MailerLite: Email already subscribed:', normalizedEmail)
             } else {
               console.warn('⚠️ MailerLite API returned error (non-critical):', response.status, responseText.substring(0, 200))
             }
@@ -325,7 +356,7 @@ export async function POST(request: NextRequest) {
       
       const location = locationData
       console.log('🔄 Database pool obtained, executing query...')
-      console.log('🔄 Email:', email.trim().toLowerCase())
+      console.log('🔄 Email:', normalizedEmail)
       console.log('🔄 Location data:', location ? JSON.stringify(location, null, 2) : 'Missing')
       console.log('🔄 IP Address:', ipAddress)
       
@@ -351,7 +382,7 @@ export async function POST(request: NextRequest) {
           updated_at = NOW()
         RETURNING id, email, created_at
       `, [
-        email.trim().toLowerCase(),
+        normalizedEmail,
         ipAddress,
         location?.country || null,
         location?.countryCode || null,
@@ -379,7 +410,7 @@ export async function POST(request: NextRequest) {
       try {
         const verifyResult = await db.query(
           'SELECT id, email, created_at FROM subscriptions WHERE email = $1',
-          [email.trim().toLowerCase()]
+          [normalizedEmail]
         )
         if (verifyResult.rows.length > 0) {
           console.log('✅ Verified: Subscription exists in database:', verifyResult.rows[0])
@@ -397,7 +428,7 @@ export async function POST(request: NextRequest) {
       console.error('❌ Error message:', dbError instanceof Error ? dbError.message : String(dbError))
       console.error('❌ Error code:', (dbError as any)?.code)
       console.error('❌ Error stack:', dbError instanceof Error ? dbError.stack : 'No stack trace')
-      console.error('❌ Email attempted:', email)
+      console.error('❌ Email attempted:', normalizedEmail)
       console.error('❌ DATABASE_URL check:', {
         exists: !!process.env.DATABASE_URL,
         length: process.env.DATABASE_URL?.length || 0,
@@ -427,7 +458,7 @@ export async function POST(request: NextRequest) {
     
     // Log subscription tracking
     console.log('📧 Subscription Tracking:', JSON.stringify({
-      email,
+      email: normalizedEmail,
       ipAddress,
       location: locationSummary,
       userAgent,
@@ -439,7 +470,7 @@ export async function POST(request: NextRequest) {
       success: true,
     }, null, 2))
     
-    console.log(`📍 Subscription: ${email} | Location: ${locationSummary.location} | IP: ${ipAddress} | Country: ${locationSummary.country || 'Unknown'} | City: ${locationSummary.city || 'Unknown'}`)
+    console.log(`📍 Subscription: ${normalizedEmail} | Location: ${locationSummary.location} | IP: ${ipAddress} | Country: ${locationSummary.country || 'Unknown'} | City: ${locationSummary.city || 'Unknown'}`)
     
     // Get device info for Slack notification
     const getDeviceType = (ua: string): string => {
@@ -491,14 +522,14 @@ export async function POST(request: NextRequest) {
       
       const emailHtml = formatFormSubmissionEmail({
         fullName,
-        email,
+        email: normalizedEmail,
         cityCountry,
         whatBringsYou,
       })
       
       emailBackupSuccess = await sendEmail({
         to: 'boutallion.ae@gmail.com',
-        subject: `[Boutallion Registration] ${fullName} - ${email}`,
+        subject: `[Boutallion Registration] ${fullName} - ${normalizedEmail}`,
         html: emailHtml + `
           <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
           <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-top: 20px;">
@@ -550,7 +581,7 @@ export async function POST(request: NextRequest) {
     // Send Slack notification (non-blocking)
     try {
       await sendSlackNotification({
-        email,
+        email: normalizedEmail,
         fullName,
         cityCountry,
         whatBringsYou,
@@ -584,7 +615,7 @@ export async function POST(request: NextRequest) {
     
     // Log final status
     console.log('📊 Final Subscription Status:', {
-      email,
+      email: normalizedEmail,
       mailerliteSuccess: mailerliteSuccess ? '✅' : '❌',
       emailBackupSuccess: emailBackupSuccess ? '✅' : '❌',
       databaseSaved: '✅', // Database save happens before this
@@ -599,11 +630,32 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     })
   } catch (error) {
-    console.error('Subscription error:', error)
-    // Return success on unexpected errors to avoid blocking users
+    console.error('❌ ========================================')
+    console.error('❌ SUBSCRIPTION API ERROR')
+    console.error('❌ ========================================')
+    console.error('❌ Error:', error instanceof Error ? error.message : String(error))
+    console.error('❌ Stack:', error instanceof Error ? error.stack : 'No stack trace')
+    console.error('❌ ========================================')
+    
+    // Return a user-friendly error message
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred'
+    
+    // Check if it's a validation error (should return 400)
+    if (errorMessage.includes('required') || errorMessage.includes('Invalid') || errorMessage.includes('valid')) {
+      return NextResponse.json(
+        { error: errorMessage },
+        { status: 400 }
+      )
+    }
+    
+    // For other errors, still try to save to database/email backup if possible
+    // but return an error to the user so they know something went wrong
     return NextResponse.json(
-      { success: true, message: 'Successfully subscribed' },
-      { status: 200 }
+      { 
+        error: 'We encountered an issue processing your subscription. Please try again or contact us directly.',
+        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+      },
+      { status: 500 }
     )
   }
 }

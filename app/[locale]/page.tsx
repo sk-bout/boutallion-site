@@ -255,14 +255,27 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
+    // Clear any previous errors
+    setEmailError('')
+    
     // Validate email before submission
     if (!validateEmail(formData.email)) {
       return
     }
     
-    // Validate required fields
-    if (!formData.fullName.trim()) {
-      setEmailError(t['error-full-name-required'] || 'Full name is required')
+    // Validate all required fields before submission
+    if (!formData.fullName || !formData.fullName.trim()) {
+      setEmailError(t['error-full-name-required'] || 'Please enter your full name')
+      return
+    }
+    
+    if (!formData.cityCountry || !formData.cityCountry.trim()) {
+      setEmailError('Please enter your city and country')
+      return
+    }
+    
+    if (!formData.whatBringsYou || !formData.whatBringsYou.trim()) {
+      setEmailError('Please tell us what brings you to Boutallion')
       return
     }
     
@@ -275,17 +288,33 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: formData.email,
-          fullName: formData.fullName,
-          cityCountry: formData.cityCountry,
-          whatBringsYou: formData.whatBringsYou,
+          email: formData.email.trim(),
+          fullName: formData.fullName.trim(),
+          cityCountry: formData.cityCountry.trim(),
+          whatBringsYou: formData.whatBringsYou.trim(),
         }),
       })
 
-      const data = await response.json()
+      // Handle non-JSON responses
+      let data
+      try {
+        data = await response.json()
+      } catch (jsonError) {
+        const text = await response.text()
+        console.error('Failed to parse response as JSON:', text)
+        throw new Error('Server returned an invalid response. Please try again.')
+      }
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to subscribe')
+        // Use the error message from the API if available
+        const errorMessage = data?.error || data?.message || `Subscription failed (${response.status})`
+        console.error('Subscription API error:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorMessage,
+          data,
+        })
+        throw new Error(errorMessage)
       }
 
       // Track successful subscription with analytics
@@ -318,7 +347,21 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         locale: params.locale,
       })
       
-      setEmailError(error instanceof Error ? error.message : (t['error-something-wrong'] || 'Something went wrong. Please try again.'))
+      // Provide user-friendly error messages
+      let errorMessage = t['error-something-wrong'] || 'Something went wrong. Please try again.'
+      
+      if (error instanceof Error) {
+        errorMessage = error.message
+      } else if (typeof error === 'string') {
+        errorMessage = error
+      }
+      
+      // Handle network errors specifically
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        errorMessage = 'Network error. Please check your connection and try again.'
+      }
+      
+      setEmailError(errorMessage)
     } finally {
       setIsSubmitting(false)
     }

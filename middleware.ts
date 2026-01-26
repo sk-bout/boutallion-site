@@ -29,7 +29,9 @@ export function middleware(request: NextRequest) {
   const userAgent = request.headers.get('user-agent') || ''
   
   // Force HTTPS redirect (critical for Facebook/WhatsApp OG tags)
-  if (protocol === 'http:') {
+  // Skip HTTPS redirect for localhost/127.0.0.1 (development)
+  const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('127.')
+  if (protocol === 'http:' && !isLocalhost) {
     url.protocol = 'https:'
     return NextResponse.redirect(url, 301)
   }
@@ -46,7 +48,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 301)
   }
   
-  // Skip API routes, static files, Next.js internals, verification files, and robots.txt/sitemap
+  // Skip API routes, static files, Next.js internals, verification files, robots.txt/sitemap, and lab routes
   if (
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
@@ -54,6 +56,7 @@ export function middleware(request: NextRequest) {
     pathname.includes('googled6388a4c0fa66801.html') ||
     pathname === '/robots.txt' ||
     pathname === '/sitemap.xml' ||
+    pathname.startsWith('/lab') ||
     pathname.includes('.')
   ) {
     return NextResponse.next()
