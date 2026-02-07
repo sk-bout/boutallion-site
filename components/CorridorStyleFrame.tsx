@@ -27,6 +27,14 @@ interface CorridorStyleFrameProps {
   showPlaceholder?: boolean
 }
 
+const FRAME_EDGE = 14
+const RECESS_MARGIN = { top: 12, right: 14, bottom: 12, left: 14 }
+
+const BEVEL_GRADIENT = 'linear-gradient(270deg, #062e33 0%, #052a2f 20%, #042329 40%, #041e22 60%, #03191c 80%, #021214 100%)'
+const BEVEL_GRADIENT_90 = 'linear-gradient(90deg, #062e33 0%, #052a2f 20%, #042329 40%, #041e22 60%, #03191c 80%, #021214 100%)'
+const BEVEL_GRADIENT_TOP = 'linear-gradient(to top, #062e33 0%, #052a2f 20%, #042329 40%, #041e22 60%, #03191c 80%, #021214 100%)'
+const BEVEL_GRADIENT_BOTTOM = 'linear-gradient(to bottom, #062e33 0%, #052a2f 20%, #042329 40%, #041e22 60%, #03191c 80%, #021214 100%)'
+
 export default function CorridorStyleFrame({
   label,
   frameNumber,
@@ -37,108 +45,47 @@ export default function CorridorStyleFrame({
   placeholderText = 'Image placeholder',
   showPlaceholder = true,
 }: CorridorStyleFrameProps) {
+  const hasLabel = Boolean(label)
   return (
     <div
       className={`relative overflow-hidden flex-shrink-0 ${className}`}
       style={{
         aspectRatio,
-        // Solid 3D frame - exact corridor style
-        background: `
-          linear-gradient(135deg, #052a2f 0%, #031a1d 25%, #041f23 50%, #031a1d 75%, #052a2f 100%),
-          repeating-linear-gradient(45deg, #041f23 0px, #041f23 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px),
-          radial-gradient(circle at 30% 40%, rgba(212, 197, 160, 0.06) 0%, #041f23 40%),
-          radial-gradient(circle at 70% 60%, rgba(212, 197, 160, 0.04) 0%, #041f23 40%)
-        `,
+        boxSizing: 'border-box',
+        border: '3px solid #052a2f',
         backgroundColor: '#031a1d',
+        backgroundImage: 'linear-gradient(135deg, #052a2f 0%, #041f23 50%, #052a2f 100%)',
         boxShadow: `
-          inset 0 0 0 3px rgba(212, 197, 160, 0.25),
-          inset 0 6px 12px rgba(0, 0, 0, 0.6),
-          inset 0 -6px 12px rgba(0, 0, 0, 0.5),
-          inset 8px 0 16px rgba(0, 0, 0, 0.4),
-          inset -8px 0 16px rgba(0, 0, 0, 0.4),
-          0 12px 32px rgba(0, 0, 0, 0.5),
-          0 0 0 1px rgba(0, 0, 0, 0.4),
-          0 0 40px rgba(0, 0, 0, 0.3)
+          inset 0 0 0 3px #0a3a40,
+          inset 0 6px 12px #000000,
+          inset 0 -6px 12px #000000,
+          inset 8px 0 16px #000000,
+          inset -8px 0 16px #000000,
+          0 12px 32px #000000,
+          0 20px 48px #000000
         `,
-        transform: 'translate3d(0, 0, 0) perspective(1000px) rotateX(0deg)',
+        transform: 'translateZ(0)',
+        backfaceVisibility: 'hidden',
         position: 'relative',
         ...style,
       }}
     >
-      {/* Fluted column effect on left side */}
-      <div
-        className="absolute left-0 top-0 bottom-0 z-10"
-        style={{
-          width: '16px',
-          background: `
-            repeating-linear-gradient(
-              90deg,
-              #041f23 0px,
-              #041f23 8px,
-              #021214 8px,
-              #021214 12px
-            )
-          `,
-          boxShadow: 'inset -4px 0 8px rgba(0, 0, 0, 0.6), 2px 0 6px rgba(0, 0, 0, 0.3)',
-        }}
-      />
-      {/* Fluted column effect on right side */}
-      <div
-        className="absolute right-0 top-0 bottom-0 z-10"
-        style={{
-          width: '16px',
-          background: `
-            repeating-linear-gradient(
-              90deg,
-              #041f23 0px,
-              #041f23 8px,
-              #021214 8px,
-              #021214 12px
-            )
-          `,
-          boxShadow: 'inset 4px 0 8px rgba(0, 0, 0, 0.6), -2px 0 6px rgba(0, 0, 0, 0.3)',
-        }}
-      />
-      {/* Top molding */}
-      <div
-        className="absolute top-0 left-0 right-0 h-2 z-10"
-        style={{
-          background: 'linear-gradient(to bottom, #021214 0%, #041f23 40%, #052a2f 100%)',
-          boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.3)',
-        }}
-      />
-      <div
-        className="absolute top-2 left-0 right-0 h-0.5 z-10"
-        style={{
-          background: 'linear-gradient(to bottom, rgba(212, 197, 160, 0.25) 0%, rgba(212, 197, 160, 0.1) 100%)',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.08)',
-        }}
-      />
-      {/* Bottom molding */}
-      <div
-        className="absolute bottom-2 left-0 right-0 h-0.5 z-10"
-        style={{
-          background: 'linear-gradient(to top, rgba(212, 197, 160, 0.25) 0%, rgba(212, 197, 160, 0.1) 100%)',
-          boxShadow: '0 -1px 3px rgba(0, 0, 0, 0.4), inset 0 -1px 1px rgba(255, 255, 255, 0.08)',
-        }}
-      />
-      <div
-        className="absolute bottom-0 left-0 right-0 h-2 z-10"
-        style={{
-          background: 'linear-gradient(to top, #021214 0%, #041f23 40%, #052a2f 100%)',
-          boxShadow: 'inset 0 -2px 4px rgba(0, 0, 0, 0.6), 0 -2px 4px rgba(0, 0, 0, 0.3)',
-        }}
-      />
+      {/* 3D bevel edges: green (inside) → black (outside) on all sides, equal width - exact corridor style */}
+      <div className="absolute left-0 top-0 bottom-0 z-10" style={{ width: `${FRAME_EDGE}px`, background: BEVEL_GRADIENT, boxShadow: 'inset -4px 0 10px #000000, 4px 0 10px #000000' }} />
+      <div className="absolute right-0 top-0 bottom-0 z-10" style={{ width: `${FRAME_EDGE}px`, background: BEVEL_GRADIENT_90, boxShadow: 'inset 4px 0 10px #000000, -4px 0 10px #000000' }} />
+      <div className="absolute top-0 left-0 right-0 z-10" style={{ height: `${FRAME_EDGE}px`, background: BEVEL_GRADIENT_TOP, boxShadow: 'inset 0 4px 10px #000000, 0 5px 12px #000000' }} />
+      <div className="absolute bottom-0 left-0 right-0 z-10" style={{ height: `${FRAME_EDGE}px`, background: BEVEL_GRADIENT_BOTTOM, boxShadow: 'inset 0 -4px 10px #000000, 0 -5px 12px #000000' }} />
 
-      {/* Label overlay (centered, above content) */}
+      {/* Label overlay - smaller text for nicer fit within frame */}
       {label && (
         <div
           className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
           style={{ top: 0, left: 0, right: 0, bottom: 0 }}
         >
           <span
-            className="font-portrait text-gold text-2xl md:text-3xl tracking-[0.15em] uppercase"
+            className="font-portrait text-gold tracking-[0.15em] uppercase"
             style={{
+              fontSize: 'clamp(0.75rem, 2vw, 1.125rem)',
               textShadow: '0 1px 2px rgba(0, 0, 0, 0.5), 0 -1px 1px rgba(255, 255, 255, 0.1)',
             }}
           >
@@ -147,22 +94,16 @@ export default function CorridorStyleFrame({
         </div>
       )}
 
-      {/* Recessed content panel */}
+      {/* Recessed content panel - lighter for label frames so background shows through */}
       <div
         className="relative w-full h-full"
         style={{
-          margin: '10px 16px 6px 16px',
-          boxShadow: `
-            inset 0 0 0 3px rgba(212, 197, 160, 0.2),
-            inset 0 6px 12px rgba(0, 0, 0, 0.55),
-            inset 0 -6px 12px rgba(0, 0, 0, 0.45),
-            inset 8px 0 16px rgba(0, 0, 0, 0.4),
-            inset -8px 0 16px rgba(0, 0, 0, 0.4),
-            0 12px 32px rgba(0, 0, 0, 0.45),
-            0 0 0 1px rgba(0, 0, 0, 0.35)
-          `,
-          background: '#031a1d',
-          border: '1px solid rgba(212, 197, 160, 0.15)',
+          margin: `${RECESS_MARGIN.top}px ${RECESS_MARGIN.right}px ${RECESS_MARGIN.bottom}px ${RECESS_MARGIN.left}px`,
+          boxShadow: hasLabel
+            ? 'inset 0 0 0 1px rgba(212, 197, 160, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.2)'
+            : `inset 0 0 0 3px #0a3a40, inset 0 6px 12px #000000, inset 0 -6px 12px #000000, inset 8px 0 16px #000000, inset -8px 0 16px #000000`,
+          background: hasLabel ? 'transparent' : '#031a1d',
+          border: hasLabel ? 'none' : '1px solid #052a2f',
         }}
       >
         {children ?? (showPlaceholder && (
@@ -172,9 +113,7 @@ export default function CorridorStyleFrame({
               background: 'linear-gradient(to bottom, #052a2f 0%, #031a1d 40%, #031a1d 100%)',
             }}
           >
-            <span
-              className="font-refined text-white/25 text-xs tracking-[0.3em] uppercase"
-            >
+            <span className="font-refined text-white/25 text-xs tracking-[0.3em] uppercase">
               {placeholderText}
             </span>
           </div>

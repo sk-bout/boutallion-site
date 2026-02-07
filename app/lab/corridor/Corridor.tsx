@@ -33,23 +33,24 @@ export default function Corridor() {
       const headerHeight = isMobile ? 72 : 88
       const calculatedTopPadding = headerHeight + (isMobile ? 20 : 24)
       // Padding below second row (space above copyright)
-      const calculatedBottomPadding = isMobile ? 30 : 50
+      const calculatedBottomPadding = (isMobile ? 24 : 40) + 8
       setTopPadding(calculatedTopPadding)
       setBottomPadding(calculatedBottomPadding)
       
       // Extra vertical space reserved for logo + copyright text themselves
-      const textAreaHeight = isMobile ? 60 : 70
+      const textAreaHeight = isMobile ? 50 : 60
       const nonRowSpace = calculatedTopPadding + calculatedBottomPadding + textAreaHeight
       
       // Height available for the two frame rows plus the gap between them
       const availableHeight = vh - nonRowSpace
+      // Reserve 8px buffer (4px per row) so bottom border never gets clipped
+      const buffer = 8
       
-      // Target card height so that 2 rows + gap fit exactly in available height
-      const idealCardHeight = Math.floor((availableHeight - calculatedGap) / 2)
+      // Target card height so that 2 rows + gap fit exactly with buffer for borders
+      const idealCardHeight = Math.floor((availableHeight - calculatedGap - buffer) / 2)
       
-      // Apply responsive constraints while keeping frames as large as possible
-      const maxCardHeight = isMobile ? 560 : isTablet ? 680 : 800
-      const minCardHeight = 260
+      const maxCardHeight = isMobile ? 640 : isTablet ? 720 : 880
+      const minCardHeight = 320
       const calculatedHeight = Math.max(minCardHeight, Math.min(maxCardHeight, idealCardHeight))
       
       setCardHeight(calculatedHeight)
@@ -64,6 +65,7 @@ export default function Corridor() {
     <div
       ref={containerRef}
       className="fixed inset-0 overflow-hidden z-10"
+      style={{ backgroundColor: '#031a1d' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -77,6 +79,7 @@ export default function Corridor() {
       <div 
         className="absolute inset-0 flex flex-col justify-center items-center"
         style={{
+          zIndex: 5,
           gap: `${gapSize}px`,
           // Use calculated paddings so two rows always fit viewport
           paddingTop: `${topPadding}px`,
@@ -85,8 +88,8 @@ export default function Corridor() {
           overflow: 'hidden',
         }}
       >
-        {/* Row 1: Left-to-right */}
-        <div className="relative w-full flex-shrink-0 overflow-hidden" style={{ zIndex: 1, height: `${cardHeight}px`, maxHeight: `${cardHeight}px` }}>
+        {/* Row 1: Left-to-right - extra 4px height so bottom border never clips */}
+        <div className="relative w-full flex-shrink-0" style={{ zIndex: 1, height: `${cardHeight + 4}px`, minHeight: `${cardHeight + 4}px`, overflow: 'visible' }}>
           <Row
             items={row1Items}
             direction="right"
@@ -96,8 +99,8 @@ export default function Corridor() {
           />
         </div>
 
-        {/* Row 2: Right-to-left */}
-        <div className="relative w-full flex-shrink-0 overflow-hidden" style={{ zIndex: 2, height: `${cardHeight}px`, maxHeight: `${cardHeight}px` }}>
+        {/* Row 2: Right-to-left - extra 4px height so bottom border never clips */}
+        <div className="relative w-full flex-shrink-0" style={{ zIndex: 2, height: `${cardHeight + 4}px`, minHeight: `${cardHeight + 4}px`, overflow: 'visible' }}>
           <Row
             items={row2Items}
             direction="left"

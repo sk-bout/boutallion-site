@@ -68,7 +68,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${playfairDisplay.variable} ${inter.variable}`}>
+      <body className={`${playfairDisplay.variable} ${inter.variable}`} style={{ backgroundColor: '#031a1d', color: '#ffffff' }}>
         {/* Structured Data - Luxury Brand */}
         <Script
           id="structured-data-brand"

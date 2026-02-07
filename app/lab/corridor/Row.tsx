@@ -29,7 +29,7 @@ export default function Row({ items, direction, speed, isHovered, cardHeight = 4
   const estimatedOneSet = items.length * (cardWidth + gap)
   const effectiveTrackWidth = trackWidth > 0 ? trackWidth : estimatedOneSet
 
-  const duration = effectiveTrackWidth > 0 ? Math.round((effectiveTrackWidth / 80) * 1000) : 60000
+  const duration = effectiveTrackWidth > 0 ? Math.round((effectiveTrackWidth / 28) * 1000) : 120000
   const animName = `corridor-scroll-${direction}-${items.length}`
   const animRunning = effectiveTrackWidth > 0 && !isPaused
 
@@ -98,18 +98,20 @@ export default function Row({ items, direction, speed, isHovered, cardHeight = 4
   return (
     <div
       ref={containerRef}
-      className="overflow-hidden"
       style={{ 
         height: '100%',
         maxHeight: '100%',
         display: 'flex',
         alignItems: 'center',
+        paddingLeft: '16px',
+        paddingRight: '16px',
+        overflow: 'hidden',
       }}
     >
       <style>{`
         @keyframes ${animName} {
-          0% { transform: translateX(${direction === 'right' ? 0 : -effectiveTrackWidth}px); }
-          100% { transform: translateX(${direction === 'right' ? -effectiveTrackWidth : 0}px); }
+          0% { transform: translate3d(${direction === 'right' ? 0 : -Math.round(effectiveTrackWidth)}px, 0, 0); }
+          100% { transform: translate3d(${direction === 'right' ? -Math.round(effectiveTrackWidth) : 0}px, 0, 0); }
         }
       `}</style>
       <div
@@ -233,163 +235,64 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
   // Use width < height so frames read more vertical than horizontal
   const cardWidth = Math.round(cardHeight * 0.75)
 
+  const FRAME_EDGE = 14
+  const RECESS_MARGIN = { top: 12, right: 14, bottom: 12, left: 14 }
+  const isLabelFrame = item.label && item.type === 'image'
   const cardContent = (
     <div
       ref={cardRef}
-      className="relative overflow-hidden flex-shrink-0"
+      className="relative flex-shrink-0 overflow-hidden"
       style={{
         width: `${cardWidth}px`,
         height: `${cardHeight}px`,
-        // Solid 3D frame - no transparency
-        background: `
-          linear-gradient(135deg, #052a2f 0%, #031a1d 25%, #041f23 50%, #031a1d 75%, #052a2f 100%),
-          repeating-linear-gradient(45deg, #041f23 0px, #041f23 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px),
-          radial-gradient(circle at 30% 40%, rgba(212, 197, 160, 0.06) 0%, #041f23 40%),
-          radial-gradient(circle at 70% 60%, rgba(212, 197, 160, 0.04) 0%, #041f23 40%)
-        `,
+        boxSizing: 'border-box',
+        border: `3px solid #052a2f`,
         backgroundColor: '#031a1d',
-        // 3D frame - solid border + inset shadows for depth
-        boxShadow: `
-          inset 0 0 0 3px rgba(212, 197, 160, 0.25),
-          inset 0 6px 12px rgba(0, 0, 0, 0.6),
-          inset 0 -6px 12px rgba(0, 0, 0, 0.5),
-          inset 8px 0 16px rgba(0, 0, 0, 0.4),
-          inset -8px 0 16px rgba(0, 0, 0, 0.4),
-          0 12px 32px rgba(0, 0, 0, 0.5),
-          0 0 0 1px rgba(0, 0, 0, 0.4),
-          0 0 40px rgba(0, 0, 0, 0.3)
+        backgroundImage: 'linear-gradient(135deg, #052a2f 0%, #041f23 50%, #052a2f 100%)',
+        boxShadow: isLabelFrame
+          ? 'inset 0 0 0 1px #0a3a40'
+          : `
+          inset 0 0 0 3px #0a3a40,
+          inset 0 6px 12px #000000,
+          inset 0 -6px 12px #000000,
+          inset 8px 0 16px #000000,
+          inset -8px 0 16px #000000
         `,
-        // 3D transform for depth
-        transform: `translate3d(0, 0, 0) perspective(1000px) rotateX(0deg) ${isHovered ? 'scale(1.03) translateZ(10px)' : 'scale(1) translateZ(0px)'}`,
-        // Prevent flickering with hardware acceleration
-        willChange: 'transform, opacity',
-        opacity: isHovered ? 1 : hoveredCardId && hoveredCardId !== item.id ? 0.75 : 1,
-        transition: 'transform 0.3s ease-out, opacity 0.3s ease-out',
+        transform: 'translateZ(0)',
+        backfaceVisibility: 'hidden',
         position: 'relative',
       }}
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
     >
-      {/* Fluted column effect on left side - solid 3D frame edge */}
-      <div
-        className="absolute left-0 top-0 bottom-0 z-10"
-        style={{
-          width: '16px',
-          background: `
-            repeating-linear-gradient(
-              90deg,
-              #041f23 0px,
-              #041f23 8px,
-              #021214 8px,
-              #021214 12px
-            )
-          `,
-          boxShadow: 'inset -4px 0 8px rgba(0, 0, 0, 0.6), 2px 0 6px rgba(0, 0, 0, 0.3)',
-        }}
-      />
-      
-      {/* Fluted column effect on right side - solid 3D frame edge */}
-      <div
-        className="absolute right-0 top-0 bottom-0 z-10"
-        style={{
-          width: '16px',
-          background: `
-            repeating-linear-gradient(
-              90deg,
-              #041f23 0px,
-              #041f23 8px,
-              #021214 8px,
-              #021214 12px
-            )
-          `,
-          boxShadow: 'inset 4px 0 8px rgba(0, 0, 0, 0.6), -2px 0 6px rgba(0, 0, 0, 0.3)',
-        }}
-      />
-      
-      {/* Top molding - solid 3D bevel */}
-      <div
-        className="absolute top-0 left-0 right-0 h-2 z-10"
-        style={{
-          background: 'linear-gradient(to bottom, #021214 0%, #041f23 40%, #052a2f 100%)',
-          boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.3)',
-        }}
-      />
-      <div
-        className="absolute top-2 left-0 right-0 h-0.5 z-10"
-        style={{
-          background: 'linear-gradient(to bottom, rgba(212, 197, 160, 0.25) 0%, rgba(212, 197, 160, 0.1) 100%)',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.08)',
-        }}
-      />
-      
-      {/* Bottom molding - solid 3D bevel */}
-      <div
-        className="absolute bottom-2 left-0 right-0 h-0.5 z-10"
-        style={{
-          background: 'linear-gradient(to top, rgba(212, 197, 160, 0.25) 0%, rgba(212, 197, 160, 0.1) 100%)',
-          boxShadow: '0 -1px 3px rgba(0, 0, 0, 0.4), inset 0 -1px 1px rgba(255, 255, 255, 0.08)',
-        }}
-      />
-      <div
-        className="absolute bottom-0 left-0 right-0 h-2 z-10"
-        style={{
-          background: 'linear-gradient(to top, #021214 0%, #041f23 40%, #052a2f 100%)',
-          boxShadow: 'inset 0 -2px 4px rgba(0, 0, 0, 0.6), 0 -2px 4px rgba(0, 0, 0, 0.3)',
-        }}
-      />
+      {/* 3D bevel edges: green (inside) → black (outside) on all sides, equal width */}
+      <div className="absolute left-0 top-0 bottom-0 z-10" style={{ width: `${FRAME_EDGE}px`, background: 'linear-gradient(270deg, #062e33 0%, #052a2f 20%, #042329 40%, #041e22 60%, #03191c 80%, #021214 100%)', boxShadow: 'inset -4px 0 10px #000000, 4px 0 10px #000000' }} />
+      <div className="absolute right-0 top-0 bottom-0 z-10" style={{ width: `${FRAME_EDGE}px`, background: 'linear-gradient(90deg, #062e33 0%, #052a2f 20%, #042329 40%, #041e22 60%, #03191c 80%, #021214 100%)', boxShadow: 'inset 4px 0 10px #000000, -4px 0 10px #000000' }} />
+      <div className="absolute top-0 left-0 right-0 z-10" style={{ height: `${FRAME_EDGE}px`, background: 'linear-gradient(to top, #062e33 0%, #052a2f 20%, #042329 40%, #041e22 60%, #03191c 80%, #021214 100%)', boxShadow: 'inset 0 4px 10px #000000, 0 5px 12px #000000' }} />
+      <div className="absolute bottom-0 left-0 right-0 z-10" style={{ height: `${FRAME_EDGE}px`, background: 'linear-gradient(to bottom, #062e33 0%, #052a2f 20%, #042329 40%, #041e22 60%, #03191c 80%, #021214 100%)', boxShadow: 'inset 0 -4px 10px #000000, 0 -5px 12px #000000' }} />
 
-      {/* Label in exact visual center of entire frame */}
-      {item.label && (
-        <div
-          className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
-          style={{ top: 0, left: 0, right: 0, bottom: 0 }}
-        >
-          <span
-            className="font-portrait text-gold text-2xl md:text-3xl tracking-[0.15em] uppercase"
-            style={{
-              textShadow: '0 1px 2px rgba(0, 0, 0, 0.5), 0 -1px 1px rgba(255, 255, 255, 0.1)',
-            }}
-          >
-            {item.label}
-          </span>
-        </div>
-      )}
-      
-      {/* Content container - solid recessed panel, no transparency */}
+      {/* Recessed content panel - lighter for label frames (1 & 4) so background shows */}
       <div
-        className="relative w-full h-full"
+        className="absolute"
         style={{
-          margin: '10px 16px 6px 16px',
-          boxShadow: `
-            inset 0 0 0 3px rgba(212, 197, 160, 0.2),
-            inset 0 6px 12px rgba(0, 0, 0, 0.55),
-            inset 0 -6px 12px rgba(0, 0, 0, 0.45),
-            inset 8px 0 16px rgba(0, 0, 0, 0.4),
-            inset -8px 0 16px rgba(0, 0, 0, 0.4),
-            0 12px 32px rgba(0, 0, 0, 0.45),
-            0 0 0 1px rgba(0, 0, 0, 0.35)
-          `,
-          paddingLeft: '0',
-          paddingRight: '0',
-          background: '#031a1d',
-          border: '1px solid rgba(212, 197, 160, 0.15)',
+          top: RECESS_MARGIN.top,
+          left: RECESS_MARGIN.left,
+          right: RECESS_MARGIN.right,
+          bottom: RECESS_MARGIN.bottom,
+          zIndex: 0,
+          overflow: 'hidden',
+          opacity: 1,
+          boxShadow: isLabelFrame ? 'none' : 'inset 0 0 0 3px #0a3a40, inset 0 6px 12px #000000, inset 0 -6px 12px #000000, inset 8px 0 16px #000000, inset -8px 0 16px #000000',
+          background: isLabelFrame ? 'transparent' : '#031a1d',
+          border: isLabelFrame ? 'none' : '1px solid #052a2f',
         }}
       >
         {item.type === 'topic' ? (
-          <div 
-            className="relative w-full h-full"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            }}
+          <div
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ width: '100%', height: '100%' }}
           >
-            <span 
+            <span
               className="font-portrait text-gold text-2xl tracking-[0.15em] uppercase"
               style={{
                 textShadow: '0 1px 2px rgba(0, 0, 0, 0.5), 0 -1px 1px rgba(255, 255, 255, 0.1)',
@@ -399,9 +302,8 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
             >
               {item.label}
             </span>
-            {/* Frame number overlay - bronze plaque style */}
             {item.frameNumber && (
-              <div 
+              <div
                 className="absolute top-3 left-3 px-2 py-1"
                 style={{
                   background: 'linear-gradient(135deg, #8b6914 0%, #6b4e0a 50%, #8b6914 100%)',
@@ -421,30 +323,20 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
             )}
           </div>
         ) : item.type === 'image' ? (
-          <div 
-            className="relative w-full h-full"
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            }}
-          >
+          <div className="absolute inset-0 w-full h-full">
             <Image
               src={item.src || '/logo.png'}
               alt={item.alt || ''}
               fill
               className="object-cover"
               style={{
-                opacity: isHovered ? 1 : 0.9,
-                transition: 'opacity 0.3s ease-out',
-                willChange: 'opacity',
+                opacity: 1,
                 objectPosition: 'center center',
+                objectFit: 'cover',
+                ...(isLabelFrame && { filter: 'brightness(1.4) contrast(1.08)' }),
               }}
               sizes="280px"
             />
-            {/* Clickable overlay for frames with href - label is rendered at card level for exact center */}
             {item.href && (
               <Link
                 href={item.href}
@@ -452,9 +344,8 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
                 aria-label={item.label || 'View'}
               />
             )}
-            {/* Frame number overlay */}
             {item.frameNumber && (
-              <div 
+              <div
                 className="absolute top-3 left-3 px-2 py-1 z-20"
                 style={{
                   background: 'linear-gradient(135deg, #8b6914 0%, #6b4e0a 50%, #8b6914 100%)',
@@ -474,16 +365,7 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
             )}
           </div>
         ) : (
-          <div 
-            className="relative w-full h-full"
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0, // Equal left and right - symmetrical
-              bottom: 0,
-            }}
-          >
+          <div className="absolute inset-0 w-full h-full">
             <video
               ref={videoRef}
               src={item.src}
@@ -495,10 +377,9 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
               preload="auto"
               className="w-full h-full object-cover"
               style={{
-                opacity: isHovered ? 1 : 0.85,
-                transition: 'opacity 0.3s ease-out',
-                willChange: 'opacity',
-                objectPosition: 'left center',
+                opacity: 1,
+                objectPosition: 'center center',
+                objectFit: 'cover',
               }}
               onLoadedMetadata={(e) => {
                 const video = e.currentTarget
@@ -518,9 +399,8 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
                 }
               }}
             />
-            {/* Frame number overlay - bronze plaque style */}
             {item.frameNumber && (
-              <div 
+              <div
                 className="absolute top-3 left-3 px-2 py-1"
                 style={{
                   background: 'linear-gradient(135deg, #8b6914 0%, #6b4e0a 50%, #8b6914 100%)',
@@ -541,6 +421,37 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
           </div>
         )}
       </div>
+
+      {/* Label in exact visual center - stable layer to prevent flicker during scroll */}
+      {item.label && (
+        <div
+          className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
+          style={{
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            contain: 'layout style paint',
+          }}
+        >
+          <span
+            className="font-portrait text-gold tracking-[0.15em] uppercase"
+            style={{
+              fontSize: 'clamp(0.75rem, 2vw, 1.125rem)',
+              textShadow: '0 1px 2px rgba(0, 0, 0, 0.5), 0 -1px 1px rgba(255, 255, 255, 0.1)',
+              transform: 'translateZ(0)',
+              backfaceVisibility: 'hidden',
+              WebkitFontSmoothing: 'antialiased',
+            }}
+          >
+            {item.label}
+          </span>
+        </div>
+      )}
+
     </div>
   )
 

@@ -67,8 +67,10 @@ export const row1Items: RowItem[] = [
   {
     id: 'frame-4',
     type: 'image',
-    src: '/image-4.png',
-    alt: 'Frame 4 - image 4',
+    src: '/green%20frame%20background.png',
+    alt: 'Founder frame',
+    label: 'FOUNDER',
+    href: '/lab/corridor/the-founder',
     frameNumber: 7,
   },
   {
@@ -90,8 +92,10 @@ export const row1Items: RowItem[] = [
   {
     id: 'frame-7',
     type: 'image',
-    src: '/image-6.png',
-    alt: 'Frame 7 - image 6',
+    src: '/green%20frame%20background.png',
+    alt: 'Craftsmanship frame',
+    label: 'CRAFTSMANSHIP',
+    href: '/lab/corridor/craftsmanship',
     frameNumber: 10,
   },
   {
