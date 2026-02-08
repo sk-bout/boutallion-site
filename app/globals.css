@@ -121,11 +121,17 @@ body {
   }
 }
 
-/* Prevent text overflow on all devices */
+/* Prevent text overflow on all devices - disable hyphenation to avoid cut words */
 h1, h2, h3, h4, h5, h6, p {
   overflow-wrap: break-word;
   word-wrap: break-word;
-  hyphens: auto;
+  hyphens: none;
+}
+
+p {
+  text-align: justify;
+  text-justify: inter-word;
+  text-align-last: left;
 }
 
 /* Ensure BOUTALLION text doesn't overflow on small screens */
@@ -182,7 +188,7 @@ body, html {
     box-sizing: border-box !important;
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
-    hyphens: auto !important;
+    hyphens: none !important;
   }
 }
 
@@ -589,4 +595,41 @@ textarea {
 @keyframes goldShimmer {
   0%, 100% { opacity: 0.4; }
   50% { opacity: 0.7; }
+}
+
+/* Floating leaves - About Us page */
+@keyframes leafFloat1 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(8px, -12px) rotate(3deg); }
+  50% { transform: translate(-6px, -20px) rotate(-2deg); }
+  75% { transform: translate(10px, -8px) rotate(4deg); }
+}
+
+@keyframes leafFloat2 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(-10px, 8px) rotate(-4deg); }
+  66% { transform: translate(6px, 15px) rotate(2deg); }
+}
+
+/* Our Story – coordinates reveal effect */
+@keyframes storyCoordinatesReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+    letter-spacing: 0.5em;
+  }
+  60% {
+    opacity: 1;
+    letter-spacing: 0.2em;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.15em;
+  }
+}
+
+.story-coordinates {
+  animation: storyCoordinatesReveal 1.4s ease-out forwards;
+  font-variant-numeric: tabular-nums;
 }
