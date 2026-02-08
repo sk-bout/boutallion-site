@@ -337,13 +337,6 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
               }}
               sizes="280px"
             />
-            {item.href && (
-              <Link
-                href={item.href}
-                className="absolute inset-0 z-30"
-                aria-label={item.label || 'View'}
-              />
-            )}
             {item.frameNumber && (
               <div
                 className="absolute top-3 left-3 px-2 py-1 z-20"
@@ -455,9 +448,9 @@ function Card({ item, isHovered, hoveredCardId, onHover, onLeave, cardHeight = 4
     </div>
   )
 
-  if (item.type === 'topic' && item.href) {
+  if (item.href) {
     return (
-      <Link href={item.href} className="block">
+      <Link href={item.href} className="block" aria-label={item.label || 'View'}>
         {cardContent}
       </Link>
     )

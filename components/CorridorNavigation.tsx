@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useLayoutEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useRouter, usePathname } from 'next/navigation'
 
@@ -49,7 +49,8 @@ export default function CorridorNavigation({ inline }: CorridorNavigationProps) 
   const pathname = usePathname()
 
   // Position dropdown based on button when opening (for portal/inline mode)
-  useEffect(() => {
+  // useLayoutEffect ensures position is set before paint, avoiding flash at (0,0)
+  useLayoutEffect(() => {
     if (isOpen && inline && buttonRef.current && typeof document !== 'undefined') {
       const rect = buttonRef.current.getBoundingClientRect()
       setDropdownPosition({
@@ -76,12 +77,14 @@ export default function CorridorNavigation({ inline }: CorridorNavigationProps) 
 
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener('pointerdown', handleClickOutside)
       window.addEventListener('scroll', handleScroll, true)
       window.addEventListener('touchmove', handleScroll, true)
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('pointerdown', handleClickOutside)
       window.removeEventListener('scroll', handleScroll, true)
       window.removeEventListener('touchmove', handleScroll, true)
     }
@@ -111,8 +114,14 @@ export default function CorridorNavigation({ inline }: CorridorNavigationProps) 
         {/* Hamburger Button */}
         <button
           ref={buttonRef}
-          onClick={() => setIsOpen(!isOpen)}
-          className="px-3 py-2 text-xs sm:text-sm bg-transparent border border-boutallion-green text-boutallion-green font-sans hover:bg-boutallion-green hover:text-white transition-colors duration-200 font-light flex items-center justify-center gap-2"
+          type="button"
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            setIsOpen((prev) => !prev)
+          }}
+          onPointerDown={(e) => e.stopPropagation()}
+          className="px-3 py-2 text-xs sm:text-sm bg-transparent border border-white/70 text-white/90 font-sans hover:bg-white/10 hover:border-white transition-colors duration-200 font-light flex items-center justify-center gap-2"
           aria-label="Open navigation menu"
           aria-expanded={isOpen}
           aria-haspopup="true"
@@ -145,7 +154,9 @@ export default function CorridorNavigation({ inline }: CorridorNavigationProps) 
           const dropdownContent = (
             <div
               ref={dropdownMenuRef}
-              className={`bg-boutallion-green border border-white/30 shadow-lg shadow-black/50 overflow-hidden z-[9999] min-w-[200px] ${
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
+              className={`bg-boutallion-green border border-white/30 shadow-lg shadow-black/50 overflow-hidden z-[9999] min-w-[200px] pointer-events-auto ${
                 inline ? 'fixed' : 'absolute top-full left-0 mt-1.5'
               }`}
               style={
@@ -173,7 +184,9 @@ export default function CorridorNavigation({ inline }: CorridorNavigationProps) 
                         return (
                           <button
                             key={sub.id}
+                            type="button"
                             onClick={() => handleItemClick(sub.href)}
+                            onPointerDown={(e) => e.stopPropagation()}
                             className={`w-full px-6 py-2.5 text-left text-xs sm:text-sm font-sans font-light transition-colors duration-200 ${
                               isActive
                                 ? 'text-gold-DEFAULT bg-white/5'
@@ -192,7 +205,9 @@ export default function CorridorNavigation({ inline }: CorridorNavigationProps) 
                 return (
                   <button
                     key={item.id}
+                    type="button"
                     onClick={() => item.href && handleItemClick(item.href)}
+                    onPointerDown={(e) => e.stopPropagation()}
                     className={`w-full px-4 py-3 text-left text-xs sm:text-sm font-sans font-light transition-colors duration-200 border-b border-white/10 last:border-b-0 ${
                       isActive
                         ? 'text-gold-DEFAULT bg-white/5'

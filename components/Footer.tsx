@@ -18,13 +18,13 @@ export default function Footer() {
         paddingRight: `max(1rem, calc(env(safe-area-inset-right) + 1rem))`,
       }}
     >
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-6">
-        {/* Copyright */}
+      <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-6">
+        {/* Copyright - left edge */}
         <p className="font-refined text-white/40 text-xs sm:text-sm tracking-wide order-2 sm:order-1">
           © Boutallion 2026
         </p>
 
-        {/* Policy links - classic horizontal row with subtle separators */}
+        {/* Policy links - right edge */}
         <nav
           className="flex flex-wrap items-center justify-center sm:justify-end gap-x-1 gap-y-1 order-1 sm:order-2"
           aria-label="Legal"
