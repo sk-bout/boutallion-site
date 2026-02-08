@@ -7,9 +7,9 @@ export default function SocialIcons() {
   
   return (
     <div 
-      className="fixed bottom-0 right-0 z-[100] p-3 sm:p-4 md:p-6 pointer-events-none"
+      className="fixed right-0 z-[100] p-3 sm:p-4 md:p-6 pointer-events-none"
       style={{
-        paddingBottom: `max(0.75rem, env(safe-area-inset-bottom))`,
+        bottom: 'calc(3rem + env(safe-area-inset-bottom))',
         paddingRight: `max(0.75rem, env(safe-area-inset-right))`,
         boxSizing: 'border-box',
       }}

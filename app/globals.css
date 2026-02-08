@@ -78,6 +78,9 @@ body {
   --font-portrait: 'Portrait', serif;
   --font-refined: 'Playfair Display', serif;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --boutallion-green: #031a1d;
+  --accent: #ded0a8;
+  --accent-muted: rgba(222, 208, 168, 0.6);
 }
 
 /* Ensure consistent scaling across all devices */

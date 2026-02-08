@@ -24,7 +24,6 @@ const NAVIGATION_ITEMS: NavigationItem[] = [
     label: 'About',
     subItems: [
       { id: 'about-us', label: 'About Us', href: '/lab/corridor/about-us' },
-      { id: 'about-us-demo', label: 'Layout Variants Demo', href: '/lab/corridor/about-us-demo' },
       { id: 'our-story', label: 'Our Story', href: '/lab/corridor/our-story' },
       { id: 'the-founder', label: 'The Founder', href: '/lab/corridor/the-founder' },
     ],

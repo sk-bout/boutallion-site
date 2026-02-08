@@ -6,197 +6,242 @@ import BaroqueBackground from '@/components/BaroqueBackground'
 import CorridorStyleFrame from '@/components/CorridorStyleFrame'
 import Footer from '@/components/Footer'
 import SocialIcons from '@/components/SocialIcons'
+import {
+  useScrollReveal,
+  useParallax,
+  KineticLine,
+  BOUTALLION_GREEN,
+  ACCENT,
+} from '@/components/ScrollRevealSection'
 
-function getScrollParent(el: HTMLElement): HTMLElement | Window {
-  let parent: HTMLElement | null = el.parentElement
-  while (parent && parent !== document.body) {
-    const { overflowY } = getComputedStyle(parent)
-    if (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') {
-      return parent
-    }
-    parent = parent.parentElement
-  }
-  return window
-}
-
-function useScrollReveal() {
-  const ref = useRef<HTMLDivElement>(null)
-  const [progress, setProgress] = useState(0)
-  const rafRef = useRef<number>()
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-
-    const scrollParent = getScrollParent(el)
-    const getViewportHeight = () =>
-      scrollParent instanceof Window
-        ? window.innerHeight
-        : (scrollParent as HTMLElement).clientHeight
-
-    const updateProgress = () => {
-      const rect = el.getBoundingClientRect()
-      const viewportHeight = getViewportHeight()
-      // Start revealing when element's top is 30% from bottom of viewport
-      const triggerPoint = viewportHeight * 0.7
-      // Full reveal when element's top reaches 20% from top of viewport
-      const endPoint = viewportHeight * 0.2
-      const raw = (triggerPoint - rect.top) / (triggerPoint - endPoint)
-      const eased = raw <= 0 ? 0 : raw >= 1 ? 1 : 1 - Math.pow(1 - raw, 1.5)
-      setProgress(eased)
-    }
-
-    const handleScroll = () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-      rafRef.current = requestAnimationFrame(updateProgress)
-    }
-
-    updateProgress()
-    scrollParent.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('resize', handleScroll)
-    return () => {
-      scrollParent.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleScroll)
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    }
-  }, [])
-
-  return { ref, progress }
+const glassStyle = {
+  background: `linear-gradient(135deg, ${BOUTALLION_GREEN} 0%, #041f23 50%, ${BOUTALLION_GREEN} 100%)`,
+  border: '1px solid rgba(222, 208, 168, 0.12)',
+  boxShadow:
+    'inset 0 1px 0 rgba(255,255,255,0.04), 0 24px 64px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.05)',
 }
 
 export default function AboutUsPage() {
   const heroRef = useScrollReveal()
-  const section1Ref = useScrollReveal()
-  const section2Ref = useScrollReveal()
+  const s1Ref = useScrollReveal()
+  const s2Ref = useScrollReveal()
+  const s3Ref = useScrollReveal()
   const ctaRef = useScrollReveal()
 
+  const parallaxBg = useParallax(0.15)
+  const parallaxAccent = useParallax(0.08)
+
+  const tx = (p: number, amt = 48) => `${amt * (1 - p)}px`
+
   return (
-    <div className="fixed inset-0 overflow-auto">
+    <div className="fixed inset-0 overflow-auto bg-[#031a1d]">
       <BaroqueBackground />
       <SocialIcons />
 
-      <main className="relative z-10 min-h-screen pt-24 md:pt-32 pb-32 md:pb-40 px-6 md:px-12 lg:px-20">
-        <div className="max-w-6xl mx-auto">
-          {/* Hero - smooth scroll-linked reveal */}
+      {/* Parallax accent layer - moves slower than scroll */}
+      <div
+        ref={parallaxAccent.ref}
+        className="fixed inset-0 pointer-events-none z-0"
+        style={{
+          background: `radial-gradient(ellipse 80% 60% at 50% 20%, rgba(222, 208, 168, 0.06) 0%, transparent 50%)`,
+          transform: `translateY(${parallaxAccent.offset * 0.5}px)`,
+        }}
+      />
+
+      {/* Parallax foreground grain */}
+      <div
+        ref={parallaxBg.ref}
+        className="fixed inset-0 pointer-events-none z-0 opacity-[0.03]"
+        style={{
+          backgroundImage: 'url("/taupe%202%20background.png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          transform: `translateY(${parallaxBg.offset * 0.3}px)`,
+        }}
+      />
+
+      <main className="relative z-10 min-h-screen pt-24 md:pt-36 pb-32 md:pb-48 px-6 md:px-12 lg:px-20">
+        <div className="max-w-4xl mx-auto">
+          {/* Hero - always visible on load, subtle reveal on scroll */}
           <section
             ref={heroRef.ref}
-            className="mb-28 md:mb-36 lg:mb-44"
+            className="mb-32 md:mb-40 lg:mb-48"
             style={{
-              opacity: heroRef.progress,
-              transform: `translateY(${40 * (1 - heroRef.progress)}px)`,
+              opacity: Math.max(0.6, heroRef.progress),
+              transform: `translateY(${tx(heroRef.progress, 60)})`,
             }}
           >
             <div
-              className="relative overflow-hidden rounded-sm p-10 md:p-14 lg:p-20 group transition-all duration-700 hover:border-gold-DEFAULT/25"
-              style={{
-                background: 'linear-gradient(135deg, #031a1d 0%, #041f23 50%, #031a1d 100%)',
-                border: '1px solid rgba(212, 197, 160, 0.12)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 24px 64px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)',
-              }}
+              className="relative overflow-hidden rounded-sm p-10 md:p-14 lg:p-20"
+              style={glassStyle}
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-gold-DEFAULT/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <h1 className="font-portrait text-5xl md:text-7xl lg:text-8xl text-white/[0.98] tracking-[-0.02em] leading-[1.05] mb-6 md:mb-10">
+              <h1
+                className="font-portrait text-5xl md:text-7xl lg:text-8xl tracking-[-0.02em] leading-[1.05] mb-10 md:mb-14"
+                style={{ color: ACCENT }}
+              >
                 About Boutallion
               </h1>
               <div
-                className="h-px bg-gradient-to-r from-gold-DEFAULT/60 via-gold-DEFAULT/40 to-transparent mb-10 md:mb-12"
+                className="h-px mb-10 md:mb-12"
                 style={{
-                  width: `${120 * heroRef.progress}px`,
+                  width: `${140 * heroRef.progress}px`,
+                  background: `linear-gradient(90deg, ${ACCENT} 0%, rgba(222,208,168,0.3) 100%)`,
                 }}
               />
-              <p className="font-refined text-xl md:text-2xl lg:text-[1.4rem] text-white/85 leading-[1.7] max-w-3xl tracking-wide">
-                Boutallion was founded in 2016 and is crafted in Italy.
-              </p>
-              <p className="font-refined text-base md:text-lg lg:text-xl text-white/70 leading-[1.8] max-w-3xl mt-8 md:mt-10 tracking-wide">
-                Working with couture methods and a jewellery-led approach to design, precision, weight, and construction are treated with the same care as a fine jewel. Materials are selected for their origin and tactile quality. Cut and balance are deliberate. Every piece is developed to remain relevant beyond time or circumstance.
-              </p>
-              <p className="font-refined text-base md:text-lg lg:text-xl text-white/70 leading-[1.8] max-w-3xl mt-6 md:mt-8 tracking-wide">
-                This approach is sustained through close collaboration with century-old suppliers and specialised ateliers across Europe, whose knowledge has been refined over generations. Craftsmanship, materials, and execution follow uncompromising standards. Nothing is released unless it meets the level of the house.
-              </p>
+              <div className="font-refined text-lg md:text-xl lg:text-[1.25rem] leading-[1.9] tracking-wide space-y-6 max-w-3xl">
+                <p className="text-white/90">
+                  <KineticLine
+                    text="Boutallion was founded in 2016 in the Netherlands. The house exists to uphold a standard of luxury defined by uncompromising materials, precise construction, and made-to-measure thinking, where cultural expression never requires a compromise in quality."
+                    progress={heroRef.progress}
+                  />
+                </p>
+                <p className="text-white/75">
+                  <KineticLine
+                    text="Crafted in Italy, Boutallion works with couture methods and a jewellery-led approach to design. Precision, weight, and construction are treated with the same discipline as a fine jewel. Materials are selected for their origin and quality. Cut, proportion, and finishing are deliberate. Every piece is developed to remain relevant beyond time or circumstance."
+                    progress={heroRef.progress}
+                    baseDelay={0.25}
+                  />
+                </p>
+              </div>
             </div>
           </section>
 
-          {/* Section 1 - Image + text with smooth scroll reveal */}
+          {/* Section 2 - Image left, text right */}
           <section
-            ref={section1Ref.ref}
-            className="grid md:grid-cols-2 gap-10 md:gap-16 lg:gap-20 items-center mb-28 md:mb-36"
+            ref={s1Ref.ref}
+            className="grid md:grid-cols-2 gap-12 md:gap-20 items-center mb-32 md:mb-40"
             style={{
-              opacity: section1Ref.progress,
-              transform: `translateY(${56 * (1 - section1Ref.progress)}px)`,
+              opacity: Math.max(0.15, s1Ref.progress),
+              transform: `translateY(${tx(s1Ref.progress)})`,
             }}
           >
-            <CorridorStyleFrame
-              className="group cursor-default transition-all duration-700 hover:scale-[1.02]"
-            />
+            <div className="order-2 md:order-1">
+              <CorridorStyleFrame
+                label="CRAFT"
+                className="transition-transform duration-700"
+                style={{ transform: `translateY(${-s1Ref.progress * 20}px)` }}
+              />
+            </div>
             <div
-              className="p-10 md:p-12 rounded-sm transition-all duration-700 hover:border-gold-DEFAULT/20"
+              className="order-1 md:order-2 p-8 md:p-10 rounded-sm"
               style={{
-                background: 'linear-gradient(135deg, #031a1d 0%, #041f23 100%)',
-                border: '1px solid rgba(212, 197, 160, 0.1)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.02), 0 8px 32px rgba(0, 0, 0, 0.15)',
+                ...glassStyle,
+                borderColor: 'rgba(222, 208, 168, 0.1)',
               }}
             >
-              <p className="font-refined text-lg md:text-xl text-white/75 leading-[1.85] tracking-wide">
-                Drawing from nature, architecture, and Middle Eastern culture, the work is informed by geometry, organic form, and spatial rhythm. These influences guide structure and composition rather than surface treatment. Cultural elements are approached with respect and depth, not interpretation.
+              <p className="font-refined text-base md:text-lg text-white/80 leading-[1.9] tracking-wide">
+                <KineticLine
+                  text="This standard is sustained through close collaboration with century-old suppliers and specialised ateliers across Europe, whose knowledge has been refined over generations. Craftsmanship, materials, and execution follow strict criteria. Nothing is released unless it meets the level set by the house."
+                  progress={s1Ref.progress}
+                />
               </p>
             </div>
           </section>
 
-          {/* Section 2 - Reversed layout with smooth scroll reveal */}
+          {/* Section 3 - Full-width block */}
           <section
-            ref={section2Ref.ref}
-            className="grid md:grid-cols-2 gap-10 md:gap-16 lg:gap-20 items-center mb-28 md:mb-36"
+            ref={s2Ref.ref}
+            className="mb-32 md:mb-40"
             style={{
-              opacity: section2Ref.progress,
-              transform: `translateY(${56 * (1 - section2Ref.progress)}px)`,
+              opacity: Math.max(0.15, s2Ref.progress),
+              transform: `translateY(${tx(s2Ref.progress)})`,
             }}
           >
             <div
-              className="p-10 md:p-12 rounded-sm order-2 md:order-1 transition-all duration-700 hover:border-gold-DEFAULT/20"
+              className="p-10 md:p-14 lg:p-20 rounded-sm"
               style={{
-                background: 'linear-gradient(135deg, #031a1d 0%, #052a2f 100%)',
-                border: '1px solid rgba(212, 197, 160, 0.1)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.02), 0 8px 32px rgba(0, 0, 0, 0.15)',
+                ...glassStyle,
+                borderColor: 'rgba(222, 208, 168, 0.08)',
               }}
             >
-              <p className="font-refined text-lg md:text-xl text-white/75 leading-[1.85] tracking-wide mb-8">
-                Outside the logic of seasonal collections, Boutallion presents a carefully considered body of pieces. Each creation stands on its own, conceived to belong anywhere and to remain relevant over time. Introduced selectively and by invitation, the work remains focused, considered, and discreet.
-              </p>
-              <p className="font-refined text-lg md:text-xl text-white/75 leading-[1.85] tracking-wide">
-                The result is clothing that settles naturally on the body and reveals its quality immediately, understood through touch, balance, and construction rather than explanation. Boutallion speaks to women for whom such distinctions are instinctive and whose choices favour continuity over novelty.
+              <p className="font-refined text-lg md:text-xl text-white/85 leading-[1.9] tracking-wide max-w-3xl">
+                <KineticLine
+                  text="Boutallion draws from nature, architecture, and Middle Eastern culture. From the geometry of built space to organic forms shaped over time, these influences inform structure and composition rather than surface effect. Cultural elements are approached with respect and depth, not interpretation."
+                  progress={s2Ref.progress}
+                />
               </p>
             </div>
-            <CorridorStyleFrame
-              className="order-1 md:order-2 group cursor-default transition-all duration-700 hover:scale-[1.02]"
-            />
           </section>
 
-          {/* CTA - smooth scroll-linked reveal */}
+          {/* Section 4 - Text left, image right */}
+          <section
+            ref={s3Ref.ref}
+            className="grid md:grid-cols-2 gap-12 md:gap-20 items-center mb-32 md:mb-40"
+            style={{
+              opacity: Math.max(0.15, s3Ref.progress),
+              transform: `translateY(${tx(s3Ref.progress)})`,
+            }}
+          >
+            <div
+              className="p-8 md:p-10 rounded-sm"
+              style={{
+                ...glassStyle,
+                borderColor: 'rgba(222, 208, 168, 0.1)',
+              }}
+            >
+              <p className="font-refined text-base md:text-lg text-white/80 leading-[1.9] tracking-wide mb-8">
+                <KineticLine
+                  text="The house does not operate within seasonal collections. Instead, it presents a considered body of pieces, each conceived to stand on its own and to belong anywhere."
+                  progress={s3Ref.progress}
+                />
+              </p>
+              <p className="font-refined text-base md:text-lg text-white/75 leading-[1.9] tracking-wide">
+                <KineticLine
+                  text="Creations are introduced selectively and by invitation, allowing the work to remain focused, coherent, and discreet. Those wishing to explore the house may request access."
+                  progress={s3Ref.progress}
+                  baseDelay={0.2}
+                />
+              </p>
+            </div>
+            <div>
+              <CorridorStyleFrame
+                label="HOUSE"
+                className="transition-transform duration-700"
+                style={{ transform: `translateY(${-s3Ref.progress * 24}px)` }}
+              />
+            </div>
+          </section>
+
+          {/* Section 5 - Final statement */}
           <section
             ref={ctaRef.ref}
             className="relative"
             style={{
-              opacity: ctaRef.progress,
-              transform: `translateY(${48 * (1 - ctaRef.progress)}px)`,
+              opacity: Math.max(0.15, ctaRef.progress),
+              transform: `translateY(${tx(ctaRef.progress)})`,
             }}
           >
             <div
-              className="relative overflow-hidden rounded-sm p-12 md:p-16 lg:p-20 flex flex-col items-center justify-center text-center group"
+              className="relative overflow-hidden rounded-sm p-12 md:p-16 lg:p-20 flex flex-col items-center justify-center text-center"
               style={{
-                background: 'linear-gradient(135deg, #031a1d 0%, #041f23 50%, #031a1d 100%)',
-                border: '1px solid rgba(212, 197, 160, 0.15)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 32px 80px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.05)',
+                ...glassStyle,
+                borderColor: 'rgba(222, 208, 168, 0.15)',
               }}
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-gold-DEFAULT/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <p className="font-refined text-xl md:text-2xl text-white/80 leading-relaxed max-w-2xl mb-10 md:mb-12 tracking-wide relative z-10">
-                Those wishing to explore the house may request access.
+              <div
+                className="absolute inset-0 opacity-30"
+                style={{
+                  background: `radial-gradient(ellipse 60% 40% at 50% 50%, rgba(222, 208, 168, 0.08) 0%, transparent 70%)`,
+                }}
+              />
+              <p className="font-refined text-xl md:text-2xl text-white/90 leading-relaxed max-w-2xl mb-12 tracking-wide relative z-10">
+                <KineticLine
+                  text="The result is clothing that sits seamlessly on the body and reveals its quality immediately, understood through material, construction, and finish rather than explanation. Boutallion is created for women who recognise such distinctions through experience and who choose continuity over novelty."
+                  progress={ctaRef.progress}
+                />
               </p>
               <Link
                 href="/lab/corridor/request-order"
-                className="relative inline-flex items-center justify-center px-12 py-4 md:px-14 md:py-5 font-refined text-sm tracking-[0.2em] uppercase text-boutallion-green bg-gold-DEFAULT hover:bg-gold-light transition-all duration-500 overflow-hidden group/btn"
+                className="relative inline-flex items-center justify-center px-14 py-5 font-refined text-sm tracking-[0.2em] uppercase overflow-hidden group/btn transition-all duration-500"
+                style={{
+                  backgroundColor: ACCENT,
+                  color: BOUTALLION_GREEN,
+                }}
               >
-                <span className="absolute inset-0 bg-white/10 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
+                <span
+                  className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.12)' }}
+                />
                 <span className="relative z-10">Request Access</span>
               </Link>
             </div>

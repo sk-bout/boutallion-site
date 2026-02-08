@@ -25,6 +25,10 @@ const config: Config = {
           light: '#e8dcc0',
           dark: '#c4b590',
         },
+        accent: {
+          DEFAULT: '#ded0a8',
+          muted: 'rgba(222, 208, 168, 0.6)',
+        },
         'boutallion-green': {
           DEFAULT: '#031a1d',
         },

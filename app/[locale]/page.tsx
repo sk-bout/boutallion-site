@@ -1,11 +1,14 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client'
 
-import { useState, Suspense, useMemo, useEffect, useRef } from 'react'
-import { Canvas } from '@react-three/fiber'
-import { PerspectiveCamera } from '@react-three/drei'
+import { useState, Suspense, useEffect, useRef } from 'react'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import LuxuryWebGLEffects from '@/components/LuxuryWebGLEffects'
+
+const MainPageWebGLEffects = dynamic(
+  () => import('@/components/MainPageWebGLEffects'),
+  { ssr: false }
+)
 import { getTranslations, Locale } from '@/lib/i18n'
 import PermanentLanguageSwitcher from '@/components/PermanentLanguageSwitcher'
 import Footer from '@/components/Footer'
@@ -366,18 +369,6 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
     }
   }
 
-  // Memoize canvas props to prevent re-renders
-  const canvasProps = useMemo(() => ({
-    gl: { 
-      antialias: true, 
-      alpha: true,
-      powerPreference: 'high-performance' as const,
-      preserveDrawingBuffer: false,
-    },
-    dpr: [1, 2] as [number, number],
-    frameloop: 'always' as const,
-  }), [])
-
   return (
     <div className="min-h-screen min-h-[100dvh] flex items-center justify-center relative overflow-hidden bg-boutallion-green safe-area-inset">
       <PermanentLanguageSwitcher />
@@ -417,24 +408,10 @@ export default function ComingSoon({ params }: { params: { locale: Locale } }) {
         </div>
       </div>
 
-      {/* WebGL Effects - Crystals and Gold Dust */}
-      <div className="fixed inset-0 z-0 pointer-events-none" style={{ width: '100%', height: '100%' }}>
-        <Suspense fallback={null}>
-          <Canvas
-            {...canvasProps}
-            style={{ width: '100%', height: '100%' }}
-          >
-          <PerspectiveCamera makeDefault position={[0, 0, 6]} fov={60} />
-          <ambientLight intensity={0.4} />
-          <pointLight position={[10, 10, 10]} intensity={1.5} color="#d4c5a0" />
-          <pointLight position={[-10, -10, -10]} intensity={1.0} color="#d4c5a0" />
-          <directionalLight position={[5, 8, 5]} intensity={1.2} color="#d4c5a0" />
-          <spotLight position={[0, 10, 0]} angle={0.3} penumbra={0.5} intensity={1.5} color="#d4c5a0" />
-            
-            <LuxuryWebGLEffects />
-          </Canvas>
-        </Suspense>
-      </div>
+      {/* WebGL Effects - Crystals and Gold Dust (client-only to avoid dev/localhost issues) */}
+      <Suspense fallback={null}>
+        <MainPageWebGLEffects />
+      </Suspense>
 
       {/* Main content */}
       <main className="relative z-10 text-center px-4 sm:px-6 pt-0 sm:pt-2 md:pt-3 pb-8 sm:pb-12 md:pb-16 w-full max-w-full mx-auto animate-fade-in flex flex-col items-center justify-start min-h-[100vh] min-h-[100dvh] safe-area-inset">
