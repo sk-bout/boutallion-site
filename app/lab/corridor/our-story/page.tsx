@@ -125,7 +125,7 @@ export default function OurStoryPage() {
   const boxShadow = { boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }
 
   return (
-    <div ref={scrollRef} className="fixed inset-0 overflow-auto bg-[#031a1d]">
+    <div ref={scrollRef} className="fixed inset-0 overflow-auto bg-[#031a1d]" style={{ scrollbarGutter: 'stable' }}>
       <div
         className="fixed inset-0 pointer-events-none z-0"
         style={{
@@ -183,8 +183,11 @@ export default function OurStoryPage() {
               Our Story
             </h1>
             <div className="w-20 h-px mb-6 bg-gradient-to-r from-[#ded0a8] to-transparent" />
-            {/* Screen-wide cover video – same frame style as other images */}
-            <div className="w-full -mx-8 md:-mx-14 lg:-mx-20 xl:-mx-24 mt-6 mb-20 overflow-visible ml-8 md:ml-12 lg:ml-16" style={revealFrame(hero.progress, true)}>
+            {/* Screen-wide cover video – same frame style as other images; extends to main’s right edge */}
+            <div
+              className="w-full -mx-6 md:-mx-12 lg:-mx-16 xl:-mx-20 mt-6 mb-20 overflow-visible"
+              style={revealFrame(hero.progress, true)}
+            >
               <CorridorStyleFrame aspectRatio="16/9" className="w-full min-w-0">
                 <div className="absolute inset-0 w-full h-full">
                   <video
@@ -227,14 +230,14 @@ export default function OurStoryPage() {
             </div>
           </section>
 
-          {/* Horizontal frame 1 */}
+          {/* Frame 1 */}
           <section ref={s2.ref} className="mb-24 md:mb-32" style={reveal(s2.progress)}>
             <div className="w-full will-change-transform" style={revealFrame(s2.progress, true)}>
-              <CorridorStyleFrame label="OUR STORY" aspectRatio="16/9">
+              <CorridorStyleFrame aspectRatio="16/9" frameNumber={1}>
                 <div className="absolute inset-0 w-full h-full">
                   <Image
-                    src="/sheikh%20zayed%20abaya%20boutallion.png"
-                    alt="Boutallion craft"
+                    src="/our%20story%20frame%202.png"
+                    alt="Our story"
                     fill
                     className="object-cover"
                     style={{ objectPosition: 'center center' }}
@@ -259,14 +262,14 @@ export default function OurStoryPage() {
             </div>
           </section>
 
-          {/* Horizontal frame 1 */}
+          {/* Frame 2 */}
           <section ref={s4.ref} className="mb-24 md:mb-32" style={reveal(s4.progress)}>
             <div className="w-full will-change-transform" style={revealFrame(s4.progress, false)}>
-              <CorridorStyleFrame aspectRatio="16/9">
+              <CorridorStyleFrame aspectRatio="16/9" frameNumber={2}>
                 <div className="absolute inset-0 w-full h-full">
                   <Image
-                    src="/sheikh%20zayed%20abaya%20boutallion.png"
-                    alt="Boutallion atelier"
+                    src="/our%20story%20frame%203.png"
+                    alt="Our story"
                     fill
                     className="object-cover"
                     style={{ objectPosition: 'center center' }}
@@ -288,18 +291,20 @@ export default function OurStoryPage() {
             </div>
           </section>
 
-          {/* Horizontal frame 2 */}
+          {/* Frame 3 */}
           <section ref={s6.ref} className="mb-24 md:mb-32" style={reveal(s6.progress)}>
             <div className="w-full will-change-transform" style={revealFrame(s6.progress, false)}>
-              <CorridorStyleFrame aspectRatio="16/9">
+              <CorridorStyleFrame aspectRatio="16/9" frameNumber={3}>
                 <div className="absolute inset-0 w-full h-full">
-                  <Image
-                    src="/sheikh%20zayed%20abaya%20boutallion.png"
-                    alt="Boutallion creation"
-                    fill
-                    className="object-cover"
+                  <video
+                    src="/our%20story%20frame%204.mp4"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover"
                     style={{ objectPosition: 'center center' }}
-                    sizes="(min-width: 768px) 100vw, 100vw"
+                    aria-label="Our story"
                   />
                 </div>
               </CorridorStyleFrame>
@@ -323,14 +328,14 @@ export default function OurStoryPage() {
             </div>
           </section>
 
-          {/* Horizontal frame 2 */}
+          {/* Frame 4 */}
           <section ref={s8.ref} className="mb-24 md:mb-32" style={reveal(s8.progress)}>
             <div className="w-full will-change-transform" style={revealFrame(s8.progress, true)}>
-              <CorridorStyleFrame aspectRatio="16/9">
+              <CorridorStyleFrame aspectRatio="16/9" frameNumber={4}>
                 <div className="absolute inset-0 w-full h-full">
                   <Image
-                    src="/sheikh%20zayed%20abaya%20boutallion.png"
-                    alt="Boutallion"
+                    src="/our%20story%20frame%205.png"
+                    alt="Our story"
                     fill
                     className="object-cover"
                     style={{ objectPosition: 'center center' }}
