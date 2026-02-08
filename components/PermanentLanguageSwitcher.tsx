@@ -91,7 +91,7 @@ export default function PermanentLanguageSwitcher({ inline }: PermanentLanguageS
         {/* Dropdown Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="px-3 py-2 text-xs sm:text-sm bg-transparent border border-boutallion-green text-boutallion-green font-sans hover:bg-boutallion-green hover:text-white transition-colors duration-200 font-light whitespace-nowrap flex items-center justify-center gap-1.5"
+          className="px-3 py-2 text-xs sm:text-sm bg-transparent border border-[#ded0a8]/90 text-[#ded0a8] font-sans hover:bg-[#ded0a8]/10 hover:border-[#ded0a8] transition-colors duration-200 font-light whitespace-nowrap flex items-center justify-center gap-1.5"
           aria-label="Select language"
           aria-expanded={isOpen}
           aria-haspopup="true"

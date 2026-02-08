@@ -121,7 +121,7 @@ export default function CorridorNavigation({ inline }: CorridorNavigationProps) 
             setIsOpen((prev) => !prev)
           }}
           onPointerDown={(e) => e.stopPropagation()}
-          className="px-3 py-2 text-xs sm:text-sm bg-transparent border border-white/70 text-white/90 font-sans hover:bg-white/10 hover:border-white transition-colors duration-200 font-light flex items-center justify-center gap-2"
+          className="px-3 py-2 text-xs sm:text-sm bg-transparent border border-[#ded0a8]/90 text-[#ded0a8] font-sans hover:bg-[#ded0a8]/10 hover:border-[#ded0a8] transition-colors duration-200 font-light flex items-center justify-center gap-2"
           aria-label="Open navigation menu"
           aria-expanded={isOpen}
           aria-haspopup="true"

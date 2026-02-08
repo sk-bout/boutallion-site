@@ -8,9 +8,12 @@ import PermanentLanguageSwitcher from '@/components/PermanentLanguageSwitcher'
 export default function LabCorridorHeader() {
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-[9990] flex items-center justify-between px-4 sm:px-6 md:px-8 h-16 sm:h-20 relative overflow-visible isolate"
-      style={{ backgroundColor: 'rgba(3, 26, 29, 0.97)' }}
+      className="fixed top-0 left-0 right-0 w-full z-[9990] flex items-center justify-between px-4 sm:px-6 md:px-8 h-16 sm:h-20 relative overflow-visible"
       style={{
+        backgroundImage: 'url("/green%20frame%20background.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
         paddingTop: `max(0.5rem, env(safe-area-inset-top))`,
         paddingLeft: `max(1rem, env(safe-area-inset-left) + 0.5rem)`,
         paddingRight: `max(1rem, env(safe-area-inset-right) + 0.5rem)`,

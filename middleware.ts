@@ -48,6 +48,13 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 301)
   }
   
+  // Redirect /{locale}/lab/* to /lab/* (lab corridor has no locale prefix)
+  if (pathname.match(/^\/(en|ar|it|fr|nl|zh|ru)\/lab(\/|$)/)) {
+    const labPath = pathname.replace(/^\/(en|ar|it|fr|nl|zh|ru)/, '')
+    url.pathname = labPath
+    return NextResponse.redirect(url, 307)
+  }
+
   // Skip API routes, static files, Next.js internals, verification files, robots.txt/sitemap, lab routes, and policy pages
   if (
     pathname.startsWith('/api') ||
