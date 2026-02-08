@@ -12,7 +12,7 @@ When the corridor rows stop sliding or the infinite scroll breaks:
 
 3. **Seamless loop** – `duplicatedItems = [...items, ...items, ...items, ...items, ...items]` (5 copies). One-set width = `track.scrollWidth / 5`. When animation completes and restarts, content is identical.
 
-4. **Duration** – `(effectiveTrackWidth / 80) * 1000` ms.
+4. **Duration** – `(effectiveTrackWidth / 28) * 1000` ms (slower, elegant scroll ~28px/sec).
 
 5. **Pause** – `animationPlayState: 'paused'` when `isPaused` (hovering an image).
 
